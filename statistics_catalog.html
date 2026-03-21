@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="중소기업 관련 국가 통계를 한곳에서 확인할 수 있는 웹페이지입니다.">
+  <title>중소기업 관련 국가 통계</title>
+  <style>
+    :root {
+      --bg: #e9f2fb;
+      --panel: rgba(249, 252, 255, 0.9);
+      --panel-strong: #ffffff;
+      --ink: #18212b;
+      --muted: #627181;
+      --line: rgba(58, 95, 140, 0.14);
+      --accent: #1d4ed8;
+      --accent-soft: rgba(29, 78, 216, 0.1);
+      --accent-strong: #163b7a;
+      --shadow: 0 18px 40px rgba(40, 72, 115, 0.12);
+      --radius: 20px;
+      --radius-sm: 14px;
+      --font-ui: "Noto Sans KR", "Pretendard", "Malgun Gothic", sans-serif;
+      --font-display: "Noto Sans KR", "Pretendard", "Malgun Gothic", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-ui);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.74), transparent 34%),
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 24%),
+        linear-gradient(180deg, #edf5ff 0%, #d9eafe 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .shell {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(430px, 1.02fr) minmax(0, 2.28fr);
+      gap: 18px;
+      padding: 18px;
+      min-height: 100vh;
+      max-width: 2400px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .sidebar {
+      padding: 24px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 24px;
+      height: calc(100vh - 48px);
+      overflow: hidden;
+    }
+
+    .dept-name {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: var(--accent-strong);
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .nav-switch {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 0 12px;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.2;
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease, border-color 160ms ease;
+      box-shadow: 0 12px 24px rgba(40, 72, 115, 0.12);
+    }
+
+    .nav-link:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+    }
+
+    .nav-link-read {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff;
+      border-color: rgba(29, 78, 216, 0.28);
+    }
+
+    .nav-link-dashboard {
+      background: linear-gradient(135deg, #0f766e, #0ea5a5);
+      color: #ffffff;
+      border-color: rgba(14, 165, 165, 0.28);
+    }
+
+    .nav-link-stats {
+      background: linear-gradient(135deg, #b45309, #d97706);
+      color: #ffffff;
+      border-color: rgba(217, 119, 6, 0.28);
+    }
+
+    .nav-link.is-active {
+      box-shadow: 0 16px 30px rgba(40, 72, 115, 0.18);
+    }
+
+    .nav-link:not(.is-active) {
+      opacity: 0.86;
+    }
+
+    .nav-link-sub {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.35;
+      opacity: 0.88;
+    }
+
+    .site-panel {
+      display: grid;
+      gap: 12px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .site-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .site-panel h3 {
+      margin: 0;
+      font-size: 16px;
+      color: var(--accent-strong);
+    }
+
+    .site-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .site-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-content: start;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .site-link {
+      display: flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 11px;
+      border-radius: 14px;
+      border: 1px solid rgba(29, 78, 216, 0.12);
+      background: rgba(255,255,255,0.8);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .site-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(40, 72, 115, 0.1);
+      border-color: rgba(29, 78, 216, 0.24);
+    }
+
+    .main {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 20px;
+      min-height: calc(100vh - 48px);
+    }
+
+    .hero {
+      padding: 18px 22px;
+      align-self: start;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(29, 78, 216, 0.16), transparent 22%),
+        linear-gradient(140deg, rgba(255,255,255,0.94), rgba(230, 240, 255, 0.92));
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 28px;
+      border: 1px solid rgba(29, 78, 216, 0.14);
+      right: -40px;
+      bottom: -58px;
+      transform: rotate(18deg);
+      background: rgba(255,255,255,0.32);
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .section {
+      padding: 18px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .section h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: var(--panel-strong);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+      display: grid;
+      gap: 10px;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(60, 52, 45, 0.1);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .agency {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .date-chip {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .group-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .leaf-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .leaf-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(29, 78, 216, 0.12);
+      background: rgba(255,255,255,0.82);
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .leaf-link::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      margin-top: 0.5em;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #1d4ed8, #60a5fa);
+      flex: 0 0 auto;
+    }
+
+    .leaf-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(40, 72, 115, 0.1);
+      border-color: rgba(29, 78, 216, 0.24);
+    }
+
+    .leaf-link span {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+      color: inherit;
+    }
+
+    .group-block {
+      display: grid;
+      gap: 8px;
+    }
+
+    .group-heading {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .empty {
+      border: 1px dashed rgba(29, 78, 216, 0.25);
+      border-radius: 18px;
+      padding: 28px 20px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.6);
+    }
+
+    @media (max-width: 1120px) {
+      .shell {
+        grid-template-columns: 1fr;
+        max-width: none;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .main {
+        grid-template-rows: auto auto;
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        padding: 14px;
+      }
+
+      .hero,
+      .section,
+      .sidebar {
+        padding: 18px;
+      }
+
+      .nav-switch,
+      .site-links {
+        grid-template-columns: 1fr;
+      }
+
+      .leaf-list {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h2 {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 1180px) and (min-width: 721px) {
+      .leaf-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1800px) and (min-height: 980px) {
+      .shell {
+        width: min(1880px, calc(100vw - 48px));
+        max-width: none;
+        min-height: calc(100vh - 24px);
+        grid-template-columns: minmax(610px, 1.1fr) minmax(0, 2.1fr);
+        gap: 22px;
+        padding: 12px 18px;
+      }
+
+      .sidebar {
+        top: 12px;
+        height: calc(100vh - 24px);
+      }
+
+      .main {
+        min-height: calc(100vh - 24px);
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar panel">
+      <div>
+        <div class="dept-name">IBK경제연구소 중기산업연구실 중소기업팀</div>
+      </div>
+
+      <div class="nav-switch">
+        <a class="nav-link nav-link-read" href="./index.html">
+          <span>읽을거리</span>
+        </a>
+        <a class="nav-link nav-link-stats is-active" href="./statistics_catalog.html">
+          <span>중소기업 통계</span>
+        </a>
+        <a class="nav-link nav-link-dashboard" href="./tableau_dashboard.html">
+          <span>시각화 대쉬보드</span>
+        </a>
+      </div>
+
+      <section class="site-panel">
+        <div class="site-panel-head">
+          <h3>유용한 사이트</h3>
+          <div class="site-note">클릭 시 새 창 이동</div>
+        </div>
+        <div id="siteLinks" class="site-links"></div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="hero panel">
+        <div class="hero-top">
+          <div>
+            <h2>중소기업 관련 국가 통계</h2>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <div class="section-head">
+          <h3>통계 목록</h3>
+          <div id="listNote" class="section-note"></div>
+        </div>
+        <div id="cards" class="cards"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const markdownSource = String.raw`# 유용한 사이트
+- 국가데이터처
+https://kosis.kr/index/index.do
+
+- 한국은행 경제통계시스템(ECOS)
+https://ecos.bok.or.kr/#/
+
+- 금융통계정보시스템
+https://fisis.fss.or.kr/page/main.jsp
+
+- 은행통계정보시스템
+http://bss.kfb.or.kr/
+
+- 산업통계분석시스템
+https://www.istans.or.kr/main.html
+
+- 금융위원회
+https://www.fsc.go.kr/index
+
+- 금융감독원
+https://www.fss.or.kr/fss/main/main.do?menuNo=200000
+
+- 중소벤처기업부
+https://www.mss.go.kr/site/smba/main.do
+
+- 한국은행
+https://www.bok.or.kr/portal/main/main.do
+
+- 중소기업중앙회
+https://www.kbiz.or.kr/ko/index/index.do
+
+- 국제금융센터
+https://www.kcif.or.kr/
+
+- 은행연합회
+https://www.kfb.or.kr/main/main.php
+
+- 중소벤처기업연구원
+https://www.kosi.re.kr/kosbiWar/main
+
+- 한국금융연구원
+https://www.kif.re.kr/kif4/main/
+
+- 산업은행 미래전략연구소
+https://rd.kdb.co.kr/index.jsp
+
+- 우리금융경영연구소
+https://www.wfri.re.kr/ko/web/main.php
+
+- 하나금융연구소
+https://www.hanaif.re.kr/main.do
+
+- KB경영연구소
+https://www.kbfg.com/kbresearch/index.do
+
+- 현대경제연구원
+https://www.hri.co.kr/kor/main/main.html
+
+
+
+
+
+
+
+
+# 중소기업 경기
+
+## 1. 실물경기
+- 중소기업 경기동행지수
+https://kosis.kr/statHtml/statHtml.do?orgId=303&tblId=DT_303005_CI001&conn_path=I2
+
+- 기업규모별 제조업 생산지수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1F02007&conn_path=I2
+
+- 중소기업 평균가동률(15~22년)
+https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_B10121&conn_path=I2
+
+- 중소기업 평균가동률(23년 이후)
+https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10125&conn_path=I2
+
+- 시도/산업별 광공업 생산지수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1F02001&conn_path=I2
+
+- 기업규모별 서비스업 생산지수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2022&conn_path=I2
+
+- 음식점 포함 소매판매액지수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41017&conn_path=I2
+
+- 재별 상품군별 소매판매액지수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41012&conn_path=I2
+
+- 산업별 서비스업 생산지수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2020&conn_path=I2
+
+
+
+## 2. 체감경기
+- 한국은행 BSI(실적)
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y013&conn_path=I2
+
+- 한국은행 BSI(전망)
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y014&conn_path=I2
+
+- SBHI(실적)
+https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10100A&conn_path=I2
+
+- SBHI(전망)
+https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10100B&conn_path=I2
+
+- 기업경영상 애로요인
+https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10127&conn_path=I2
+
+
+
+---
+
+
+# 소상공인, 자영업자
+## 1. 자영업자 기본현황
+- 성/종사상지위별 취업자
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1DA7028S&conn_path=I2
+
+- 시도·산업·종사상지위별 종사자수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K52D04&conn_path=I2
+
+- 소득5분위별 가구주 종사상지위별 자산, 부채, 소득 현황
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1HDAAA13&conn_path=I2
+
+## 2. 창업, 폐업
+- 기업생멸행정통계 - 산업별 조직형태별 기업수
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1BD1006&conn_path=I2
+
+- 폐업자 수 및 폐업률
+https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=DT_133N_981&conn_path=I2
+
+- 폐업자 현황
+https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=TX_13301_A169&conn_path=I2
+
+
+
+---
+
+
+# 중소기업 금융
+## 1. 대출금, 금리
+- 산업별대출금(예금은행, 기업규모별)
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_131Y018&conn_path=I2
+
+- 시설, 운전자금 대출
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_141Y004&conn_path=I2
+
+- 대출금리(신규취급액 기준)
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y006&conn_path=I2
+
+- 대출금리(잔액 기준)
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y015&conn_path=I2
+
+
+## 2. 대출행태 서베이
+- 대출태도
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y001&conn_path=I2
+
+- 신용위험
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y002&conn_path=I2
+
+- 대출 수요
+https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y003&conn_path=I2
+
+
+
+---
+
+
+# 중소기업 수출
+- 기업규모별 수출입
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N116&conn_path=I2
+
+- 기업규모별, 주요국가별 수출입
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N227&conn_path=I2
+
+- 산업별, 기업규모별 수출입
+https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N313&conn_path=I2
+
+- 대륙별, 국가별 중소기업 수출
+https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
+
+    const cardsEl = document.getElementById("cards");
+    const listNoteEl = document.getElementById("listNote");
+    const siteLinksEl = document.getElementById("siteLinks");
+
+    function parseMarkdown(source) {
+      const lines = source.split(/\r?\n/);
+      const usefulSites = [];
+      const sections = [];
+      let currentSection = null;
+      let currentGroup = null;
+      let pendingItem = null;
+      let pendingSite = null;
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+
+        if (!line || line === "---") {
+          continue;
+        }
+
+        if (line.startsWith("# ")) {
+          if (line.slice(2).trim() === "유용한 사이트") {
+            currentSection = null;
+            currentGroup = null;
+            pendingItem = null;
+            pendingSite = null;
+            continue;
+          }
+
+          currentSection = {
+            title: line.slice(2).trim(),
+            groups: []
+          };
+          sections.push(currentSection);
+          currentGroup = null;
+          pendingItem = null;
+          pendingSite = null;
+          continue;
+        }
+
+        if (/^\d+\.\s+/.test(line)) {
+          pendingSite = {
+            title: line.replace(/^\d+\.\s+/, "").trim(),
+            url: ""
+          };
+          usefulSites.push(pendingSite);
+          continue;
+        }
+
+        if (!currentSection && line.startsWith("- ")) {
+          pendingSite = {
+            title: line.slice(2).trim(),
+            url: ""
+          };
+          usefulSites.push(pendingSite);
+          continue;
+        }
+
+        if (line.startsWith("## ")) {
+          if (!currentSection) {
+            continue;
+          }
+
+          currentGroup = {
+            title: line.slice(3).trim(),
+            items: []
+          };
+          currentSection.groups.push(currentGroup);
+          pendingItem = null;
+          continue;
+        }
+
+        if (/^https?:\/\//i.test(line) && pendingSite && !pendingSite.url) {
+          pendingSite.url = line;
+          continue;
+        }
+
+        if (line.startsWith("- ")) {
+          if (!currentGroup && currentSection) {
+            currentGroup = {
+              title: "기타",
+              items: []
+            };
+            currentSection.groups.push(currentGroup);
+          }
+
+          if (!currentGroup) {
+            continue;
+          }
+
+          pendingItem = {
+            title: line.slice(2).trim(),
+            url: ""
+          };
+          currentGroup.items.push(pendingItem);
+          continue;
+        }
+
+        if (/^https?:\/\//i.test(line) && pendingItem) {
+          pendingItem.url = line;
+        }
+      }
+
+      return {
+        usefulSites: usefulSites.filter(site => site.title && site.url),
+        sections: sections.map(section => ({
+          ...section,
+          groups: section.groups.map(group => ({
+            ...group,
+            items: group.items.filter(item => item.title && item.url)
+          })).filter(group => group.title)
+        })).filter(section => section.title)
+      };
+    }
+
+    function createLeafLink(item) {
+      return `
+        <a class="leaf-link" href="${item.url}" target="_blank" rel="noopener noreferrer">
+          <span>${item.title}</span>
+        </a>
+      `;
+    }
+
+    function renderUsefulSites(data) {
+      siteLinksEl.innerHTML = data.map(site => `
+        <a class="site-link" href="${site.url}" target="_blank" rel="noopener noreferrer">${site.title}</a>
+      `).join("");
+    }
+
+    function orderSections(data) {
+      const preferredOrder = ["중소기업 경기", "소상공인, 자영업자", "중소기업 수출", "중소기업 금융"];
+      const rank = new Map(preferredOrder.map((title, index) => [title, index]));
+
+      return [...data].sort((a, b) => {
+        const aRank = rank.has(a.title) ? rank.get(a.title) : Number.MAX_SAFE_INTEGER;
+        const bRank = rank.has(b.title) ? rank.get(b.title) : Number.MAX_SAFE_INTEGER;
+        if (aRank !== bRank) return aRank - bRank;
+        return a.title.localeCompare(b.title, "ko");
+      });
+    }
+
+    function renderCards(data) {
+      const orderedData = orderSections(data);
+      const totalItems = orderedData.reduce((sum, section) => {
+        return sum + section.groups.reduce((groupSum, group) => groupSum + group.items.length, 0);
+      }, 0);
+
+      listNoteEl.textContent = `${orderedData.length}개 대분류 · ${totalItems}개 통계표`;
+
+      cardsEl.innerHTML = orderedData.map(section => `
+        <article class="card">
+          <div class="card-top">
+            <span class="agency">${section.title}</span>
+            <span class="date-chip">${section.groups.length}개 중분류</span>
+          </div>
+          <div class="group-list">
+            ${section.groups.map(group => `
+                <div class="group-block">
+                  <h4 class="group-heading">${group.title}</h4>
+                  <div class="leaf-list">
+                    ${group.items.length ? group.items.map(createLeafLink).join("") : '<div class="empty">연결된 통계표가 없습니다.</div>'}
+                  </div>
+                </div>
+            `).join("")}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    const parsed = parseMarkdown(markdownSource);
+    renderUsefulSites(parsed.usefulSites);
+    renderCards(parsed.sections);
+  </script>
+</body>
+</html>

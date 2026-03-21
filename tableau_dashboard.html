@@ -106,7 +106,7 @@
 
     .nav-switch {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -143,6 +143,12 @@
       background: linear-gradient(135deg, #0f766e, #0ea5a5);
       color: #ffffff;
       border-color: rgba(14, 165, 165, 0.28);
+    }
+
+    .nav-link-stats {
+      background: linear-gradient(135deg, #b45309, #d97706);
+      color: #ffffff;
+      border-color: rgba(217, 119, 6, 0.28);
     }
 
     .nav-link.is-active {
@@ -372,11 +378,12 @@
         <div class="nav-switch">
           <a class="nav-link nav-link-read" href="./index.html">
             <span>읽을거리</span>
-            <span class="nav-link-sub">(정책 보도자료, 타 기관 연구보고서 등)</span>
+          </a>
+          <a class="nav-link nav-link-stats" href="./statistics_catalog.html">
+            <span>중소기업 통계</span>
           </a>
           <a class="nav-link nav-link-dashboard is-active" href="./tableau_dashboard.html">
             <span>시각화 대쉬보드</span>
-            <span class="nav-link-sub">(중소기업 경기, 금융 관련 통계 활용)</span>
           </a>
         </div>
       </div>
