@@ -846,6 +846,52 @@
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     }
 
+    function normalizeAgencyName(value) {
+      const cleaned = value
+        .replace(/\[/g, '')
+        .replace(/\]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      const aliasMap = {
+        KIEP: '대외경제정책연구원',
+        대외경제정책연구원: '대외경제정책연구원',
+        통계청: '국가데이터처',
+        국가데이터처: '국가데이터처',
+        하나금융경영연구소: '하나금융경영연구소',
+        하나금융연구소: '하나금융경영연구소',
+        한국금융연구원: '한국금융연구원',
+        KITA: '한국무역협회',
+        한국무역협회: '한국무역협회',
+        무역협회: '한국무역협회',
+        KDI: '한국개발연구원',
+        한국개발연구원: '한국개발연구원',
+        중기중앙회: '중기중앙회',
+        중소기업중앙회: '중기중앙회'
+      };
+
+      if (aliasMap[cleaned]) {
+        return aliasMap[cleaned];
+      }
+
+      const newsAgencyPatterns = [
+        /^뉴스 기사$/i,
+        /간추린 아침뉴스/,
+        /간추린 아침 뉴스/,
+        /중소기업뉴스/,
+        /^기업\/산업$/,
+        /^경제\/증시\/부동산$/,
+        /^정치\/사회\/국내 기타$/,
+        /^국제\/해외$/
+      ];
+
+      if (newsAgencyPatterns.some(pattern => pattern.test(cleaned))) {
+        return '언론기사';
+      }
+
+      return cleaned;
+    }
+
     function formatMonthLabel(monthKey) {
       const [year, month] = monthKey.split('-');
       return `${year}.${month}`;
@@ -998,7 +1044,7 @@
         const agencyMatch = trimmed.match(/^\[([^\]]+)\]$/);
         if (agencyMatch) {
           pushBuffer();
-          currentAgency = agencyMatch[1].trim();
+          currentAgency = normalizeAgencyName(agencyMatch[1]);
           return;
         }
 
