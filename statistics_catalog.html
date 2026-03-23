@@ -565,11 +565,14 @@ https://rd.kdb.co.kr/index.jsp
 - 우리금융경영연구소
 https://www.wfri.re.kr/ko/web/main.php
 
+
 - 하나금융연구소
 https://www.hanaif.re.kr/main.do
 
+
 - KB경영연구소
 https://www.kbfg.com/kbresearch/index.do
+
 
 - 현대경제연구원
 https://www.hri.co.kr/kor/main/main.html
@@ -580,10 +583,19 @@ https://www.hri.co.kr/kor/main/main.html
 
 
 
+# 중소기업
+## 1. 중소기업 기본통계
+- 기업수
+https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_A001&conn_path=I2
 
-# 중소기업 경기
+- 종사자수
+https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_B001&conn_path=I2
 
-## 1. 실물경기
+- 매출액
+https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_C001&conn_path=I2
+
+
+## 2. 실물경기
 - 중소기업 경기동행지수
 https://kosis.kr/statHtml/statHtml.do?orgId=303&tblId=DT_303005_CI001&conn_path=I2
 
@@ -613,7 +625,7 @@ https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2020&conn_path=I2
 
 
 
-## 2. 체감경기
+## 3. 체감경기
 - 한국은행 BSI(실적)
 https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y013&conn_path=I2
 
@@ -636,22 +648,24 @@ https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10127&conn_path=I2
 
 # 소상공인, 자영업자
 ## 1. 자영업자 기본현황
-- 전산업종사상지위별 취업자수
+- 성/종사상지위별 취업자
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1DA7028S&conn_path=I2
 
-- 시도/산업별종사상지위별 종사자수
+- 시도·산업·종사상지위별 종사자수 
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K52D04&conn_path=I2
 
 - 소득5분위별 가구주 종사상지위별 자산, 부채, 소득 현황
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1HDAAA13&conn_path=I2
 
 
+
 ## 2. 실물경기
-- 소매 상품군별 판매액
+- 재별 상품군별 판매액
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41002&conn_path=I2
 
-- 소매 및 상품군별 판매/판매액지수
+- 재별 및 상품군별 소매판매액지수
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41012&conn_path=I2
+
 
 
 ## 3. 체감경기
@@ -665,14 +679,15 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_002&conn_path=I2
 https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_005&conn_path=I2
 
 
+
 ## 4. 창업, 폐업
-- 기업생멸행정통계 - 산업별/조직형태별기업수
+- 기업생멸행정통계 - 산업별 조직형태별 기업수
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1BD1006&conn_path=I2
 
-- 자영업자수및자영업률
+- 폐업자 수 및 폐업률
 https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=DT_133N_981&conn_path=I2
 
-- 자영업자현황
+- 폐업자 현황
 https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=TX_13301_A169&conn_path=I2
 
 
@@ -709,7 +724,7 @@ https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y003&conn_path=I2
 ---
 
 
-# 중소기업 수출
+# 수출 중소기업
 - 기업규모별 수출입
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N116&conn_path=I2
 
@@ -718,6 +733,7 @@ https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N227&conn_path=I2
 
 - 산업별, 기업규모별 수출입
 https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N313&conn_path=I2
+
 
 - 대륙별, 국가별 중소기업 수출
 https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
@@ -852,7 +868,7 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
     }
 
     function orderSections(data) {
-      const preferredOrder = ["중소기업 경기", "소상공인, 자영업자", "중소기업 수출", "중소기업 금융"];
+      const preferredOrder = ["중소기업", "소상공인, 자영업자", "수출 중소기업", "중소기업 금융"];
       const rank = new Map(preferredOrder.map((title, index) => [title, index]));
 
       return [...data].sort((a, b) => {
