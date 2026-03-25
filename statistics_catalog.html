@@ -160,6 +160,12 @@
       overflow: hidden;
     }
 
+    .site-panel-group {
+      display: grid;
+      gap: 12px;
+      min-height: 0;
+    }
+
     .site-panel-head {
       display: flex;
       align-items: center;
@@ -179,6 +185,13 @@
       color: var(--muted);
     }
 
+    .site-caution {
+      margin-top: -6px;
+      font-size: 11px;
+      line-height: 1.35;
+      color: #9a3412;
+    }
+
     .site-links {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -186,6 +199,13 @@
       align-content: start;
       overflow: auto;
       padding-right: 2px;
+    }
+
+    .tool-links {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      align-content: start;
     }
 
     .site-link {
@@ -208,6 +228,77 @@
       transform: translateY(-1px);
       box-shadow: 0 10px 20px rgba(40, 72, 115, 0.1);
       border-color: rgba(29, 78, 216, 0.24);
+    }
+
+    .ai-link {
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 9px;
+      border-color: rgba(13, 148, 136, 0.16);
+      background: linear-gradient(180deg, rgba(236, 253, 245, 0.96), rgba(220, 252, 231, 0.88));
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .ai-link:hover {
+      border-color: rgba(13, 148, 136, 0.28);
+      box-shadow: 0 10px 20px rgba(20, 120, 110, 0.12);
+    }
+
+    .icon-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .icon-link {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      padding: 6px 8px 5px;
+      border-radius: 16px;
+      border: 1px solid rgba(29, 78, 216, 0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(236, 244, 255, 0.92));
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .icon-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(40, 72, 115, 0.1);
+      border-color: rgba(29, 78, 216, 0.24);
+    }
+
+    .icon-link-badge {
+      width: 48px;
+      height: 30px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(40, 72, 115, 0.18);
+    }
+
+    .icon-link-label {
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .search-google .icon-link-badge {
+      background: linear-gradient(135deg, #2563eb, #22c55e);
+    }
+
+    .search-naver .icon-link-badge {
+      background: linear-gradient(135deg, #03c75a, #16a34a);
+    }
+
+    .search-youtube .icon-link-badge {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
     }
 
     .main {
@@ -424,7 +515,9 @@
       }
 
       .nav-switch,
-      .site-links {
+      .site-links,
+      .tool-links,
+      .icon-links {
         grid-template-columns: 1fr;
       }
 
@@ -488,11 +581,29 @@
       </div>
 
       <section class="site-panel">
-        <div class="site-panel-head">
-          <h3>유용한 사이트</h3>
-          <div class="site-note">클릭 시 새 창 이동</div>
+        <div class="site-panel-group">
+          <div class="site-panel-head">
+            <h3>검색 엔진</h3>
+            <div class="site-note">클릭 시 새 창 이동</div>
+          </div>
+          <div class="site-caution">공용 PC에서는 개인 계정 로그인 사용 주의</div>
+          <div id="searchLinks" class="icon-links"></div>
         </div>
-        <div id="siteLinks" class="site-links"></div>
+        <div class="site-panel-group">
+          <div class="site-panel-head">
+            <h3>AI Tools</h3>
+            <div class="site-note">클릭 시 새 창 이동</div>
+          </div>
+          <div class="site-caution">공용 PC에서는 개인 계정 로그인 사용 주의</div>
+          <div id="aiToolLinks" class="tool-links"></div>
+        </div>
+        <div class="site-panel-group">
+          <div class="site-panel-head">
+            <h3>유용한 사이트</h3>
+            <div class="site-note">클릭 시 새 창 이동</div>
+          </div>
+          <div id="siteLinks" class="site-links"></div>
+        </div>
       </section>
     </aside>
 
@@ -517,6 +628,27 @@
 
   <script>
     const markdownSource = String.raw`# 유용한 사이트
+- Google
+https://www.google.com/
+
+- Naver
+https://www.naver.com/
+
+- Youtube
+https://youtube.com/?themeRefresh=1
+
+- ChatGPT
+https://chatgpt.com/
+
+- Google Gemini
+https://gemini.google.com/app?hl=ko
+
+- Claude
+https://claude.ai/new
+
+- NotebookLM
+https://notebooklm.google.com/
+
 - 국가데이터처
 https://kosis.kr/index/index.do
 
@@ -576,6 +708,12 @@ https://www.kbfg.com/kbresearch/index.do
 
 - 현대경제연구원
 https://www.hri.co.kr/kor/main/main.html
+
+- 한국은행경제연구원
+https://www.bok.or.kr/imer/main/main.do
+
+- IBK경제연구소
+http://research.ibk.co.kr/research
 
 
 
@@ -740,6 +878,8 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
 
     const cardsEl = document.getElementById("cards");
     const listNoteEl = document.getElementById("listNote");
+    const searchLinksEl = document.getElementById("searchLinks");
+    const aiToolLinksEl = document.getElementById("aiToolLinks");
     const siteLinksEl = document.getElementById("siteLinks");
 
     function parseMarkdown(source) {
@@ -867,6 +1007,27 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
       `).join("");
     }
 
+    function renderBoxLinks(targetEl, data, className = "site-link") {
+      targetEl.innerHTML = data.map(site => `
+        <a class="${className}" href="${site.url}" target="_blank" rel="noopener noreferrer">${site.title}</a>
+      `).join("");
+    }
+
+    function renderIconLinks(targetEl, data, options) {
+      const { badgeMap, toneClassMap } = options;
+
+      targetEl.innerHTML = data.map(site => {
+        const toneClass = toneClassMap[site.title] || "";
+        const badge = badgeMap[site.title] || site.title.slice(0, 1).toUpperCase();
+        return `
+          <a class="icon-link ${toneClass}" href="${site.url}" target="_blank" rel="noopener noreferrer" aria-label="${site.title}">
+            <span class="icon-link-badge" aria-hidden="true">${badge}</span>
+            <span class="icon-link-label">${site.title}</span>
+          </a>
+        `;
+      }).join("");
+    }
+
     function orderSections(data) {
       const preferredOrder = ["중소기업", "소상공인, 자영업자", "수출 중소기업", "중소기업 금융"];
       const rank = new Map(preferredOrder.map((title, index) => [title, index]));
@@ -908,7 +1069,26 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
     }
 
     const parsed = parseMarkdown(markdownSource);
-    renderUsefulSites(parsed.usefulSites);
+    const searchTitles = new Set(["Google", "Naver", "Youtube"]);
+    const aiToolTitles = new Set(["ChatGPT", "Google Gemini", "Claude", "NotebookLM"]);
+    const searchEngines = parsed.usefulSites.filter(site => searchTitles.has(site.title));
+    const aiTools = parsed.usefulSites.filter(site => aiToolTitles.has(site.title));
+    const usefulSites = parsed.usefulSites.filter(site => !searchTitles.has(site.title) && !aiToolTitles.has(site.title));
+
+    renderIconLinks(searchLinksEl, searchEngines, {
+      badgeMap: {
+        Google: "G",
+        Naver: "N",
+        Youtube: "▶"
+      },
+      toneClassMap: {
+        Google: "search-google",
+        Naver: "search-naver",
+        Youtube: "search-youtube"
+      }
+    });
+    renderBoxLinks(aiToolLinksEl, aiTools, "site-link ai-link");
+    renderUsefulSites(usefulSites);
     renderCards(parsed.sections);
   </script>
 </body>
