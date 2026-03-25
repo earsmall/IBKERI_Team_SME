@@ -201,6 +201,27 @@
       padding-right: 2px;
     }
 
+    .site-categories {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .site-category {
+      display: grid;
+      gap: 8px;
+    }
+
+    .site-category-title {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-strong);
+      letter-spacing: 0.01em;
+    }
+
     .tool-links {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -602,7 +623,7 @@
             <h3>유용한 사이트</h3>
             <div class="site-note">클릭 시 새 창 이동</div>
           </div>
-          <div id="siteLinks" class="site-links"></div>
+          <div id="siteLinks" class="site-categories"></div>
         </div>
       </section>
     </aside>
@@ -627,7 +648,7 @@
   </div>
 
   <script>
-    const markdownSource = String.raw`# 유용한 사이트
+    const markdownSource = String.raw`# 검색 엔진
 - Google
 https://www.google.com/
 
@@ -637,6 +658,7 @@ https://www.naver.com/
 - Youtube
 https://youtube.com/?themeRefresh=1
 
+# AI Tools
 - ChatGPT
 https://chatgpt.com/
 
@@ -649,6 +671,8 @@ https://claude.ai/new
 - NotebookLM
 https://notebooklm.google.com/
 
+# 유용한 사이트
+## 통계
 - 국가데이터처
 https://kosis.kr/index/index.do
 
@@ -664,6 +688,7 @@ http://bss.kfb.or.kr/
 - 산업통계분석시스템
 https://www.istans.or.kr/main.html
 
+## 정부 부처 등
 - 금융위원회
 https://www.fsc.go.kr/index
 
@@ -688,6 +713,7 @@ https://www.kfb.or.kr/main/main.php
 - 중소벤처기업연구원
 https://www.kosi.re.kr/kosbiWar/main
 
+## 연구기관 등
 - 한국금융연구원
 https://www.kif.re.kr/kif4/main/
 
@@ -884,8 +910,12 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
 
     function parseMarkdown(source) {
       const lines = source.split(/\r?\n/);
-      const usefulSites = [];
+      const searchEngines = [];
+      const aiTools = [];
+      const usefulSiteGroups = [];
       const sections = [];
+      let currentTopCategory = null;
+      let currentUsefulGroup = null;
       let currentSection = null;
       let currentGroup = null;
       let pendingItem = null;
@@ -899,44 +929,42 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
         }
 
         if (line.startsWith("# ")) {
-          if (line.slice(2).trim() === "유용한 사이트") {
+          const title = line.slice(2).trim();
+
+          if (title === "검색 엔진" || title === "AI Tools" || title === "유용한 사이트") {
+            currentTopCategory = title;
             currentSection = null;
             currentGroup = null;
+            currentUsefulGroup = null;
             pendingItem = null;
             pendingSite = null;
             continue;
           }
 
           currentSection = {
-            title: line.slice(2).trim(),
+            title,
             groups: []
           };
           sections.push(currentSection);
+          currentTopCategory = null;
+          currentUsefulGroup = null;
           currentGroup = null;
           pendingItem = null;
           pendingSite = null;
           continue;
         }
 
-        if (/^\d+\.\s+/.test(line)) {
-          pendingSite = {
-            title: line.replace(/^\d+\.\s+/, "").trim(),
-            url: ""
-          };
-          usefulSites.push(pendingSite);
-          continue;
-        }
-
-        if (!currentSection && line.startsWith("- ")) {
-          pendingSite = {
-            title: line.slice(2).trim(),
-            url: ""
-          };
-          usefulSites.push(pendingSite);
-          continue;
-        }
-
         if (line.startsWith("## ")) {
+          if (currentTopCategory === "유용한 사이트") {
+            currentUsefulGroup = {
+              title: line.slice(3).trim(),
+              items: []
+            };
+            usefulSiteGroups.push(currentUsefulGroup);
+            pendingSite = null;
+            continue;
+          }
+
           if (!currentSection) {
             continue;
           }
@@ -947,6 +975,29 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
           };
           currentSection.groups.push(currentGroup);
           pendingItem = null;
+          continue;
+        }
+
+        if ((currentTopCategory === "검색 엔진" || currentTopCategory === "AI Tools" || currentTopCategory === "유용한 사이트") && line.startsWith("- ")) {
+          pendingSite = {
+            title: line.slice(2).trim(),
+            url: ""
+          };
+
+          if (currentTopCategory === "검색 엔진") {
+            searchEngines.push(pendingSite);
+          } else if (currentTopCategory === "AI Tools") {
+            aiTools.push(pendingSite);
+          } else {
+            if (!currentUsefulGroup) {
+              currentUsefulGroup = {
+                title: "기타",
+                items: []
+              };
+              usefulSiteGroups.push(currentUsefulGroup);
+            }
+            currentUsefulGroup.items.push(pendingSite);
+          }
           continue;
         }
 
@@ -982,7 +1033,12 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
       }
 
       return {
-        usefulSites: usefulSites.filter(site => site.title && site.url),
+        searchEngines: searchEngines.filter(site => site.title && site.url),
+        aiTools: aiTools.filter(site => site.title && site.url),
+        usefulSiteGroups: usefulSiteGroups.map(group => ({
+          ...group,
+          items: group.items.filter(item => item.title && item.url)
+        })).filter(group => group.title && group.items.length),
         sections: sections.map(section => ({
           ...section,
           groups: section.groups.map(group => ({
@@ -1002,8 +1058,13 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
     }
 
     function renderUsefulSites(data) {
-      siteLinksEl.innerHTML = data.map(site => `
-        <a class="site-link" href="${site.url}" target="_blank" rel="noopener noreferrer">${site.title}</a>
+      siteLinksEl.innerHTML = data.map(group => `
+        <section class="site-category">
+          <h4 class="site-category-title">${group.title}</h4>
+          <div class="site-links">
+            ${group.items.map(site => `<a class="site-link" href="${site.url}" target="_blank" rel="noopener noreferrer">${site.title}</a>`).join("")}
+          </div>
+        </section>
       `).join("");
     }
 
@@ -1069,13 +1130,7 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
     }
 
     const parsed = parseMarkdown(markdownSource);
-    const searchTitles = new Set(["Google", "Naver", "Youtube"]);
-    const aiToolTitles = new Set(["ChatGPT", "Google Gemini", "Claude", "NotebookLM"]);
-    const searchEngines = parsed.usefulSites.filter(site => searchTitles.has(site.title));
-    const aiTools = parsed.usefulSites.filter(site => aiToolTitles.has(site.title));
-    const usefulSites = parsed.usefulSites.filter(site => !searchTitles.has(site.title) && !aiToolTitles.has(site.title));
-
-    renderIconLinks(searchLinksEl, searchEngines, {
+    renderIconLinks(searchLinksEl, parsed.searchEngines, {
       badgeMap: {
         Google: "G",
         Naver: "N",
@@ -1087,8 +1142,8 @@ https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2`;
         Youtube: "search-youtube"
       }
     });
-    renderBoxLinks(aiToolLinksEl, aiTools, "site-link ai-link");
-    renderUsefulSites(usefulSites);
+    renderBoxLinks(aiToolLinksEl, parsed.aiTools, "site-link ai-link");
+    renderUsefulSites(parsed.usefulSiteGroups);
     renderCards(parsed.sections);
   </script>
 </body>
