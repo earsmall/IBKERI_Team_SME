@@ -308,6 +308,10 @@
       margin-bottom: 18px;
     }
 
+    .publisher-row.hidden {
+      display: none;
+    }
+
     .publisher[data-group="domestic"].active {
       background: linear-gradient(135deg, #4c6f98, #34506f);
       box-shadow: 0 12px 22px rgba(59, 95, 138, 0.22);
@@ -375,6 +379,19 @@
       margin-bottom: 8px;
       font-size: 0.84rem;
       color: var(--muted);
+    }
+
+    .headline[data-group="global"] .headline-meta span:not(.badge):not(.date-label) {
+      display: none;
+    }
+
+    .headline-scope {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 0.77rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.4;
     }
 
     .headline-title {
@@ -641,11 +658,11 @@
         <span class="eyebrow">Daily Headline Briefing</span>
         <h1>주요 언론기사</h1>
         <p class="hero-copy">
-          이 페이지는 실행일인 2026년 3월 29일을 기준으로 구성했습니다. 국내 언론은 같은 날짜 주요 매체를 폭넓게 참고해 정치, 경제, 사회, 국제 네 섹션으로 나누고 각 섹션마다 실제 파급력이 큰 기사만 배치했습니다. 해외 언론은 WSJ의 `Economy`·`Markets & Finance`, FT의 `Markets`, NYT의 `Business > Economy` 범위만 대상으로 삼고, 당일 기사를 우선 반영하되 부족할 경우 같은 범위 안에서 가장 최신 기사로 보완합니다.
+          이 페이지는 실행일인 2026년 3월 29일을 기준으로 구성했습니다. 국내 언론은 같은 날짜 주요 매체를 폭넓게 참고해 정치, 경제, 사회, 국제 네 섹션으로 나누고 각 섹션마다 실제 파급력이 큰 기사만 배치했습니다. 해외 언론은 WSJ의 `Economy`·`Markets & Finance`, FT의 `Markets`, NYT의 `Business > Economy` 범위만 대상으로 삼고 실행일 당일 기사만 반영합니다.
         </p>
         <div class="hero-meta">
           <span class="chip">기준일 2026-03-29</span>
-          <span class="chip">해외 15건 / 국내 20건</span>
+          <span class="chip">해외 최대 15건 / 국내 20건</span>
           <span class="chip">목록·요약 동시 보기</span>
         </div>
       </div>
@@ -664,9 +681,6 @@
           </div>
 
           <div class="publisher-row" id="publisherTabs">
-            <button class="publisher active" data-group="global" data-publisher="wsj" type="button">WSJ</button>
-            <button class="publisher" data-group="global" data-publisher="ft" type="button">FT</button>
-            <button class="publisher" data-group="global" data-publisher="nyt" type="button">NYT</button>
             <button class="publisher hidden" data-group="domestic" data-publisher="politics" type="button">정치</button>
             <button class="publisher hidden" data-group="domestic" data-publisher="economy" type="button">경제</button>
             <button class="publisher hidden" data-group="domestic" data-publisher="society" type="button">사회</button>
@@ -1128,6 +1142,7 @@
     const detailCards = [...document.querySelectorAll('.detail-card')];
     const headlineEmpty = document.getElementById('headlineEmpty');
     const detailEmpty = document.getElementById('detailEmpty');
+    const publisherRow = document.getElementById('publisherTabs');
     const executionDate = '2026-03-29';
     const articleDates = {
       'wsj-1': '2026-03-23',
@@ -1166,8 +1181,23 @@
       'int-5': '2026-03-29'
     };
 
+    const GLOBAL_SCOPE_TEXT = 'Business > Economy 또는 Financial Markets';
+
     let currentGroup = 'global';
-    let currentPublisher = 'wsj';
+    let currentPublisher = 'politics';
+
+    function injectGlobalScopeLabels() {
+      headlines.forEach((headline) => {
+        if (headline.dataset.group !== 'global') return;
+        if (headline.querySelector('.headline-scope')) return;
+        const titleRow = headline.querySelector('.headline-title-row');
+        if (!titleRow) return;
+        const scopeNode = document.createElement('p');
+        scopeNode.className = 'headline-scope';
+        scopeNode.textContent = GLOBAL_SCOPE_TEXT;
+        titleRow.parentNode.insertBefore(scopeNode, titleRow);
+      });
+    }
 
     function injectDates() {
       headlines.forEach((headline) => {
@@ -1196,14 +1226,13 @@
     function filterToExecutionDate() {
       headlines.forEach((headline) => {
         const date = articleDates[headline.dataset.target];
-        const isCurrent = headline.dataset.group === 'global' ? date <= executionDate : date === executionDate;
+        const isCurrent = date === executionDate;
         headline.dataset.current = isCurrent ? 'true' : 'false';
       });
 
       detailCards.forEach((card) => {
         const date = articleDates[card.id];
-        const headline = headlines.find((item) => item.dataset.target === card.id);
-        const isCurrent = headline && headline.dataset.group === 'global' ? date <= executionDate : date === executionDate;
+        const isCurrent = date === executionDate;
         card.dataset.current = isCurrent ? 'true' : 'false';
       });
     }
@@ -1222,22 +1251,29 @@
     }
 
     function syncHeadlineVisibility() {
+      publisherRow.classList.toggle('hidden', currentGroup !== 'domestic');
+
       publisherTabs.forEach((tab) => {
-        const shouldShow = tab.dataset.group === currentGroup;
+        const shouldShow = currentGroup === 'domestic' && tab.dataset.group === currentGroup;
         tab.classList.toggle('hidden', !shouldShow);
       });
 
-      const visiblePublishers = publisherTabs.filter((tab) => tab.dataset.group === currentGroup);
-      if (!visiblePublishers.some((tab) => tab.dataset.publisher === currentPublisher)) {
+      const visiblePublishers = publisherTabs.filter((tab) => !tab.classList.contains('hidden'));
+      if (currentGroup === 'domestic' && !visiblePublishers.some((tab) => tab.dataset.publisher === currentPublisher)) {
         currentPublisher = visiblePublishers[0].dataset.publisher;
       }
 
       publisherTabs.forEach((tab) => {
-        tab.classList.toggle('active', tab.dataset.publisher === currentPublisher && tab.dataset.group === currentGroup);
+        const isActive = currentGroup === 'domestic'
+          && tab.dataset.publisher === currentPublisher
+          && tab.dataset.group === currentGroup;
+        tab.classList.toggle('active', isActive);
       });
 
       headlines.forEach((headline) => {
-        const visible = headline.dataset.group === currentGroup && headline.dataset.publisher === currentPublisher && headline.dataset.current === 'true';
+        const visible = currentGroup === 'global'
+          ? headline.dataset.group === 'global' && headline.dataset.current === 'true'
+          : headline.dataset.group === 'domestic' && headline.dataset.publisher === currentPublisher && headline.dataset.current === 'true';
         headline.classList.toggle('hidden', !visible);
       });
 
@@ -1279,6 +1315,7 @@
     });
 
     injectDates();
+    injectGlobalScopeLabels();
     filterToExecutionDate();
     syncHeadlineVisibility();
   </script>
