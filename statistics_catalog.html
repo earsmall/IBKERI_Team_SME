@@ -96,19 +96,20 @@
     }
 
     .nav-link {
-      display: flex;
-      flex-direction: column;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 58px;
-      padding: 0 12px;
+      min-height: 54px;
+      padding: 0 10px;
       border-radius: 18px;
       border: 1px solid transparent;
       text-decoration: none;
       font-size: 13px;
       font-weight: 800;
       text-align: center;
-      line-height: 1.2;
+      line-height: 1.1;
+      white-space: nowrap;
+      word-break: keep-all;
       transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease, border-color 160ms ease;
       box-shadow: 0 12px 24px rgba(40, 72, 115, 0.12);
     }

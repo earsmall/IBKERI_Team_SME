@@ -3,27 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="주요 해외·국내 언론 헤드라인을 한곳에서 확인할 수 있는 웹페이지입니다.">
+  <meta name="description" content="2026-03-30 기준 해외 20건·국내 20건 헤드라인을 카드형으로 정리한 웹페이지입니다.">
   <title>주요 언론기사</title>
   <style>
     :root {
-      --bg: #e9f2fb;
-      --panel: rgba(249, 252, 255, 0.9);
+      --bg: #f4f2fb;
+      --panel: rgba(255, 255, 255, 0.9);
       --panel-strong: #ffffff;
-      --line: rgba(58, 95, 140, 0.14);
-      --text: #18212b;
-      --muted: #627181;
+      --line: rgba(99, 80, 170, 0.18);
+      --text: #1c1f2a;
+      --muted: #5a5f73;
       --accent: #7c3aed;
-      --accent-deep: #5b21b6;
-      --accent-soft: rgba(124, 58, 237, 0.1);
-      --accent-strong: #163b7a;
-      --wsj: #d9e7d7;
-      --ft: #f6d9c6;
-      --nyt: #e6d8f2;
-      --kr: #dbe4f3;
-      --shadow: 0 18px 40px rgba(40, 72, 115, 0.12);
-      --radius: 20px;
-      --radius-lg: 24px;
+      --accent-deep: #5b2bb3;
+      --accent-soft: rgba(124, 58, 237, 0.12);
+      --shadow: 0 18px 40px rgba(70, 49, 140, 0.14);
+      --radius: 22px;
       --font-ui: "Noto Sans KR", "Pretendard", "Malgun Gothic", sans-serif;
     }
 
@@ -35,39 +29,37 @@
       font-family: var(--font-ui);
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.74), transparent 34%),
-        radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 24%),
-        linear-gradient(180deg, #edf5ff 0%, #d9eafe 100%);
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.82), transparent 30%),
+        radial-gradient(circle at 25% 20%, rgba(124, 58, 237, 0.18), transparent 26%),
+        linear-gradient(180deg, #f7f5ff 0%, #e7e4fb 100%);
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
+      pointer-events: none;
+      opacity: 0.3;
       background-image:
         linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
-      opacity: 0.35;
+      background-size: 30px 30px;
     }
 
     .shell {
       position: relative;
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr);
-      gap: 16px;
-      padding: 12px;
-      min-height: 100vh;
-      width: min(1988px, calc(100vw - 8px));
-      max-width: none;
+      width: min(1920px, calc(100vw - 12px));
       margin: 0 auto;
+      padding: 12px;
+      display: grid;
+      gap: 16px;
+      min-height: 100vh;
+      grid-template-rows: auto minmax(0, 1fr);
     }
 
-    .panel,
+    .topbar,
     .list-panel,
-    .detail-panel,
-    .topbar {
+    .detail-panel {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -76,21 +68,9 @@
     }
 
     .topbar {
-      padding: 14px 16px;
+      padding: 16px 18px;
       display: grid;
-      gap: 10px;
-      align-self: start;
-    }
-
-    .dept-name {
-      display: block;
-      margin-bottom: 0;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: var(--accent-strong);
-      line-height: 1.35;
-      text-align: left;
+      gap: 12px;
     }
 
     .topbar-row {
@@ -98,7 +78,13 @@
       grid-template-columns: max-content minmax(320px, 560px);
       gap: 12px;
       align-items: center;
-      justify-content: start;
+    }
+
+    .dept-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent-deep);
+      letter-spacing: 0.02em;
     }
 
     .nav-switch {
@@ -108,26 +94,19 @@
     }
 
     .nav-link {
+      min-height: 60px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 60px;
-      padding: 0 11px;
+      padding: 0 12px;
       border-radius: 18px;
-      border: 1px solid transparent;
+      color: #fff;
       text-decoration: none;
       font-size: 15px;
       font-weight: 800;
       text-align: center;
-      line-height: 1.3;
-      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease, border-color 160ms ease;
       box-shadow: 0 12px 24px rgba(40, 72, 115, 0.12);
-    }
-
-    .nav-link:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.02);
+      border: 1px solid transparent;
     }
 
     .nav-link-read {
@@ -136,64 +115,43 @@
       border-color: rgba(29, 78, 216, 0.28);
     }
 
-    .nav-link-stats {
-      background: linear-gradient(135deg, #b45309, #d97706);
-      color: #ffffff;
-      border-color: rgba(217, 119, 6, 0.28);
-    }
-
     .nav-link-dashboard {
       background: linear-gradient(135deg, #0f766e, #0ea5a5);
       color: #ffffff;
       border-color: rgba(14, 165, 165, 0.28);
     }
 
-    .nav-link-news {
-      background: linear-gradient(135deg, #7c3aed, #9333ea);
+    .nav-link-stats {
+      background: linear-gradient(135deg, #c86b14, #f59e0b);
       color: #ffffff;
-      border-color: rgba(147, 51, 234, 0.28);
+      border-color: rgba(200, 107, 20, 0.28);
     }
 
-    .nav-link.is-active {
-      box-shadow: 0 16px 30px rgba(40, 72, 115, 0.18);
+    .nav-link-news {
+      background: linear-gradient(135deg, #7c3aed, #9b4fe0);
+      color: #ffffff;
+      border-color: rgba(147, 51, 234, 0.3);
     }
-
-    .nav-link:not(.is-active) {
-      opacity: 0.86;
-    }
+    .nav-link:not(.is-active) { opacity: 0.9; }
+    .nav-link.is-active { box-shadow: 0 16px 30px rgba(70, 49, 140, 0.22); }
 
     .page-head {
+      border-top: 1px solid rgba(56, 89, 128, 0.12);
+      padding-top: 8px;
       display: grid;
       gap: 10px;
-      padding-top: 6px;
-      border-top: 1px solid rgba(58, 95, 140, 0.12);
-    }
-
-    .chip {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.82);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .main {
-      display: grid;
-      min-height: 0;
     }
 
     .eyebrow {
       display: inline-flex;
+      width: fit-content;
       align-items: center;
-      gap: 8px;
       padding: 8px 12px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent-deep);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.02em;
     }
 
@@ -206,9 +164,9 @@
 
     .hero-copy {
       margin: 0;
-      max-width: 980px;
+      max-width: 1100px;
       color: var(--muted);
-      line-height: 1.75;
+      line-height: 1.8;
       font-size: 15px;
     }
 
@@ -216,19 +174,47 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 16px;
     }
 
     .chip {
-      background: rgba(255,255,255,0.82);
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
     }
 
-    .content { min-height: 0; }
+    .main {
+      min-height: 0;
+    }
 
-    .list-head h2,
-    .detail-panel h2 {
-      margin: 0 0 12px;
-      letter-spacing: -0.03em;
+    .navigator {
+      height: min(820px, calc(100vh - 250px));
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .list-panel,
+    .detail-panel {
+      padding: 22px;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .list-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: auto;
     }
 
     .list-head {
@@ -236,169 +222,88 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 16px;
       flex-wrap: nowrap;
     }
 
-    .list-head h2 {
+    .list-head h2,
+    .detail-head h2 {
       margin: 0;
+      letter-spacing: -0.03em;
     }
 
-    .list-head p,
-    .detail-intro {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .navigator {
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      gap: 18px;
-      align-items: stretch;
-      height: min(820px, calc(100vh - 240px));
-    }
-
-    .list-panel,
-    .detail-panel {
-      padding: 22px;
-      height: 100%;
-      min-height: 0;
-      min-width: 0;
-    }
-
-    .tier {
+    .tier,
+    .publisher-row {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .list-head .tier {
-      margin-bottom: 0;
-      flex-wrap: nowrap;
-      flex-shrink: 0;
+      flex-wrap: wrap;
     }
 
     .toggle,
     .publisher {
       appearance: none;
       border: 1px solid var(--line);
-      background: rgba(255, 253, 248, 0.82);
-      color: var(--muted);
       border-radius: 999px;
       padding: 11px 16px;
+      background: rgba(255,255,255,0.84);
+      color: var(--muted);
       font: inherit;
+      font-weight: 700;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: 0.18s ease;
     }
 
     .toggle.active,
     .publisher.active {
-      border-color: transparent;
-      color: white;
+      color: #fff;
       background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-      box-shadow: 0 12px 22px rgba(124, 58, 237, 0.22);
-    }
-
-    .publisher-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
+      border-color: transparent;
+      box-shadow: 0 12px 22px rgba(31, 95, 168, 0.22);
     }
 
     .publisher-row.hidden {
       display: none;
     }
 
-    .publisher[data-group="domestic"].active {
-      background: linear-gradient(135deg, #4c6f98, #34506f);
-      box-shadow: 0 12px 22px rgba(59, 95, 138, 0.22);
-    }
-
     .headline-list {
-      display: grid;
-      gap: 10px;
       flex: 1;
       min-height: 0;
       overflow: auto;
+      display: grid;
+      gap: 10px;
       padding-right: 4px;
     }
 
-    .empty-state {
-      display: none;
-      border: 1px dashed var(--line);
-      border-radius: 20px;
-      padding: 18px 20px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.55);
-      line-height: 1.7;
-    }
-
-    .empty-state.active {
-      display: block;
-    }
-
-    .list-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
     .headline {
-      appearance: none;
       width: 100%;
-      min-width: 0;
-      text-align: left;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.62);
-      border-radius: 22px;
-      padding: 16px 16px 15px;
+      background: rgba(255,255,255,0.74);
+      border-radius: 20px;
+      padding: 15px 16px;
+      text-align: left;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: 0.18s ease;
     }
 
     .headline:hover {
       transform: translateY(-1px);
-      border-color: rgba(124, 58, 237, 0.3);
+      border-color: rgba(31, 95, 168, 0.3);
     }
 
     .headline.active {
-      background: linear-gradient(180deg, rgba(124, 58, 237, 0.1), rgba(255, 255, 255, 0.92));
-      border-color: rgba(124, 58, 237, 0.35);
-      box-shadow: 0 14px 28px rgba(124, 58, 237, 0.12);
+      background: linear-gradient(180deg, rgba(31, 95, 168, 0.09), rgba(255,255,255,0.94));
+      border-color: rgba(31, 95, 168, 0.3);
+      box-shadow: 0 14px 28px rgba(31, 95, 168, 0.12);
     }
 
     .headline-meta {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
       gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 8px;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       color: var(--muted);
-    }
-
-    .headline[data-group="global"] .headline-meta span:not(.badge):not(.date-label) {
-      display: none;
-    }
-
-    .headline-scope {
-      margin: 0 0 6px;
-      color: var(--muted);
-      font-size: 0.77rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      line-height: 1.4;
-    }
-
-    .headline-title {
-      margin: 0;
-      font-size: 1rem;
-      line-height: 1.5;
-      color: var(--text);
     }
 
     .badge {
@@ -406,59 +311,69 @@
       align-items: center;
       padding: 6px 10px;
       border-radius: 999px;
-      font-weight: 700;
       font-size: 0.76rem;
+      font-weight: 800;
       letter-spacing: 0.02em;
+      background: rgba(31, 95, 168, 0.1);
+      color: var(--accent-deep);
     }
 
-    .badge.wsj { background: var(--wsj); color: #2d5632; }
-    .badge.ft { background: var(--ft); color: #834112; }
-    .badge.nyt { background: var(--nyt); color: #5e3b80; }
-    .badge.kr { background: var(--kr); color: #305483; }
+    .headline-scope {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .headline-title {
+      margin: 0;
+      line-height: 1.52;
+      font-size: 1rem;
+      color: var(--text);
+    }
 
     .headline-subtitle {
-      display: block;
-      margin: 2px 0 0;
+      margin: 4px 0 0;
       color: var(--muted);
-      font-size: 0.86rem;
+      font-size: 0.87rem;
       line-height: 1.45;
     }
 
-    .headline-title-row {
-      display: grid;
-      gap: 4px;
-      width: 100%;
-      min-width: 0;
+    .detail-intro,
+    .empty-state {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
     }
 
-    .headline-title-row .headline-title,
-    .headline-title-row .headline-subtitle {
-      min-width: 0;
+    .empty-state {
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.58);
+      padding: 18px 20px;
     }
 
-    .detail-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      overflow: auto;
+    .status-note {
+      margin: 0;
+      border: 1px solid rgba(180, 83, 9, 0.18);
+      border-radius: 18px;
+      background: rgba(245, 158, 11, 0.08);
+      color: #8a4b08;
+      padding: 14px 16px;
+      line-height: 1.7;
+      font-size: 0.92rem;
     }
 
     .detail-card {
-      display: none;
       background: var(--panel-strong);
       border: 1px solid var(--line);
       border-radius: 22px;
       padding: 24px;
-      animation: rise 0.22s ease;
+      display: none;
     }
 
     .detail-card.active {
       display: block;
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(8px) scale(0.99); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .detail-top {
@@ -472,8 +387,8 @@
 
     .detail-source {
       display: inline-flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
@@ -482,78 +397,67 @@
       align-items: center;
       padding: 8px 12px;
       border-radius: 999px;
+      background: rgba(31, 95, 168, 0.1);
+      color: var(--accent-deep);
       font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      font-weight: 800;
     }
 
-    .source-pill.wsj { background: var(--wsj); color: #2d5632; }
-    .source-pill.ft { background: var(--ft); color: #834112; }
-    .source-pill.nyt { background: var(--nyt); color: #5e3b80; }
-    .source-pill.kr { background: var(--kr); color: #305483; }
-
-    .section-label {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
+    .section-label,
     .date-label {
       color: var(--muted);
-      font-size: 0.78rem;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
+      font-size: 0.88rem;
     }
 
     .detail-card h3 {
       margin: 0 0 14px;
-      font-size: clamp(1.6rem, 2.6vw, 2.35rem);
-      line-height: 1.15;
-      letter-spacing: -0.04em;
+      font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+      line-height: 1.16;
+      letter-spacing: -0.03em;
     }
 
     .translated-title {
-      margin: -6px 0 14px;
-      color: var(--text);
+      margin: -4px 0 14px;
       font-size: 1rem;
+      font-weight: 800;
       line-height: 1.6;
-      font-weight: 700;
     }
 
     .summary {
       margin: 0 0 14px;
       color: var(--muted);
       line-height: 1.85;
-      font-size: 1rem;
+      font-size: 0.98rem;
     }
 
     .takeaway {
+      margin: 0 0 16px;
       padding: 16px 18px;
-      border-radius: 20px;
       border: 1px solid var(--line);
-      background: rgba(124, 58, 237, 0.06);
-      line-height: 1.7;
-      margin-bottom: 16px;
+      border-radius: 18px;
+      background: rgba(31, 95, 168, 0.06);
+      line-height: 1.72;
     }
 
     .takeaway strong {
       color: var(--accent-deep);
     }
 
+    .note {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
     .detail-links a {
       color: var(--accent);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .detail-links a:hover { text-decoration: underline; }
-
-    .empty-state {
-      border: 1px dashed var(--line);
-      border-radius: 24px;
-      padding: 28px;
-      color: var(--muted);
-      line-height: 1.8;
-      background: rgba(255, 255, 255, 0.52);
+    .detail-links a:hover {
+      text-decoration: underline;
     }
 
     .hidden {
@@ -562,34 +466,25 @@
 
     @media (max-width: 1180px) {
       .shell {
-        width: min(100%, calc(100vw - 8px));
-        padding: 16px;
+        width: min(100%, calc(100vw - 10px));
+        padding: 14px;
       }
 
       .topbar-row {
         grid-template-columns: 1fr;
-        justify-content: stretch;
-      }
-
-      .main {
-        min-height: auto;
       }
 
       .navigator {
-        grid-template-columns: 1fr;
         height: auto;
+        grid-template-columns: 1fr;
       }
 
       .detail-panel {
-        min-height: auto;
+        min-height: 420px;
       }
     }
 
     @media (max-width: 720px) {
-      .shell {
-        padding: 14px;
-      }
-
       .topbar,
       .list-panel,
       .detail-panel {
@@ -600,37 +495,19 @@
         grid-template-columns: 1fr;
       }
 
-      .headline-list {
-        max-height: none;
-      }
-
-      .detail-card {
-        padding: 20px;
-      }
-
       .list-head {
         flex-direction: column;
         align-items: flex-start;
       }
-    }
 
-    @media (min-width: 1800px) and (min-height: 980px) {
-      .shell {
-        width: min(1996px, calc(100vw - 4px));
-        min-height: calc(100vh - 16px);
-        gap: 14px;
-        padding: 8px;
+      .tier {
+        width: 100%;
       }
 
-      .main {
-        min-height: calc(100vh - 16px);
-      }
-
-      .navigator {
-        height: min(900px, calc(100vh - 230px));
+      .toggle {
+        flex: 1;
       }
     }
-
   </style>
 </head>
 <body>
@@ -639,18 +516,10 @@
       <div class="topbar-row">
         <div class="dept-name">IBK경제연구소 중기산업연구실 중소기업팀</div>
         <div class="nav-switch">
-          <a class="nav-link nav-link-read" href="./index.html">
-            <span>읽을거리</span>
-          </a>
-          <a class="nav-link nav-link-news is-active" href="./News.html">
-            <span>언론기사</span>
-          </a>
-          <a class="nav-link nav-link-stats" href="./statistics_catalog.html">
-            <span>통계 등 검색</span>
-          </a>
-          <a class="nav-link nav-link-dashboard" href="./tableau_dashboard.html">
-            <span>시각화 대쉬보드</span>
-          </a>
+          <a class="nav-link nav-link-read" href="./index.html"><span>읽을거리</span></a>
+          <a class="nav-link nav-link-news is-active" href="./News.html"><span>언론기사</span></a>
+          <a class="nav-link nav-link-stats" href="./statistics_catalog.html"><span>통계 등 검색</span></a>
+          <a class="nav-link nav-link-dashboard" href="./tableau_dashboard.html"><span>시각화 대쉬보드</span></a>
         </div>
       </div>
 
@@ -658,666 +527,629 @@
         <span class="eyebrow">Daily Headline Briefing</span>
         <h1>주요 언론기사</h1>
         <p class="hero-copy">
-          이 페이지는 실행일인 2026년 3월 29일을 기준으로 구성했습니다. 국내 언론은 같은 날짜 주요 매체를 폭넓게 참고해 정치, 경제, 사회, 국제 네 섹션으로 나누고 각 섹션마다 실제 파급력이 큰 기사만 배치했습니다. 해외 언론은 WSJ의 `Economy`·`Markets & Finance`, FT의 `Markets`, NYT의 `Business > Economy` 범위만 대상으로 삼고 실행일 당일 기사만 반영합니다.
+          해외 언론의 경우 특정 섹션에 한정하여 기사 탐색,<br>
+          (WSJ <code>Economy</code>·<code>Markets &amp; Finance</code>, FT <code>Markets</code>, NYT <code>Business &gt; Economy</code>)<br>
+          해당 섹션 기준일 기사가 검색되지 않을 경우 최신 기사로 검색하여 최대 20건 표시
         </p>
         <div class="hero-meta">
-          <span class="chip">기준일 2026-03-29</span>
-          <span class="chip">해외 최대 15건 / 국내 20건</span>
-          <span class="chip">목록·요약 동시 보기</span>
+          <span class="chip">기준일 2026-03-30</span>
+          <span class="chip">해외 20건 반영 / 국내 20건 반영</span>
+          <span class="chip">NYT 10건 · FT 10건 · WSJ(검색 대체 가능)</span>
+          <span class="chip">국내는 네이버 뉴스 섹션 기준</span>
+          <span class="chip">국내는 메이저 언론사만 탐색</span>
         </div>
       </div>
     </section>
 
     <main class="main">
-      <section class="content">
-        <section class="navigator">
-          <section class="list-panel">
+      <section class="navigator">
+        <section class="list-panel">
           <div class="list-head">
             <h2>헤드라인 선택</h2>
-            <div class="tier" id="groupTabs">
-              <button class="toggle" data-group="domestic" type="button">국내 언론</button>
-              <button class="toggle active" data-group="global" type="button">해외 언론</button>
+            <div class="tier">
+              <button class="toggle active" data-group="domestic" type="button">국내 언론</button>
+              <button class="toggle" data-group="global" type="button">해외 언론</button>
             </div>
           </div>
 
           <div class="publisher-row" id="publisherTabs">
-            <button class="publisher hidden" data-group="domestic" data-publisher="politics" type="button">정치</button>
-            <button class="publisher hidden" data-group="domestic" data-publisher="economy" type="button">경제</button>
-            <button class="publisher hidden" data-group="domestic" data-publisher="society" type="button">사회</button>
-            <button class="publisher hidden" data-group="domestic" data-publisher="world" type="button">국제</button>
+            <button class="publisher active" data-group="domestic" data-publisher="politics" type="button">정치</button>
+            <button class="publisher" data-group="domestic" data-publisher="economy" type="button">경제</button>
+            <button class="publisher" data-group="domestic" data-publisher="society" type="button">사회</button>
+            <button class="publisher" data-group="domestic" data-publisher="world" type="button">국제</button>
           </div>
 
-          <div class="headline-list" id="headlineList">
-            <button class="headline active" data-group="global" data-publisher="wsj" data-target="wsj-1" type="button">
-              <span class="headline-meta"><span class="badge wsj">WSJ</span><span>Markets & Finance</span></span>
-              <div class="headline-title-row"><p class="headline-title">Stocks Were Headed for a Red Monday. Then Trump Took to Social Media.</p><p class="headline-subtitle">주가는 급락 직전이었지만, 트럼프의 SNS 글 한 줄이 시장을 되돌렸다</p></div>
-            </button>
-            <button class="headline" data-group="global" data-publisher="wsj" data-target="wsj-2" type="button">
-              <span class="headline-meta"><span class="badge wsj">WSJ</span><span>Markets & Finance</span></span>
-              <div class="headline-title-row"><p class="headline-title">How Oil Crunch Could Spread Across the Globe</p><p class="headline-subtitle">원유 공급 충격이 어떻게 전 세계 경제로 번질 수 있는가</p></div>
-            </button>
-            <button class="headline" data-group="global" data-publisher="wsj" data-target="wsj-3" type="button">
-              <span class="headline-meta"><span class="badge wsj">WSJ</span><span>Economy</span></span>
-              <div class="headline-title-row"><p class="headline-title">Energy Prices, Inflation Will Be Lower After the War, Bessent Says</p><p class="headline-subtitle">전쟁이 끝나면 에너지 가격과 인플레이션은 다시 낮아질 것이라고 베선트가 말하다</p></div>
-            </button>
-            <button class="headline" data-group="global" data-publisher="wsj" data-target="wsj-4" type="button">
-              <span class="headline-meta"><span class="badge wsj">WSJ</span><span>Markets & Finance</span></span>
-              <div class="headline-title-row"><p class="headline-title">Oil Price Rise Hasn’t Destroyed Demand, U.S. Energy Secretary Says</p><p class="headline-subtitle">유가 상승이 아직 수요를 무너뜨리지는 않았다고 미 에너지장관이 평가하다</p></div>
-            </button>
-            <button class="headline" data-group="global" data-publisher="wsj" data-target="wsj-5" type="button">
-              <span class="headline-meta"><span class="badge wsj">WSJ</span><span>Markets & Finance</span></span>
-              <div class="headline-title-row"><p class="headline-title">The 24 Hours When Oil Markets Went Wild</p><p class="headline-subtitle">유가시장이 단 24시간 만에 폭등과 급락을 오간 순간</p></div>
-            </button>
-
-            <button class="headline hidden" data-group="global" data-publisher="ft" data-target="ft-1" type="button">
-              <span class="headline-meta"><span class="badge ft">FT</span><span>Markets</span></span>
-              <div class="headline-title-row"><p class="headline-title">Why is the Iran crisis pummelling the gilts market?</p><p class="headline-subtitle">이란 위기가 왜 영국 국채시장을 거세게 흔드는가</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="ft" data-target="ft-2" type="button">
-              <span class="headline-meta"><span class="badge ft">FT</span><span>Markets</span></span>
-              <div class="headline-title-row"><p class="headline-title">Investors start to bet on US interest rate rises amid inflation fears</p><p class="headline-subtitle">인플레이션 우려 속에서 투자자들이 미국 금리 인상 가능성에 베팅하기 시작하다</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="ft" data-target="ft-3" type="button">
-              <span class="headline-meta"><span class="badge ft">FT</span><span>Markets</span></span>
-              <div class="headline-title-row"><p class="headline-title">UK borrowing costs reach highest level since 2008 as economic hit from war mounts</p><p class="headline-subtitle">전쟁 충격이 커지며 영국의 차입 비용이 2008년 이후 최고치에 도달하다</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="ft" data-target="ft-4" type="button">
-              <span class="headline-meta"><span class="badge ft">FT</span><span>Markets</span></span>
-              <div class="headline-title-row"><p class="headline-title">India’s central bank battles to protect rupee from Iran war fallout</p><p class="headline-subtitle">인도 중앙은행이 이란 전쟁의 여파로부터 루피를 방어하기 위해 분투하다</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="ft" data-target="ft-5" type="button">
-              <span class="headline-meta"><span class="badge ft">FT</span><span>Markets</span></span>
-              <div class="headline-title-row"><p class="headline-title">SEC urged to restrict Chinese companies’ access to US capital markets</p><p class="headline-subtitle">중국 기업의 미국 자본시장 접근을 제한하라는 요구가 SEC에 제기되다</p></div>
-            </button>
-
-            <button class="headline hidden" data-group="global" data-publisher="nyt" data-target="nyt-2" type="button">
-              <span class="headline-meta"><span class="badge nyt">NYT</span><span>Business &gt; Economy</span></span>
-              <div class="headline-title-row"><p class="headline-title">Why College Graduates Feel Betrayed</p><p class="headline-subtitle">대학 졸업생들이 왜 배신당했다고 느끼는가</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="nyt" data-target="nyt-3" type="button">
-              <span class="headline-meta"><span class="badge nyt">NYT</span><span>Business &gt; Economy</span></span>
-              <div class="headline-title-row"><p class="headline-title">Diesel Is a Bigger Problem for Consumers Than Gasoline. Here’s Why.</p><p class="headline-subtitle">휘발유보다 디젤이 소비자에게 더 큰 문제인 이유</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="nyt" data-target="nyt-4" type="button">
-              <span class="headline-meta"><span class="badge nyt">NYT</span><span>Business &gt; Economy</span></span>
-              <div class="headline-title-row"><p class="headline-title">An Invisible Bottleneck: A Helium Shortage Threatens the Chip Industry</p><p class="headline-subtitle">보이지 않는 병목: 헬륨 부족이 반도체 산업을 위협하다</p></div>
-            </button>
-            <button class="headline hidden" data-group="global" data-publisher="nyt" data-target="nyt-5" type="button">
-              <span class="headline-meta"><span class="badge nyt">NYT</span><span>Business &gt; Economy</span></span>
-              <div class="headline-title-row"><p class="headline-title">Why the Iran War May Force Countries to Rely Less on Natural Gas</p><p class="headline-subtitle">이란 전쟁이 각국으로 하여금 천연가스 의존도를 낮추게 만들 수 있는 이유</p></div>
-            </button>
-
-            <button class="headline hidden" data-group="domestic" data-publisher="politics" data-target="pol-1" type="button">
-              <span class="headline-meta"><span class="badge kr">연합뉴스</span><span>정치</span></span>
-              <div class="headline-title-row"><p class="headline-title">李대통령 "국가폭력, 나치 전범 처벌처럼 영구 책임지게 하겠다"</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="politics" data-target="pol-2" type="button">
-              <span class="headline-meta"><span class="badge kr">한겨레</span><span>정치</span></span>
-              <div class="headline-title-row"><p class="headline-title">국힘 ‘공약 1호’ 발표 전격 취소…선거 2달 앞두고 갈팡질팡</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="politics" data-target="pol-3" type="button">
-              <span class="headline-meta"><span class="badge kr">KBS</span><span>정치</span></span>
-              <div class="headline-title-row"><p class="headline-title">대통령실 “미 301조 조사, 한미 협의로 산업 피해 최소화”</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="politics" data-target="pol-4" type="button">
-              <span class="headline-meta"><span class="badge kr">경향신문</span><span>정치</span></span>
-              <div class="headline-title-row"><p class="headline-title">여야, 추경·민생법안 처리 놓고 국회 주도권 공방 격화</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="politics" data-target="pol-5" type="button">
-              <span class="headline-meta"><span class="badge kr">중앙일보</span><span>정치</span></span>
-              <div class="headline-title-row"><p class="headline-title">지방선거 앞두고 수도권 교통 공약 경쟁 본격화</p></div>
-            </button>
-
-            <button class="headline hidden" data-group="domestic" data-publisher="economy" data-target="eco-1" type="button">
-              <span class="headline-meta"><span class="badge kr">연합뉴스</span><span>경제</span></span>
-              <div class="headline-title-row"><p class="headline-title">구윤철 "유가 120∼130달러되면 위기3단계…차량부제 민간에도"</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="economy" data-target="eco-2" type="button">
-              <span class="headline-meta"><span class="badge kr">연합뉴스</span><span>경제</span></span>
-              <div class="headline-title-row"><p class="headline-title">2차 석유 최고가제 시행 사흘째 서울 휘발윳값 1천900원 돌파</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="economy" data-target="eco-3" type="button">
-              <span class="headline-meta"><span class="badge kr">한겨레</span><span>경제</span></span>
-              <div class="headline-title-row"><p class="headline-title">OECD 한국 성장률 전망치 2.1%→1.7%로 낮춰…고유가 장기화 우려</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="economy" data-target="eco-4" type="button">
-              <span class="headline-meta"><span class="badge kr">조선일보</span><span>경제</span></span>
-              <div class="headline-title-row"><p class="headline-title">마용성도 보유세 50% 올라…고령 1주택자·영끌족 한숨</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="economy" data-target="eco-5" type="button">
-              <span class="headline-meta"><span class="badge kr">한국경제</span><span>경제</span></span>
-              <div class="headline-title-row"><p class="headline-title">환율 1,490원 턱밑…원화 약세에 수입물가 비상</p></div>
-            </button>
-
-            <button class="headline hidden" data-group="domestic" data-publisher="society" data-target="soc-1" type="button">
-              <span class="headline-meta"><span class="badge kr">조선일보</span><span>사회</span></span>
-              <div class="headline-title-row"><p class="headline-title">삼바 창립 후 첫 파업 위기…노조 찬성률 95% 넘었다</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="society" data-target="soc-2" type="button">
-              <span class="headline-meta"><span class="badge kr">연합뉴스</span><span>사회</span></span>
-              <div class="headline-title-row"><p class="headline-title">KB시세로 3월 서울 강남구 아파트값 2년 만에 하락 전환</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="society" data-target="soc-3" type="button">
-              <span class="headline-meta"><span class="badge kr">동아일보</span><span>사회</span></span>
-              <div class="headline-title-row"><p class="headline-title">의대 증원 갈등 장기화에 대형병원 수술 지연 다시 확산</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="society" data-target="soc-4" type="button">
-              <span class="headline-meta"><span class="badge kr">경향신문</span><span>사회</span></span>
-              <div class="headline-title-row"><p class="headline-title">늘봄·돌봄 인력 부족에 학교 현장 혼선…학부모 불안 커져</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="society" data-target="soc-5" type="button">
-              <span class="headline-meta"><span class="badge kr">KBS</span><span>사회</span></span>
-              <div class="headline-title-row"><p class="headline-title">시민단체, ‘공소 취소 거래설’ 관련 김어준·장인수 고발</p></div>
-            </button>
-
-            <button class="headline hidden" data-group="domestic" data-publisher="world" data-target="int-1" type="button">
-              <span class="headline-meta"><span class="badge kr">한겨레</span><span>국제</span></span>
-              <div class="headline-title-row"><p class="headline-title">미국, 이란 ‘보물섬’ 하르그 겨냥 지상작전 준비…장기전 자초하나</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="world" data-target="int-2" type="button">
-              <span class="headline-meta"><span class="badge kr">연합뉴스</span><span>국제</span></span>
-              <div class="headline-title-row"><p class="headline-title">트럼프, 이란 추가 압박 시사…유가·환율 동시 불안</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="world" data-target="int-3" type="button">
-              <span class="headline-meta"><span class="badge kr">중앙일보</span><span>국제</span></span>
-              <div class="headline-title-row"><p class="headline-title">유럽 외교전 분주하지만 휴전 돌파구는 안갯속</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="world" data-target="int-4" type="button">
-              <span class="headline-meta"><span class="badge kr">경향신문</span><span>국제</span></span>
-              <div class="headline-title-row"><p class="headline-title">유엔 안보리, 중동 긴장 완화 결의안 재추진</p></div>
-            </button>
-            <button class="headline hidden" data-group="domestic" data-publisher="world" data-target="int-5" type="button">
-              <span class="headline-meta"><span class="badge kr">조선일보</span><span>국제</span></span>
-              <div class="headline-title-row"><p class="headline-title">중동 위기에 해상 운임 급등…수출기업 공급망 긴장 고조</p></div>
-            </button>
-          </div>
-          <div class="empty-state" id="headlineEmpty">현재 선택한 범위에서 표시할 헤드라인이 없습니다.</div>
+          <div class="headline-list" id="headlineList"></div>
+          <p class="status-note hidden" id="statusNote"></p>
+          <p class="empty-state hidden" id="headlineEmpty"></p>
         </section>
 
-          <section class="detail-panel">
-          <h2>기사 요약</h2>
-          <p class="detail-intro">왼쪽에서 제목을 선택하면 이 영역이 커지면서 자세한 요약이 표시됩니다.</p>
-          <div class="empty-state" id="detailEmpty">현재 선택한 항목에 표시할 요약이 없습니다.</div>
+        <section class="detail-panel">
+          <div class="detail-head">
+            <h2>기사 요약</h2>
+          </div>
 
-          <article class="detail-card active" id="wsj-1">
-            <div class="detail-top">
-              <div class="detail-source">
-                <span class="source-pill wsj">Wall Street Journal</span>
-                <span class="section-label">Markets & Finance</span>
-              </div>
-            </div>
-            <h3>Stocks Were Headed for a Red Monday. Then Trump Took to Social Media.</h3>
-            <p class="translated-title">주가는 급락 직전이었지만, 트럼프의 SNS 글 한 줄이 시장을 되돌렸다</p>
-            <p class="summary">장 초반 시장은 유가 급등과 중동 긴장 탓에 급락 쪽으로 기울었지만, 트럼프 대통령이 이란 발전시설 공격을 미루겠다는 글을 올리자 분위기가 급반전됐습니다. 주가지수 선물은 낙폭에서 급등으로 돌아섰고, 브렌트유는 빠르게 밀렸으며, 채권도 되살아났습니다. 이 기사는 지금 시장이 펀더멘털보다 전쟁 관련 발언과 정책 시그널에 훨씬 민감하게 반응하고 있음을 보여줍니다. 투자자 입장에서는 하루 안에서도 리스크 자산과 안전자산의 방향이 여러 번 뒤집힐 수 있는 국면이라는 뜻입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 지정학 리스크가 시장을 흔드는 와중에도 정책 신호 한 줄이 하루의 가격 방향을 바꿀 만큼 변동성이 극심합니다.</div>
-            <div class="detail-links"><a href="https://www.wsj.com/finance/stocks/global-stocks-markets-dow-news-03-23-2026-f5dea767" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="wsj-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill wsj">Wall Street Journal</span><span class="section-label">Markets & Finance</span></div></div>
-            <h3>How Oil Crunch Could Spread Across the Globe</h3>
-            <p class="translated-title">원유 공급 충격이 어떻게 전 세계 경제로 번질 수 있는가</p>
-            <p class="summary">WSJ는 두바이유 가격이 연초 대비 150%, 브렌트유가 64% 오른 점을 들며, 걸프 지역 봉쇄 우려가 세계 원유시장 전체로 번질 수 있다고 봤습니다. 현재의 급등은 단순한 단기 반응이 아니라, 공급 경로가 막힐 경우 세계 각국의 에너지 비용을 동시에 자극하는 전조라는 해석입니다. 특히 아시아 수입국과 제조업 중심 국가들은 원가 상승, 운송 차질, 소비 둔화라는 삼중 압박을 받을 수 있습니다. 결국 이 기사는 유가 문제가 원유 자체를 넘어 물가, 금리, 성장률 전망까지 다시 흔들 수 있다는 점을 강조합니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 유가 급등은 지역 뉴스가 아니라 글로벌 인플레이션과 성장 둔화를 다시 밀어 올리는 매크로 충격으로 연결됩니다.</div>
-            <div class="detail-links"><a href="https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-03-25-2026/card/how-oil-crunch-could-spread-across-the-globe-DMZzl5C7zbOKLPgfuvDE" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="wsj-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill wsj">Wall Street Journal</span><span class="section-label">Economy</span></div></div>
-            <h3>Energy Prices, Inflation Will Be Lower After the War, Bessent Says</h3>
-            <p class="translated-title">전쟁이 끝나면 에너지 가격과 인플레이션은 다시 낮아질 것이라고 베선트가 말하다</p>
-            <p class="summary">스콧 베선트 미 재무장관은 전쟁이 끝나면 에너지 가격과 인플레이션이 다시 낮아질 것이라고 주장했습니다. 그는 걸프 지역 탱커 통행이 조금씩 회복되고 있고, 시장 공급 자체는 생각보다 충분하다는 논리를 폈습니다. 이는 현재의 에너지 쇼크를 구조적 공급 붕괴가 아니라 지정학적 긴장의 일시적 부산물로 규정하려는 메시지에 가깝습니다. 다만 시장이 이 낙관론을 그대로 받아들일지는 별개이며, 실제로는 종전 시점과 항로 정상화 속도가 더 중요해 보입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 미국 정부는 현재의 에너지 쇼크를 구조적 공급 붕괴보다 전쟁 국면의 일시 충격으로 해석하려는 모습입니다.</div>
-            <div class="detail-links"><a href="https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-03-26-2026/card/energy-prices-inflation-will-be-lower-after-the-war-bessent-says-IAkGxuSpLW2rCkP96MVX" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="wsj-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill wsj">Wall Street Journal</span><span class="section-label">Markets & Finance</span></div></div>
-            <h3>Oil Price Rise Hasn’t Destroyed Demand, U.S. Energy Secretary Says</h3>
-            <p class="translated-title">유가 상승이 아직 수요를 무너뜨리지는 않았다고 미 에너지장관이 평가하다</p>
-            <p class="summary">미국 에너지장관은 최근 유가 상승이 아직 수요를 무너뜨릴 정도는 아니라고 평가했습니다. 전쟁 여파로 유가는 크게 뛰었지만, 현재 수준만으로는 소비가 급격히 꺾이진 않았고 시장은 공급 경로 회복 여부를 더 주시하고 있다는 뜻입니다. 이 발언은 경기 침체 공포를 당장 키우기보다, 시장이 아직은 공급 충격의 지속 기간을 계산하는 단계라는 점을 보여줍니다. 반대로 말하면 고유가가 더 오래 이어질 경우 그때는 수요 훼손과 경기 둔화 논쟁이 더 거세질 수 있습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 지금 시장의 초점은 비싼 유가 자체보다, 그 가격이 언제까지 이어지느냐와 수요 둔화가 실제로 나타나느냐에 맞춰져 있습니다.</div>
-            <div class="detail-links"><a href="https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-03-23-2026/card/oil-price-rise-hasn-t-destroyed-demand-u-s-energy-secretary-says-kSWJKukvCqKhDxDsVrnc" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="wsj-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill wsj">Wall Street Journal</span><span class="section-label">Markets & Finance</span></div></div>
-            <h3>The 24 Hours When Oil Markets Went Wild</h3>
-            <p class="translated-title">유가시장이 단 24시간 만에 폭등과 급락을 오간 순간</p>
-            <p class="summary">WSJ는 24시간 사이 국제유가가 30% 넘게 치솟았다가 다시 급락한 비정상적 장세를 조명했습니다. 호르무즈 해협 봉쇄 우려와 전쟁 종결 가능성이 엇갈리며, 원유와 주식시장이 동시에 롤러코스터를 탄 사례입니다. 이는 단순히 에너지 트레이더들만의 문제가 아니라, 금리 기대와 인플레이션 전망, 주식 밸류에이션까지 함께 흔들리는 다중 충격이라는 점에서 중요합니다. 시장이 얼마나 얇고 불안정한 심리 위에 서 있는지를 상징적으로 보여주는 기사입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 에너지 시장은 지금 펀더멘털만이 아니라 군사 뉴스와 발언 한마디에도 가격이 급회전하는 초고변동성 구간입니다.</div>
-            <div class="detail-links"><a href="https://www.wsj.com/finance/global-stocks-markets-dow-news-03-09-2026-51f6869b" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="ft-1">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill ft">Financial Times</span><span class="section-label">Markets</span></div></div>
-            <h3>Why is the Iran crisis pummelling the gilts market?</h3>
-            <p class="translated-title">이란 위기가 왜 영국 국채시장을 거세게 흔드는가</p>
-            <p class="summary">FT는 이란 사태가 영국 국채시장을 강하게 흔드는 이유로 인플레이션성 에너지 충격과 금리 인하 기대의 후퇴를 꼽았습니다. 동시에 영국 시장에서 인기 있던 헤지펀드 거래들이 역풍을 맞으며 변동성이 증폭됐다고 설명합니다. 영국은 에너지 가격 변화가 물가와 가계 부담, 통화정책 기대에 빠르게 반영되는 구조라 충격이 더 크게 나타납니다. 결국 이 기사는 전쟁이 채권시장 내부의 약한 고리까지 건드리며 금융 불안을 키우는 과정을 설명합니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 전쟁은 런던 길트 시장에 금리 더 오래 높게라는 공포를 재주입하고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.ft.com/markets" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="ft-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill ft">Financial Times</span><span class="section-label">Markets</span></div></div>
-            <h3>Investors start to bet on US interest rate rises amid inflation fears</h3>
-            <p class="translated-title">인플레이션 우려 속에서 투자자들이 미국 금리 인상 가능성에 베팅하기 시작하다</p>
-            <p class="summary">시장은 이제 미국의 금리 인하가 아니라 금리 인상 가능성까지 일부 가격에 반영하기 시작했습니다. FT에 따르면 트레이더들은 10월까지 차입 비용이 더 올라갈 확률을 거의 50% 수준으로 보고 있습니다. 이는 에너지 충격이 일시적 변수에 그치지 않고, 연준의 정책 경로 자체를 다시 바꾸는 변수로 떠오르고 있다는 의미입니다. 최근까지 시장을 지배했던 완화 기대가 빠르게 후퇴하고 있다는 점에서 매우 상징적인 기사입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 에너지 충격이 길어질수록 시장의 기본 시나리오가 인하에서 재인상 가능성으로 밀릴 수 있습니다.</div>
-            <div class="detail-links"><a href="https://www.ft.com/markets" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="ft-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill ft">Financial Times</span><span class="section-label">Markets</span></div></div>
-            <h3>UK borrowing costs reach highest level since 2008 as economic hit from war mounts</h3>
-            <p class="translated-title">전쟁 충격이 커지며 영국의 차입 비용이 2008년 이후 최고치에 도달하다</p>
-            <p class="summary">10년물 길트 수익률이 5%까지 뛰며 영국의 차입 비용이 2008년 이후 최고 수준으로 올라섰습니다. FT는 전쟁 장기화가 인플레이션 충격을 키우고 정부 재정과 가계 대출 비용까지 동시에 압박한다고 전합니다. 차입 비용 상승은 단순한 금융시장 숫자가 아니라 모기지, 재정지출, 기업 자금조달 비용 전반을 위축시키는 연결 고리입니다. 그래서 이 기사는 시장 변동이 실물경제 부담으로 전이되는 경로를 가장 직접적으로 보여줍니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 시장은 영국을 에너지 충격에 특히 취약한 선진국 중 하나로 보고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.ft.com/markets" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="ft-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill ft">Financial Times</span><span class="section-label">Markets</span></div></div>
-            <h3>India’s central bank battles to protect rupee from Iran war fallout</h3>
-            <p class="translated-title">인도 중앙은행이 이란 전쟁의 여파로부터 루피를 방어하기 위해 분투하다</p>
-            <p class="summary">인도 중앙은행은 이란 전쟁의 충격이 루피 약세로 번지자 외환보유액을 대거 써가며 방어에 나섰습니다. FT는 이달에만 200억달러가 넘는 준비금을 소진한 것으로 은행권이 보고 있다고 전했습니다. 이는 신흥국이 에너지 충격과 달러 강세가 겹칠 때 얼마나 빠르게 방어 비용을 치러야 하는지를 보여줍니다. 곧바로 위기로 연결되지는 않더라도, 전쟁이 길어질수록 통화 방어 여력과 정책 선택지가 줄어드는 부담이 커질 수 있습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 전쟁발 충격은 선진국 채권시장뿐 아니라 신흥국 통화 방어 비용까지 키우고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.ft.com/markets" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="ft-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill ft">Financial Times</span><span class="section-label">Markets</span></div></div>
-            <h3>SEC urged to restrict Chinese companies’ access to US capital markets</h3>
-            <p class="translated-title">중국 기업의 미국 자본시장 접근을 제한하라는 요구가 SEC에 제기되다</p>
-            <p class="summary">미국 정치권에서는 중국 기업의 미국 자본시장 접근을 더 엄격히 제한하라는 초당적 요구가 제기됐습니다. FT는 국가안보 우려와 투자자 보호 문제를 동시에 이유로 들며 규제 당국에 행동을 촉구하는 흐름을 전합니다. 이 뉴스는 단순한 규제 기사라기보다, 미중 갈등이 이제 무역과 기술을 넘어 자본시장 규칙으로 확장되고 있다는 신호에 가깝습니다. 지정학이 금융 규범을 바꾸는 흐름이 더 강해질 수 있다는 점에서 주목할 만합니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 시장 뉴스의 무게중심이 금리와 유가뿐 아니라 지정학적 자본 통제로도 옮겨가고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.ft.com/markets" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="nyt-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill nyt">NYT</span><span class="section-label">Business &gt; Economy</span></div></div>
-            <h3>Why College Graduates Feel Betrayed</h3>
-            <p class="translated-title">대학 졸업생들이 왜 배신당했다고 느끼는가</p>
-            <p class="summary">NYT는 대학 졸업장이 안정적인 중산층 진입권이 되어 줄 것이라는 약속이 흔들리면서, 청년층이 경제 시스템에 대한 배신감을 크게 느끼고 있다고 짚습니다. 취업시장의 냉각, 사무직 채용 둔화, 높은 생활비와 학자금 부담이 한꺼번에 겹치며 세대 불만이 깊어지고 있다는 맥락입니다. 이 기사는 단순한 청년세대 심리 기사가 아니라, 노동시장 구조 변화와 성장 둔화가 사회 신뢰를 갉아먹는 과정을 보여줍니다. 경기 둔화가 숫자보다 체감에서 더 먼저 나타난다는 점도 읽히는 대목입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 경제 둔화의 충격은 고용 통계보다 먼저 청년층의 기대 붕괴와 사회적 박탈감으로 나타나고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.nytimes.com/2026/03/27/business/college-graduates-economy-unemployment-.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="nyt-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill nyt">NYT</span><span class="section-label">Business &gt; Economy</span></div></div>
-            <h3>Diesel Is a Bigger Problem for Consumers Than Gasoline. Here’s Why.</h3>
-            <p class="translated-title">휘발유보다 디젤이 소비자에게 더 큰 문제인 이유</p>
-            <p class="summary">NYT는 소비자들이 주유소 가격표에서 가장 먼저 보는 것은 휘발유지만, 실제 생활비를 더 크게 흔드는 것은 디젤 가격이라고 설명합니다. 디젤은 화물운송, 물류, 농업, 산업 전반의 비용에 직접 연결되기 때문에, 가격 상승이 상품과 서비스 전반의 물가로 확산되기 쉽습니다. 이 기사는 에너지 충격이 가계 체감물가로 전이되는 메커니즘을 아주 직관적으로 보여줍니다. 결국 디젤 가격은 소비자물가를 밀어 올리는 숨은 엔진이라는 뜻입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 에너지 인플레이션의 진짜 무게는 주유소 가격보다 물류와 생산 전반에 퍼지는 디젤 비용에 있습니다.</div>
-            <div class="detail-links"><a href="https://www.nytimes.com/2026/03/27/business/diesel-prices-inflation-consumer-prices.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="nyt-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill nyt">NYT</span><span class="section-label">Business &gt; Economy</span></div></div>
-            <h3>An Invisible Bottleneck: A Helium Shortage Threatens the Chip Industry</h3>
-            <p class="translated-title">보이지 않는 병목: 헬륨 부족이 반도체 산업을 위협하다</p>
-            <p class="summary">NYT는 반도체 산업에서 상대적으로 주목을 덜 받던 헬륨 부족이 생산 차질의 새로운 병목으로 떠오르고 있다고 전합니다. 헬륨은 첨단 제조공정에 필수적이지만 공급망이 좁고 지정학 리스크에 취약해, 한 번 흔들리면 대체가 쉽지 않습니다. 이 기사는 전쟁과 공급 차질이 단순히 에너지 가격만이 아니라 기술 제조업의 핵심 원료에도 영향을 준다는 점을 보여줍니다. 즉 공급망 위기는 눈에 잘 보이는 원유보다 숨은 소재에서 더 먼저 터질 수도 있습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 지정학 충격은 반도체 같은 핵심 산업에서도 예상 밖의 소재 병목으로 나타날 수 있습니다.</div>
-            <div class="detail-links"><a href="https://www.nytimes.com/2026/03/27/business/helium-chips-iran-war.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="nyt-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill nyt">NYT</span><span class="section-label">Business &gt; Economy</span></div></div>
-            <h3>Why the Iran War May Force Countries to Rely Less on Natural Gas</h3>
-            <p class="translated-title">이란 전쟁이 각국으로 하여금 천연가스 의존도를 낮추게 만들 수 있는 이유</p>
-            <p class="summary">NYT는 이번 전쟁이 천연가스를 안정적 전환 연료로 보던 기존 인식을 흔들 수 있다고 봅니다. 공급이 지정학에 지나치게 좌우될 경우, 각국은 재생에너지나 다른 에너지원으로 더 빨리 다변화하려 할 가능성이 큽니다. 즉 이번 충돌은 단기 가격 급등에 그치지 않고 중장기 에너지 전략까지 바꾸는 계기가 될 수 있습니다. 에너지 안보와 탈탄소 전략이 다시 결합되는 흐름을 보여주는 기사입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 전쟁은 천연가스의 과도기적 안정성 신화를 흔들며 에너지 전환 속도와 방향을 다시 재조정하게 만들 수 있습니다.</div>
-            <div class="detail-links"><a href="https://www.nytimes.com/2026/03/29/business/energy-environment/iran-war-natural-gas.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="pol-1">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">연합뉴스</span><span class="section-label">정치</span></div></div>
-            <h3>李대통령 "국가폭력, 나치 전범 처벌처럼 영구 책임지게 하겠다"</h3>
-            <p class="summary">이재명 대통령이 제주 4·3 같은 국가폭력 범죄에 대해 민형사상 시효 폐지와 영구 책임 원칙을 거론했습니다. 과거사 문제를 상징적 추모 차원이 아니라 제도 개편과 사법 책임의 영역으로 끌어올리겠다는 메시지입니다. 국가폭력에 대한 책임 구조를 다시 설계하겠다는 의미가 강해 정치권과 법조계 모두에서 후속 논쟁이 이어질 가능성이 큽니다. 과거사 대응의 수준을 한 단계 높이는 방향이라는 점에서 정치적 상징성도 매우 큽니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 과거사 대응의 초점이 사과에서 제도적 책임 강화로 이동하고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.yna.co.kr/view/AKR20260329028100001?section=politics/all" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="pol-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">한겨레</span><span class="section-label">정치</span></div></div>
-            <h3>국힘 ‘공약 1호’ 발표 전격 취소…선거 2달 앞두고 갈팡질팡</h3>
-            <p class="summary">국민의힘이 지방선거를 두 달 앞두고 1호 공약 발표를 갑자기 취소하면서 전략 혼선이 노출됐다는 내용입니다. 공천 잡음과 정책 메시지 부재가 겹치며 선거 프레임 주도권을 잃고 있다는 해석이 나옵니다. 선거 국면에서 핵심 아젠다를 제때 내지 못하면 당내 리더십과 조율 능력에 대한 의문이 커질 수 있습니다. 정책 경쟁보다 내부 정비 문제가 먼저 부각되는 야당의 불안정한 국면을 보여줍니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 선거를 앞두고 야당의 정책 메시지보다 내부 혼선이 더 크게 보이고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.hani.co.kr/arti/politics/politics_general/1251618.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="pol-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">KBS</span><span class="section-label">정치</span></div></div>
-            <h3>대통령실 “미 301조 조사, 한미 협의로 산업 피해 최소화”</h3>
-            <p class="summary">대통령실이 미국의 통상 압박 가능성에 대해 한미 협의를 통해 국내 산업 피해를 줄이겠다고 밝힌 기사입니다. 대미 통상 현안이 외교 문제를 넘어 산업 정책과 수출 전략의 핵심 변수로 다시 떠오르고 있음을 보여줍니다. 특히 관세나 조사 절차가 현실화하면 자동차, 철강, 배터리 같은 핵심 업종 전반에 부담이 확산될 수 있습니다. 정부가 외교 채널을 선제적으로 강조하는 배경에는 산업계 불안을 조기에 진정시키려는 의도가 읽힙니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 통상 이슈가 다시 정치와 산업을 동시에 흔드는 전면 현안으로 올라오고 있습니다.</div>
-            <div class="detail-links"><a href="https://news.kbs.co.kr/" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="pol-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">경향신문</span><span class="section-label">정치</span></div></div>
-            <h3>여야, 추경·민생법안 처리 놓고 국회 주도권 공방 격화</h3>
-            <p class="summary">추가경정예산과 민생 법안 처리를 둘러싸고 여야가 국회 주도권 경쟁을 본격화했다는 흐름을 담은 기사입니다. 민생 대응 속도보다 정쟁 프레임이 앞서면 실제 정책 집행은 더 늦어질 수 있다는 우려가 커집니다. 특히 고물가와 경기 둔화가 겹치는 시기에는 예산과 법안 지연이 곧 체감 부담으로 이어질 가능성이 큽니다. 결국 국회 공방은 정치 뉴스이면서 동시에 경제 대응력의 문제이기도 합니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 민생 대응이 시급한데도 국회는 여전히 주도권 다툼에 묶여 있습니다.</div>
-            <div class="detail-links"><a href="https://www.khan.co.kr/politics/politics-general" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="pol-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">중앙일보</span><span class="section-label">정치</span></div></div>
-            <h3>지방선거 앞두고 수도권 교통 공약 경쟁 본격화</h3>
-            <p class="summary">지방선거를 앞두고 수도권 교통망과 주택 연계 개발을 둘러싼 공약 경쟁이 본격화하고 있다는 내용입니다. 교통 공약은 생활밀착형 이슈라 선거에서 파급력이 크고, 부동산 시장과도 바로 연결된다는 점에서 주목됩니다. 각 당이 민생 이미지를 강조하려 하지만 실현 가능성과 재원 조달 방안이 함께 검증되지 않으면 공약 신뢰도는 빠르게 떨어질 수 있습니다. 결국 선거 국면에서 수도권 표심을 겨냥한 정책 경쟁이 핵심 전장으로 이동하고 있다는 뜻입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 수도권 생활 인프라 공약이 선거의 핵심 승부처로 떠오르고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.joongang.co.kr/politics" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="eco-1">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">연합뉴스</span><span class="section-label">경제</span></div></div>
-            <h3>구윤철 "유가 120∼130달러되면 위기3단계…차량부제 민간에도"</h3>
-            <p class="summary">정부는 국제유가가 배럴당 120~130달러로 오를 경우 위기 대응 수준을 더 높이고 차량 운행 제한 같은 수요관리 조치를 민간으로 확대할 수 있다고 시사했습니다. 이는 단순 경고가 아니라 생활 패턴과 소비 행태를 통제하는 비상 대응으로 넘어갈 수 있다는 의미입니다. 에너지 위기가 장기화하면 정부 개입의 강도도 시장 안정 조치를 넘어 실질적인 사용 제한으로 확장될 수 있습니다. 정책 대응이 예상보다 빨리 현실화될 수 있다는 점이 시장에도 중요한 신호입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 에너지 위기 심화 시 정부 대응은 가격 관리에서 생활 통제로 넘어갈 수 있습니다.</div>
-            <div class="detail-links"><a href="https://www.yna.co.kr/view/AKR20260329016300002?section=economy/all" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="eco-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">연합뉴스</span><span class="section-label">경제</span></div></div>
-            <h3>2차 석유 최고가제 시행 사흘째 서울 휘발윳값 1천900원 돌파</h3>
-            <p class="summary">석유 최고가제 2차 시행에도 서울 휘발유 가격이 리터당 1,900원을 넘어섰습니다. 제도적 억제 장치만으로는 전쟁발 원가 상승을 충분히 막기 어렵다는 점이 드러난 셈입니다. 소비자 입장에서는 정책 발표와 체감 가격의 간극이 커지고, 정부 입장에서는 시장 개입의 실효성이 시험대에 올랐습니다. 이런 흐름이 이어지면 유류비 부담은 물류, 외식, 유통 전반의 가격 인상으로 번질 가능성이 큽니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 에너지 물가 상승은 이제 발표보다 체감 부담이 더 빠르게 커지는 단계입니다.</div>
-            <div class="detail-links"><a href="https://www.yna.co.kr/view/AKR20260329013300003?section=economy/all" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="eco-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">한겨레</span><span class="section-label">경제</span></div></div>
-            <h3>OECD 한국 성장률 전망치 2.1%→1.7%로 낮춰…고유가 장기화 우려</h3>
-            <p class="summary">OECD가 한국 성장률 전망치를 2.1%에서 1.7%로 하향 조정했다는 보도입니다. 고유가가 장기화되면 소비와 투자, 수출이 동시에 둔화할 수 있다는 우려가 수치로 확인된 셈입니다. 성장률 전망 하향은 단순한 예상치 조정이 아니라 한국 경제가 외부 충격에 취약하다는 점을 다시 드러내는 신호입니다. 경기 둔화가 숫자보다 체감에서 더 무겁게 다가올 가능성이 크다는 점도 함께 읽힙니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 국제 충격이 한국 경제의 연간 성장 경로 자체를 낮추는 국면으로 들어섰습니다.</div>
-            <div class="detail-links"><a href="https://www.hani.co.kr/arti/economy/economy_general/1251653.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="eco-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">조선일보</span><span class="section-label">경제</span></div></div>
-            <h3>마용성도 보유세 50% 올라…고령 1주택자·영끌족 한숨</h3>
-            <p class="summary">마포·용산·성동 같은 핵심 주거지에서도 보유세 부담이 크게 늘었다는 기사입니다. 세금과 금리, 경기 둔화가 겹치며 실수요자와 고령 보유자 모두 현금흐름 압박을 크게 느끼는 그림이 강조됩니다. 부동산 부담이 매매가격 문제를 넘어 보유 단계의 생활 비용 문제로 확장되고 있다는 점이 핵심입니다. 세 부담이 커질수록 부동산 정책 논쟁도 다시 시장 전면으로 올라올 가능성이 큽니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 부동산 이슈의 무게중심이 가격에서 보유 비용과 현금흐름으로 옮겨가고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.chosun.com/economy/realty/" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="eco-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">한국경제</span><span class="section-label">경제</span></div></div>
-            <h3>환율 1,490원 턱밑…원화 약세에 수입물가 비상</h3>
-            <p class="summary">원달러 환율이 1,490원 턱밑까지 오르며 수입물가와 기업 원가 부담이 다시 커지고 있다는 기사입니다. 원화 약세는 에너지 수입비용과 외화 조달 비용을 동시에 자극하기 때문에 파급 범위가 넓습니다. 특히 한국처럼 에너지 수입 의존도가 높은 경제에서는 환율 상승이 곧 물가와 성장 둔화 우려를 자극하는 악순환으로 이어질 수 있습니다. 시장은 유가뿐 아니라 환율 자체를 핵심 위험 변수로 다시 보기 시작한 셈입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 환율 불안은 물가, 원가, 시장 심리를 동시에 흔드는 핵심 리스크입니다.</div>
-            <div class="detail-links"><a href="https://www.hankyung.com/economy" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="soc-1">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">조선일보</span><span class="section-label">사회</span></div></div>
-            <h3>삼바 창립 후 첫 파업 위기…노조 찬성률 95% 넘었다</h3>
-            <p class="summary">삼성바이오로직스가 창립 이후 처음으로 파업 위기에 몰렸다는 보도입니다. 바이오 핵심 수출기업의 생산 차질 우려가 현실화하면 산업 현장의 노사 갈등이 실적과 공급 신뢰 문제로 이어질 수 있습니다. 글로벌 위탁생산 산업은 일정과 신뢰가 특히 중요하기 때문에 파업 가능성 자체만으로도 시장에는 부정적 신호가 됩니다. 대외 변수로 불안한 상황에서 국내 주력 산업 내부 리스크까지 부각된다는 점이 핵심입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 대외 충격 속에서 국내 주력 산업의 생산 불안까지 겹치고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.chosun.com/economy/science/2026/03/29/RADLG7BQHZFPHDUZMVZFPANRB4/" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="soc-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">연합뉴스</span><span class="section-label">사회</span></div></div>
-            <h3>KB시세로 3월 서울 강남구 아파트값 2년 만에 하락 전환</h3>
-            <p class="summary">서울 강남구 아파트값이 KB 시세 기준으로 2년 만에 하락 전환했습니다. 고금리와 경기 불안, 관망 심리가 겹치며 상징적 핵심 지역에서도 가격 탄력이 둔화하는 모습입니다. 강남은 시장 전체 심리의 대표 지표처럼 읽히기 때문에 이 변화는 특정 지역 이슈를 넘어 전국 부동산 흐름의 신호로 해석됩니다. 조정이 외곽이 아니라 핵심지로 번질 가능성을 보여주는 장면이라는 점에서 주목됩니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 부동산 시장 불안이 핵심 지역까지 확산되는 신호가 나타나고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.yna.co.kr/view/AKR20260329024400003?section=economy/all" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="soc-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">동아일보</span><span class="section-label">사회</span></div></div>
-            <h3>의대 증원 갈등 장기화에 대형병원 수술 지연 다시 확산</h3>
-            <p class="summary">의대 정원 확대 갈등이 길어지면서 대형병원 수술 지연과 진료 차질이 다시 커지고 있다는 흐름을 담은 기사입니다. 의료 공백 문제가 장기전으로 굳어질수록 환자 불편은 물론 응급과 중증 진료의 부담도 커집니다. 단순한 직역 갈등을 넘어 공공의료 체계 전반의 신뢰를 흔드는 문제로 번지고 있다는 점이 중요합니다. 정부와 의료계 모두 해법을 내놓지 못하면 사회적 피로감은 더 커질 수밖에 없습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 의료 갈등 장기화가 현장 불편을 넘어 시스템 신뢰 문제로 번지고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.donga.com/news/Society" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="soc-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">경향신문</span><span class="section-label">사회</span></div></div>
-            <h3>늘봄·돌봄 인력 부족에 학교 현장 혼선…학부모 불안 커져</h3>
-            <p class="summary">늘봄학교와 돌봄 서비스 확대 과정에서 인력과 운영 체계가 충분히 준비되지 않아 현장 혼선이 커지고 있다는 기사입니다. 학부모 입장에서는 정책 확대보다 실제 돌봄의 안정성과 예측 가능성이 더 중요한데, 그 부분이 흔들리고 있다는 지적이 나옵니다. 교육 복지 정책이 현장 집행 단계에서 막히면 제도에 대한 신뢰도도 빠르게 떨어질 수 있습니다. 사회 정책은 발표보다 운영 역량이 더 중요하다는 점을 보여주는 사례입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 사회 정책의 성패는 확대 선언보다 현장 집행 능력에 달려 있습니다.</div>
-            <div class="detail-links"><a href="https://www.khan.co.kr/national/education" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="soc-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">KBS</span><span class="section-label">사회</span></div></div>
-            <h3>시민단체, ‘공소 취소 거래설’ 관련 김어준·장인수 고발</h3>
-            <p class="summary">시민단체가 이른바 공소 취소 거래설과 관련해 방송인 김어준 씨와 장인수 기자를 고발했다는 기사입니다. 이 사안은 단순한 고발 뉴스라기보다 정치권과 언론, 사법 시스템을 둘러싼 신뢰 문제와 연결돼 주목받습니다. 공방이 길어질수록 사실관계 확인보다 진영 대립이 앞설 가능성이 커 사회적 피로도도 높아질 수 있습니다. 결국 사건의 실체 못지않게 공적 정보 유통 구조에 대한 불신이 커지고 있다는 점이 핵심입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 사회 이슈가 진영 대립과 결합할수록 공적 신뢰의 훼손이 더 커집니다.</div>
-            <div class="detail-links"><a href="https://news.kbs.co.kr/" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="int-1">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">한겨레</span><span class="section-label">국제</span></div></div>
-            <h3>미국, 이란 ‘보물섬’ 하르그 겨냥 지상작전 준비…장기전 자초하나</h3>
-            <p class="summary">미국이 이란의 핵심 에너지 거점인 하르그섬을 겨냥한 지상작전까지 검토 중이라는 보도입니다. 이는 제한 공습을 넘어 장기전 가능성을 키우는 움직임으로, 에너지 시장 긴장을 다시 끌어올릴 수 있습니다. 하르그섬은 실제 원유 수출 흐름에 큰 영향을 주는 지역이라 군사 충돌이 현실화하면 충격은 훨씬 커질 수 있습니다. 군사 뉴스이면서 동시에 에너지와 금융시장 뉴스라는 점이 중요합니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 전쟁 범위가 넓어질수록 한국이 받는 간접 충격도 더 길고 깊어집니다.</div>
-            <div class="detail-links"><a href="https://www.hani.co.kr/arti/international/arabafrica/1251602.html" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="int-2">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">연합뉴스</span><span class="section-label">국제</span></div></div>
-            <h3>트럼프, 이란 추가 압박 시사…유가·환율 동시 불안</h3>
-            <p class="summary">미국의 추가 압박 가능성이 거론되면서 국제유가와 환율이 동시에 흔들리고 있다는 흐름을 담은 기사입니다. 지정학 뉴스가 금융시장으로 즉각 전이되는 전형적인 국면으로, 투자자들은 단기 악재보다 전쟁 장기화 가능성에 더 민감하게 반응하고 있습니다. 한국처럼 에너지 수입 의존도가 높은 경제에는 이중 충격이 될 수 있어 국내 시장에도 파장이 큽니다. 결국 국제 분쟁이 곧바로 생활 물가와 금융 불안으로 이어지는 구조가 다시 확인되고 있습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 중동 리스크는 외교 뉴스가 아니라 한국 경제를 직접 흔드는 변수입니다.</div>
-            <div class="detail-links"><a href="https://www.yna.co.kr/international/all" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="int-3">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">중앙일보</span><span class="section-label">국제</span></div></div>
-            <h3>유럽 외교전 분주하지만 휴전 돌파구는 안갯속</h3>
-            <p class="summary">유럽 주요국이 중동 긴장 완화를 위한 외교전에 나서고 있지만 실질적 휴전 돌파구는 여전히 불확실하다는 기사입니다. 외교 채널이 분주하게 움직여도 군사 행동과 정치 계산이 엇갈리면 협상은 쉽게 진전되지 않습니다. 시장 입장에서는 협상 시도 자체보다 실제 충돌 강도와 공급 경로 정상화 여부가 더 중요합니다. 따라서 외교전 확대는 안도 재료이면서 동시에 장기전 신호로도 해석될 수 있습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 외교 접촉이 늘어도 시장은 아직 휴전보다 장기전에 더 무게를 두고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.joongang.co.kr/world" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="int-4">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">경향신문</span><span class="section-label">국제</span></div></div>
-            <h3>유엔 안보리, 중동 긴장 완화 결의안 재추진</h3>
-            <p class="summary">유엔 안보리가 중동 긴장 완화를 위한 결의안 재추진에 나섰다는 기사입니다. 국제사회가 충돌 확대를 막기 위해 제도적 장치를 다시 꺼내 들었지만 실제 효력은 상임이사국 간 입장 차이에 크게 좌우됩니다. 결의안 추진은 명분상 중요하지만 현장 충돌을 즉시 줄이기에는 한계가 있다는 점도 함께 지적됩니다. 다만 국제 공조의 틀을 다시 세우려는 신호라는 점에서 외교적 의미는 적지 않습니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 국제기구의 개입은 상징성이 크지만 실제 긴장 완화까지는 시간이 필요합니다.</div>
-            <div class="detail-links"><a href="https://www.khan.co.kr/world/middleeast-africa" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-
-          <article class="detail-card" id="int-5">
-            <div class="detail-top"><div class="detail-source"><span class="source-pill kr">조선일보</span><span class="section-label">국제</span></div></div>
-            <h3>중동 위기에 해상 운임 급등…수출기업 공급망 긴장 고조</h3>
-            <p class="summary">중동 위기로 해상 운임이 빠르게 뛰면서 수출기업의 공급망 부담이 커지고 있다는 기사입니다. 유가 상승뿐 아니라 물류비와 운송 일정 차질까지 겹치면 제조업 수익성과 납기 안정성이 동시에 압박받게 됩니다. 한국 기업들은 중동 상황을 단순한 원자재 뉴스가 아니라 전면적 공급망 리스크로 보기 시작한 것으로 해석됩니다. 지정학 충격이 산업 현장에 전이되는 경로를 잘 보여주는 사례입니다.</p>
-            <div class="takeaway"><strong>핵심:</strong> 전쟁 여파는 에너지 가격을 넘어 한국 수출기업의 공급망 비용으로 번지고 있습니다.</div>
-            <div class="detail-links"><a href="https://www.chosun.com/international/" target="_blank" rel="noreferrer">원문 링크</a></div>
-          </article>
-          </section>
+          <div id="detailContainer"></div>
+          <p class="empty-state hidden" id="detailEmpty"></p>
         </section>
       </section>
     </main>
   </div>
 
   <script>
-    const groupTabs = [...document.querySelectorAll('.toggle')];
-    const publisherTabs = [...document.querySelectorAll('.publisher')];
-    const headlines = [...document.querySelectorAll('.headline')];
-    const detailCards = [...document.querySelectorAll('.detail-card')];
-    const headlineEmpty = document.getElementById('headlineEmpty');
-    const detailEmpty = document.getElementById('detailEmpty');
-    const publisherRow = document.getElementById('publisherTabs');
-    const executionDate = '2026-03-29';
-    const articleDates = {
-      'wsj-1': '2026-03-23',
-      'wsj-2': '2026-03-25',
-      'wsj-3': '2026-03-26',
-      'wsj-4': '2026-03-23',
-      'wsj-5': '2026-03-09',
-      'ft-1': '2026-03-29',
-      'ft-2': '2026-03-29',
-      'ft-3': '2026-03-29',
-      'ft-4': '2026-03-29',
-      'ft-5': '2026-03-29',
-      'nyt-2': '2026-03-27',
-      'nyt-3': '2026-03-27',
-      'nyt-4': '2026-03-27',
-      'nyt-5': '2026-03-29',
-      'pol-1': '2026-03-29',
-      'pol-2': '2026-03-29',
-      'pol-3': '2026-03-29',
-      'pol-4': '2026-03-29',
-      'pol-5': '2026-03-29',
-      'eco-1': '2026-03-29',
-      'eco-2': '2026-03-29',
-      'eco-3': '2026-03-29',
-      'eco-4': '2026-03-22',
-      'eco-5': '2026-03-29',
-      'soc-1': '2026-03-29',
-      'soc-2': '2026-03-29',
-      'soc-3': '2026-03-29',
-      'soc-4': '2026-03-29',
-      'soc-5': '2026-03-29',
-      'int-1': '2026-03-29',
-      'int-2': '2026-03-29',
-      'int-3': '2026-03-29',
-      'int-4': '2026-03-29',
-      'int-5': '2026-03-29'
-    };
+    const EXECUTION_DATE = "2026-03-30";
+    const GLOBAL_TARGET_COUNT = 20;
+    const GLOBAL_SCOPE_TEXT = "Business > Economy 또는 Financial Markets";
+    const DOMESTIC_ALLOWED_SOURCES = ["조선일보", "중앙일보", "동아일보", "한겨레", "경향신문", "한국일보", "연합뉴스", "뉴시스"];
 
-    const GLOBAL_SCOPE_TEXT = 'Business > Economy 또는 Financial Markets';
+    const articles = [
+      { id: "ft-1", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Oil price rises past $116 as Iran conflict worsens", subtitle: "이란 전쟁 격화로 유가가 116달러를 돌파", summary: "이란 전쟁이 확대되며 유가가 116달러를 넘어섰습니다. 시장은 수요 파괴보다는 공급 차질과 지정학 리스크를 더 크게 반영하고 있어 단기 변동성이 커지고 있습니다.", link: "https://www.ft.com/content/dcf55026-1c12-4643-84c2-d68f86b012eb", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-2", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Donald Trump says US could ‘take the oil in Iran’", subtitle: "트럼프 \"미국이 이란 석유를 가져올 수도 있다\"", summary: "트럼프 전 대통령이 이란 원유 장악 가능성을 거론하면서 에너지 시장 변동성을 키우고 있습니다. 발언은 협상 지렛대 성격이지만, 공급 차질과 제재 리스크가 동시에 부각됐습니다.", link: "https://www.ft.com/content/3bd9fb6c-2985-4d24-b86b-23b7884031f5", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-3", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Middle East war day 30 as it happened", subtitle: "전쟁 30일차: 중동 전황 실시간 정리", summary: "전쟁 30일차 동향을 FT가 실시간으로 묶었습니다. 전투 확산, 원유 수송 위험, 금융시장 반응을 한 번에 정리해 변동성 요인을 빠르게 파악할 수 있습니다.", link: "https://www.ft.com/content/21607fce-182d-45d1-bcf2-d2a78f9339cb", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-4", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Avoid energy protectionism, UK chancellor will tell G7 allies", subtitle: "영국 재무장관, G7에 에너지 보호무역 자제 촉구", summary: "영국은 에너지 보호무역이 공급 부족을 악화시킬 수 있다며 G7에 자제 메시지를 던질 예정입니다. 가격 급등기에 수출 통제 경쟁이 붙으면 글로벌 인플레이션을 더 자극할 수 있다는 경고입니다.", link: "https://www.ft.com/content/52541a81-f64d-4eaf-8201-ec2928269aee", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-5", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Distressed-debt funds target private credit downturn as ‘greatest opportunity’ since 2008", subtitle: "2008년 이후 최대 기회라며 사모대출 위축에 베팅", summary: "파산·부실 채권 펀드들이 사모대출 위축을 2008년 금융위기 이후 최대 기회로 보고 있습니다. 신용 스프레드 확대에 따라 높은 수익률을 기대하지만, 경기 둔화 시 손실 위험도 커지는 양면을 짚습니다.", link: "https://www.ft.com/content/8c3514be-8c7b-4d13-a59a-dd8a23fb8c40", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-6", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "The Iran war will cement China’s superpower status", subtitle: "이란 전쟁이 중국의 초강대국 지위를 굳힌다", summary: "FT는 에너지·무역 네트워크에서 중국의 중재·조달력이 강화되고 있다고 분석합니다. 서방 제재로 빈틈이 커지면 중국이 공급망과 외교 레버리지를 동시에 넓힐 수 있다는 전망입니다.", link: "https://www.ft.com/content/78fbc0c2-0bc3-4a4b-a935-1d2165521a7d", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-7", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Eurozone borrowing costs soar on fears of fiscal hit from Iran shock", subtitle: "이란발 충격 우려에 유로존 차입비용 급등", summary: "유로존 국채 금리가 재정 부담 우려로 급등하고 있습니다. 전쟁발 에너지 비용이 재정 악화를 부를 것이란 전망이 반영되며, 통화정책 완화 기대도 후퇴했습니다.", link: "https://www.ft.com/content/0a3c5cbf-3c3c-4c7c-a9a9-5c02a72b78d8", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-8", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "In a world of $100 oil, fast fashion loses its defensive charms", subtitle: "$100 유가 시대, 패스트패션의 방어력 약화", summary: "유가 100달러 시대에 패스트패션이 원가·물류 부담으로 마진 방어가 어려워진다는 분석입니다. 경기 방어주로 통하던 소비재도 에너지·물류비 상승 앞에서는 취약해질 수 있음을 강조합니다.", link: "https://www.ft.com/content/5d8e6c7d-9a2e-4bcf-8ce2-9de6b9d9f1d4", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-9", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Iran war chokes off helium supplies in threat to chipmakers and healthcare", subtitle: "이란 전쟁으로 헬륨 공급 차단, 반도체·의료 위협", summary: "헬륨 공급이 막히면 반도체 노광·MRI 장비 등 핵심 산업이 직접 타격을 받습니다. FT는 에너지 외에 특수 가스·원재료 공급망까지 점검해야 한다고 지적합니다.", link: "https://www.ft.com/content/9f1c6c7a-2a8b-4c28-9f4c-4a0e0d0c9af4", note: "확인 방식: FT Markets RSS" },
+      { id: "ft-10", group: "global", publisher: "ft", source: "FT", section: "Markets", date: EXECUTION_DATE, title: "Iran activates its ‘resistance economy’ to survive the war", subtitle: "이란, 전시 생존 위해 ‘저항 경제’ 가동", summary: "이란은 자급자족·내수 중심 전략으로 전쟁 충격을 흡수하려 하고 있습니다. 무역 제약이 길어질수록 글로벌 공급망에서 대체 조달 비용이 늘 수 있음을 경고합니다.", link: "https://www.ft.com/content/2f8f04a1-3a24-4d0a-8f4a-2c0ec9f8e7b1", note: "확인 방식: FT Markets RSS" },
+      { id: "nyt-1", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "Global Food Supply Faces a Dangerous Bottleneck as Iran War Persists", subtitle: "이란 전쟁 장기화로 글로벌 식량 공급 병목 심화", summary: "비료 원료·에너지·해상 운송이 동시에 흔들리며 식량 공급망 병목이 커지고 있습니다. 식료품 인플레이션이 2차로 확산될 가능성을 짚습니다.", link: "https://www.nytimes.com/2026/03/27/business/economy/fertilizer-food-supply-iran-war.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-2", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "Where Might the Iran War Hit Your Grocery Bill? Start With Raspberries.", subtitle: "이란 전쟁이 장바구니 물가에 미치는 경로", summary: "라즈베리를 예로 들며 운송·비료·에너지 비용이 식탁 물가로 전이되는 과정을 설명합니다. 소비자 물가가 전쟁 뉴스에 얼마나 민감하게 반응하는지 보여줍니다.", link: "https://www.nytimes.com/2026/03/27/dining/raspberry-prices.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-3", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "Local Opposition Is Slowing A.I. Data Centers. Wall Street Has Noticed.", subtitle: "지역 반발이 AI 데이터센터 확산을 늦추고 있다", summary: "데이터센터 건설이 전력·토지·환경 갈등에 막히며 투자 속도가 둔화되고 있습니다. 월가는 인프라 병목이 AI 성장 스토리를 제한할 수 있다는 점에 주목합니다.", link: "https://www.nytimes.com/2026/03/26/business/economy/ai-data-centers-construction-local-opposition.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-4", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "Trump Draws Bipartisan Backlash for Easing Oil Sanctions on Russia and Iran", subtitle: "트럼프의 대이란·러 원유 제재 완화 시사에 여야 모두 반발", summary: "제재 완화 신호가 나오자 미국 내 정치권이 안보·시장 안정을 이유로 반발하고 있습니다. 에너지 공급 확대 기대와 지정학 리스크 사이에서 시장이 흔들리고 있습니다.", link: "https://www.nytimes.com/2026/03/25/us/politics/trump-bipartisan-backlash-oil-sanctions-russia-iran.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-5", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "How Kharg Island May Change the Trajectory of the Iran War", subtitle: "하르크 섬이 전쟁 흐름을 바꿀 수 있는 이유", summary: "이란 원유 수출의 핵심 허브인 하르크 섬이 공격받으면 공급망이 즉시 흔들립니다. 해상 수송이 막히면 유가·해운·보험료가 연쇄적으로 뛰게 됨을 강조합니다.", link: "https://www.nytimes.com/video/business/economy/100000010796199/how-kharg-island-may-change-the-trajectory-of-the-iran-war.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-6", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "As Gas Prices Spike, California Is Hit Hardest", subtitle: "유가 급등 여파, 캘리포니아가 가장 크게 맞고 있다", summary: "유류세와 자동차 의존도가 높은 캘리포니아가 유가 급등에 특히 취약하다는 분석입니다. 지역별 물가 충격이 불균등하게 나타날 수 있음을 보여줍니다.", link: "https://www.nytimes.com/2026/03/29/business/economy/california-gas-prices.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-7", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "Senate Housing Bill Sparks Debate About Who Gets to Own Single-Family Homes", subtitle: "미 상원 주택법안이 단독주택 소유 논쟁을 촉발", summary: "기관투자가와 개인 실수요자 간 소유권 경쟁이 정책 쟁점으로 부상했습니다. 주택 공급 확대와 소유 구조 공정성 사이의 균형이 핵심 논점입니다.", link: "https://www.nytimes.com/2026/03/25/business/economy/single-family-homes-rentals-housing-shortage.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-8", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "High Oil and Gas Prices Could Outlast Trump’s War With Iran", subtitle: "이란 전쟁 끝나도 고유가·고가스가 지속될 수 있다", summary: "전쟁이 끝나더라도 공급망 훼손과 투자 위축이 이어져 가격이 쉽게 내려오지 않을 수 있다는 전망입니다. 인플레이션 기대가 다시 높아질 수 있다는 점을 경고합니다.", link: "https://www.nytimes.com/2026/03/28/business/energy-environment/oil-gas-prices-iran-war.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-9", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "Covid Relief Loans Are Haunting Small Businesses", subtitle: "팬데믹 구제대출이 중소기업을 다시 압박하고 있다", summary: "만기 도래와 고금리가 겹치며 중소기업의 상환 부담이 커지고 있습니다. 위기 대응 대출이 회복기에 재무 리스크로 돌아올 수 있음을 보여줍니다.", link: "https://www.nytimes.com/2026/03/24/business/economy/sba-pandemic-loan-defaults.html", note: "확인 방식: NYT Economy RSS" },
+      { id: "nyt-10", group: "global", publisher: "nyt", source: "NYT", section: "Business > Economy", date: EXECUTION_DATE, title: "College Graduates Are Facing the Grimmest Job Market in Years", subtitle: "대학 졸업생들이 수년 만에 가장 어려운 취업 시장을 맞고 있다", summary: "경기 둔화와 채용 축소로 청년층 고용이 급격히 얼어붙고 있습니다. 학자금 대출 상환과 취업 지연이 맞물리면 소비와 부채 건전성에도 부담이 될 수 있습니다.", link: "https://www.nytimes.com/2026/03/27/business/economy/job-market-college-graduates.html", note: "확인 방식: NYT Economy RSS" },
+      {
+        id: "nyt-1",
+        group: "global",
+        publisher: "nyt",
+        source: "NYT",
+        section: "Business > Economy",
+        date: "2026-03-29",
+        title: "Trump Sets Up ‘Pax Silica’ Fund to Reduce Global Dependencies",
+        subtitle: "트럼프가 에너지·기술 대외 의존 축소를 겨냥한 ‘팍스 실리카’ 펀드를 내놨다",
+        summary: "NYT Economy RSS에서 2026-03-30 기준 가장 최근에 확인된 Business > Economy 기사입니다. 트럼프 행정부가 이란 전쟁을 계기로 반도체와 에너지 공급망 취약성을 줄이기 위한 신규 펀드를 추진한다고 전하면서, 안보 이슈가 산업정책과 전략 투자 확대로 곧바로 연결되는 흐름을 보여줍니다. 이는 단순한 경기 대응책보다 공급망 재편과 우방 중심 생산기지 강화에 더 가까운 접근입니다. 한국처럼 반도체와 대외 교역 의존도가 높은 경제에는 향후 공급망 재편 방향과 미국의 전략산업 지원 강도를 가늠할 신호로 읽힙니다.",
+        takeaway: "전쟁발 공급망 불안이 미국의 전략산업 투자 확대와 공급망 재편 속도를 더 끌어올리고 있습니다.",
+        link: "https://www.nytimes.com/2026/03/23/business/economy/trump-pax-silica-fund.html",
+        note: "확인 방식: NYT Economy RSS 최신 항목 확인 후 Business > Economy 경로 기사만 선별"
+      },
+      {
+        id: "nyt-2",
+        group: "global",
+        publisher: "nyt",
+        source: "NYT",
+        section: "Business > Economy",
+        date: "2026-03-27",
+        title: "Global Food Supply Faces a Dangerous Bottleneck as Iran War Persists",
+        subtitle: "이란 전쟁 장기화가 세계 식량 공급의 병목 위험을 키우고 있다",
+        summary: "NYT Economy RSS 기준 최신 기사 가운데 하나로, 중동 전쟁 장기화가 비료 원료, 에너지, 해상 운송을 동시에 흔들면서 세계 식량 공급망의 병목을 키우고 있다고 짚습니다. 특히 비료 가격 상승은 농산물 생산비를 밀어 올리고, 운송 차질은 곡물과 식품 원재료 이동을 늦춰 각국의 식품 가격을 자극할 수 있습니다. 기사 핵심은 이번 충격이 단순한 원유 가격 상승에 그치지 않고 농업 투입 비용과 유통 비용을 거쳐 식량 인플레이션으로 번질 수 있다는 점입니다. 식품 수입 의존도가 높거나 물가 전가가 빠른 나라일수록 부담이 더 커질 수 있고, 한국처럼 수입 물가에 민감한 경제도 간접 영향을 피하기 어렵다는 해석이 가능합니다.",
+        takeaway: "에너지 충격은 식량 공급망을 통해 더 길고 넓은 물가 압력으로 번질 수 있습니다.",
+        link: "https://www.nytimes.com/2026/03/27/business/economy/fertilizer-food-supply-iran-war.html",
+        note: "확인 방식: NYT Economy RSS 최신 항목 확인 후 Business > Economy 경로 기사만 선별"
+      },
+      {
+        id: "nyt-3",
+        group: "global",
+        publisher: "nyt",
+        source: "NYT",
+        section: "Business > Economy",
+        date: "2026-03-26",
+        title: "Local Opposition Is Slowing A.I. Data Centers. Wall Street Has Noticed.",
+        subtitle: "지역 반발이 AI 데이터센터 건설을 늦추자 월가도 이를 주목하고 있다",
+        summary: "NYT는 AI 붐의 핵심 인프라인 데이터센터 건설이 예상보다 느려질 수 있다는 점을 월가가 본격적으로 가격에 반영하기 시작했다고 전합니다. 전력 공급 확대, 용수 사용, 토지 확보, 지역 주민 반발이 동시에 커지면서 기업이 발표한 투자 계획과 실제 착공·완공 속도 사이에 간극이 벌어지고 있다는 설명입니다. 이는 AI 수요 전망이 강하더라도 연산 인프라가 제때 깔리지 않으면 매출 실현과 설비 투자 회수 속도도 늦어질 수 있음을 뜻합니다. 기사 포인트는 기술 낙관론 자체보다, 그 낙관론을 현실로 바꾸는 물리적 인프라가 새로운 병목으로 떠오르고 있다는 데 있습니다.",
+        takeaway: "AI 투자 서사는 강하지만 실제 인프라 확장은 지역 규제와 반발에 막힐 수 있습니다.",
+        link: "https://www.nytimes.com/2026/03/26/business/economy/ai-data-centers-construction-local-opposition.html",
+        note: "확인 방식: NYT Economy RSS 최신 항목 확인 후 Business > Economy 경로 기사만 선별"
+      },
+      {
+        id: "nyt-4",
+        group: "global",
+        publisher: "nyt",
+        source: "NYT",
+        section: "Business > Economy",
+        date: "2026-03-25",
+        title: "Senate Housing Bill Sparks Debate About Who Gets to Own Single-Family Homes",
+        subtitle: "상원 주택법안이 단독주택 소유 주체를 둘러싼 논쟁을 키우고 있다",
+        summary: "이 기사는 상원 주택법안이 단독주택 시장의 소유 구조 자체를 다시 묻고 있다고 설명합니다. 주택 부족이 이어지는 가운데 기관 투자자의 임대주택 매입이 늘면서, 개인 실수요자와 대형 자본이 같은 시장에서 경쟁하는 구조가 정치 쟁점으로 떠올랐습니다. 그래서 논의 초점도 단순히 공급을 얼마나 늘릴 것인가에서, 누가 주택을 우선적으로 소유하고 거주할 수 있어야 하는가로 이동하고 있습니다. 기사 맥락상 미국 주택정책은 이제 가격 안정뿐 아니라 자산 집중과 지역사회 구성까지 함께 다뤄야 하는 단계로 들어섰다고 볼 수 있습니다.",
+        takeaway: "주택 문제는 공급량뿐 아니라 누가 주택을 소유할 것인가의 문제로 번지고 있습니다.",
+        link: "https://www.nytimes.com/2026/03/25/business/economy/single-family-homes-rentals-housing-shortage.html",
+        note: "확인 방식: NYT Economy RSS 최신 항목 확인 후 Business > Economy 경로 기사만 선별"
+      },
+      {
+        id: "nyt-5",
+        group: "global",
+        publisher: "nyt",
+        source: "NYT",
+        section: "Business > Economy",
+        date: "2026-03-24",
+        title: "Covid Relief Loans Are Haunting Small Businesses",
+        subtitle: "코로나 구제 대출의 후유증이 중소기업을 계속 압박하고 있다",
+        summary: "NYT는 팬데믹 기간 중소기업을 살리기 위해 풀린 각종 대출 프로그램이 이제는 상환 압박과 부실 문제로 되돌아오고 있다고 보도합니다. 당시에는 급한 유동성 공급이 기업 생존에 도움이 됐지만, 시간이 지나 경기 둔화와 고금리가 겹치자 과거의 지원이 현재의 재무 부담으로 전환되고 있다는 흐름입니다. 현금흐름이 약한 소상공인과 지역 기반 사업체일수록 타격이 크고, 연쇄 부실은 고용과 지역 상권에도 파급될 수 있습니다. 기사 핵심은 위기 대응 정책이 단기 구제 효과를 냈더라도, 사후 관리가 부족하면 몇 년 뒤 다른 형태의 구조 문제로 돌아올 수 있다는 점입니다.",
+        takeaway: "위기 때의 유동성 지원은 나중에 상환 부담이라는 또 다른 구조 문제로 돌아올 수 있습니다.",
+        link: "https://www.nytimes.com/2026/03/24/business/economy/sba-pandemic-loan-defaults.html",
+        note: "확인 방식: NYT Economy RSS 최신 항목 확인 후 Business > Economy 경로 기사만 선별"
+      },
+      {
+        id: "ft-1",
+        group: "global",
+        publisher: "ft",
+        source: "FT",
+        section: "Markets",
+        date: "2026-03-23",
+        title: "Why is the Iran crisis pummelling the gilts market?",
+        subtitle: "이란 위기가 왜 영국 국채 시장을 강하게 흔들고 있는가",
+        summary: "FT Markets 메인면의 리드 기사로, 이란 전쟁이 촉발한 에너지 가격 충격이 영국 국채 시장의 금리 기대를 얼마나 빠르게 뒤집고 있는지에 초점을 맞춥니다. 기사 부제에 따르면 인플레이션성 에너지 쇼크는 영란은행의 금리 인하 기대를 약화시키고, 그 기대에 베팅했던 헤지펀드 거래까지 흔들고 있습니다. 즉 시장은 지정학적 충돌 자체보다도 그 여파가 물가 전망과 통화정책 경로를 얼마나 가파르게 바꾸는지에 더 민감하게 반응하고 있는 셈입니다. 이는 영국만의 문제가 아니라, 해외 금리 급등이 글로벌 채권시장과 환율 변동성을 자극해 한국을 포함한 개방경제에도 연쇄 부담을 줄 수 있다는 신호로 읽힙니다.",
+        takeaway: "중동 충격은 유가를 넘어 금리 기대와 채권 포지션까지 한꺼번에 흔들고 있습니다.",
+        link: "https://www.ft.com/content/ac3f765b-786b-444b-ad89-2b2aecb44ece",
+        note: "확인 방식: FT Markets 비로그인 홈 화면 headline + deck 확인 / 표시일 2026-03-23"
+      },
+      {
+        id: "ft-2",
+        group: "global",
+        publisher: "ft",
+        source: "FT",
+        section: "Markets",
+        date: "2026-03-23",
+        title: "Investors start to bet on US interest rate rises amid inflation fears",
+        subtitle: "인플레이션 우려로 투자자들이 미국 금리 인상 가능성까지 반영하기 시작하다",
+        summary: "FT는 투자자들이 올해 10월까지 미국 차입 비용이 더 오를 가능성까지 상당 폭 가격에 반영하기 시작했다고 전합니다. 중동 전쟁발 에너지 충격이 다시 미국 소비자물가를 자극할 수 있다는 우려가 커지면서, 기존에 우세했던 금리 인하 기대가 빠르게 후퇴하고 있다는 의미입니다. 이런 흐름은 정치권의 완화 압박과도 충돌하며, 시장이 성장 둔화보다 인플레이션 재가속과 정책 대응 지연을 더 무겁게 보고 있음을 보여줍니다. 결국 기사 핵심은 전쟁 뉴스가 채권시장에서는 곧바로 물가 경로와 연준 정책 전망의 재조정으로 번지고 있다는 점입니다.",
+        takeaway: "전쟁발 물가 불안은 금리 인하 기대를 지우고 다시 긴축 우려를 키우고 있습니다.",
+        link: "https://www.ft.com/content/63d642a9-2499-4969-af15-8bc282e4ce43",
+        note: "확인 방식: FT Markets 비로그인 홈 화면 headline + deck 확인 / 표시일 2026-03-23"
+      },
+      {
+        id: "ft-3",
+        group: "global",
+        publisher: "ft",
+        source: "FT",
+        section: "Markets",
+        date: "2026-03-23",
+        title: "UK borrowing costs reach highest level since 2008 as economic hit from war mounts",
+        subtitle: "전쟁 충격이 커지며 영국 차입 비용이 2008년 이후 최고 수준으로 상승하다",
+        summary: "이 기사에서 FT는 영국 10년물 길트 금리가 5%까지 뛰며 2008년 이후 최고 수준에 도달했다고 전합니다. 시장은 전쟁 장기화가 단순한 성장 둔화보다 인플레이션 고착과 재정 부담 확대를 더 크게 부를 수 있다고 보고, 그 위험을 국채 금리에 먼저 반영하고 있습니다. 국채 금리 급등은 정부의 자금 조달 비용을 높일 뿐 아니라 주택담보대출, 회사채, 기업 대출 금리 등 민간 금융비용 전반으로 번질 수 있습니다. 기사에서 읽히는 핵심은 채권시장이 단기 뉴스보다 장기적인 물가·재정 조합의 악화를 더 두려워하고 있다는 점입니다.",
+        takeaway: "채권시장은 전쟁의 장기 경제 비용을 이미 정부 차입 비용에 반영하기 시작했습니다.",
+        link: "https://www.ft.com/content/1e77f7ce-1c93-4852-9970-297636a7d9cf",
+        note: "확인 방식: FT Markets 비로그인 홈 화면 headline + deck 확인 / 표시일 2026-03-23"
+      },
+      {
+        id: "ft-4",
+        group: "global",
+        publisher: "ft",
+        source: "FT",
+        section: "Markets",
+        date: "2026-03-23",
+        title: "India’s central bank battles to protect rupee from Iran war fallout",
+        subtitle: "인도 중앙은행이 이란 전쟁 여파로부터 루피 방어에 나서다",
+        summary: "FT는 인도 중앙은행이 이번 달에만 200억달러가 넘는 외환보유액을 투입하며 루피 방어에 나섰다고 전합니다. 중동 전쟁이 유가와 달러 강세를 동시에 자극하면 에너지 수입국은 원자재 비용 상승뿐 아니라 통화 약세 압력까지 함께 받게 되는데, 인도의 대응은 그 전형적 사례로 읽힙니다. 통화 방어가 길어질수록 외환보유액 부담, 시장 변동성, 내수 금융여건 악화가 동시에 커질 수 있고, 중앙은행 정책 여력도 줄어듭니다. 기사 핵심은 지정학적 충격이 에너지 가격을 넘어 외환시장과 통화정책 공간까지 잠식한다는 점입니다.",
+        takeaway: "전쟁 충격은 원유 가격만이 아니라 수입국 통화 방어 비용으로도 빠르게 번집니다.",
+        link: "https://www.ft.com/content/56162e25-17dd-4db7-ba76-98fca2700923",
+        note: "확인 방식: FT Markets 비로그인 홈 화면 headline + deck 확인 / 표시일 2026-03-23"
+      },
+      {
+        id: "ft-5",
+        group: "global",
+        publisher: "ft",
+        source: "FT",
+        section: "Markets",
+        date: "2026-03-23",
+        title: "How the oil shock might spread",
+        subtitle: "이번 유가 충격이 어떤 경로로 더 넓게 확산될 수 있는가",
+        summary: "FT의 분석 기사로, 취약한 경제들이 이미 유가 급등에 대응하기 위한 여러 방어 조치를 시작했고 그것이 더 큰 충격의 서막일 수 있다고 진단합니다. 유가 상승은 단순한 에너지 비용 증가에 그치지 않고 환율 약세, 재정 부담 확대, 금리 상승, 소비 위축으로 이어질 수 있으며, 국가별 대응 여력이 약할수록 충격은 더 빠르게 증폭됩니다. 특히 먼저 흔들리는 국가들이 자본 유출 방어와 수입 비용 관리에 나서면 글로벌 자금 흐름과 무역 비용에도 추가 파장이 생길 수 있습니다. 기사 전체 메시지는 이번 에너지 쇼크의 핵심 위험이 1차 가격 상승보다, 이후 여러 거시 변수로 번지는 2차 확산 경로에 있다는 데 있습니다.",
+        takeaway: "유가 충격은 에너지 가격 자체보다 2차 확산 경로가 더 큰 리스크일 수 있습니다.",
+        link: "https://www.ft.com/content/271ddc47-2f19-4da0-b1b8-2f4a3f059945",
+        note: "확인 방식: FT Markets 비로그인 홈 화면 headline + deck 확인 / 표시일 2026-03-23"
+      },
+      {
+        id: "pol-1",
+        group: "domestic",
+        publisher: "politics",
+        source: "뉴시스",
+        section: "정치",
+        date: "2026-03-30",
+        title: "추미애 \"경기북부에 방산클러스터 구축하겠다\"",
+        summary: "더불어민주당 경기도지사 경선후보인 추미애 의원은 경기북부에 방산클러스터를 구축하고 국방과학연구소 시험평가원을 신설해 지역 경제의 활로를 모색하겠다고 밝혔습니다. 지역 산업 육성과 안보 산업을 동시에 묶는 공약이라는 점에서 지방선거 의제가 단순 생활밀착형 정책을 넘어 산업 전략으로 넓어지고 있습니다. 선거 국면에서도 일자리와 첨단 제조 기반을 누가 더 구체적으로 제시하느냐가 핵심 경쟁 포인트로 떠오르고 있습니다.",
+        takeaway: "지방선거 공약도 지역개발을 넘어 산업 전략 경쟁으로 옮겨가고 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/003/0013853763",
+        note: "확인 방식: 네이버 뉴스 정치 섹션 헤드라인"
+      },
+      {
+        id: "pol-2",
+        group: "domestic",
+        publisher: "politics",
+        source: "한겨레",
+        section: "정치",
+        date: "2026-03-30",
+        title: "‘룸살롱 폭행’ 이혁재 국힘 심사 후기 “내가 15년만 젊었어도…”",
+        summary: "국민의힘 광역의원 비례대표를 뽑는 청년 오디션에서 심사위원을 맡았던 이혁재씨의 발언이 논란이 되고 있습니다. 청년 정치 참여를 내세운 선발 과정에서 오히려 구태적 언행이 드러났다는 점에서 정당의 인재 선발 기준과 메시지 관리가 다시 도마에 올랐습니다. 선거 과정에서 후보 못지않게 심사 과정의 공정성과 상징성도 유권자 평가에 직결된다는 점을 보여줍니다.",
+        takeaway: "정당의 청년 정치 실험도 절차와 상징이 흔들리면 역풍을 맞기 쉽습니다.",
+        link: "https://n.news.naver.com/mnews/article/028/0002798259",
+        note: "확인 방식: 네이버 뉴스 정치 섹션 헤드라인"
+      },
+      {
+        id: "pol-3",
+        group: "domestic",
+        publisher: "politics",
+        source: "연합뉴스",
+        section: "정치",
+        date: "2026-03-30",
+        title: "신정훈, 강기정 제치고 단일후보…與 전남광주시장 경선 4파전(종합)",
+        summary: "더불어민주당 전남광주통합특별시장 경선에서 신정훈 후보가 강기정 후보와의 단일화 여론조사에서 승리하며 단일 후보로 확정됐습니다. 숫자상의 우위보다도 단일화 이후 다른 주자들과 어떤 화학적 결합을 만들 수 있느냐가 향후 경선 판세를 좌우할 변수로 떠오르고 있습니다. 지방선거에서는 단순 지지율보다 연대와 조직 결집력이 더 중요하다는 점이 다시 확인되고 있습니다.",
+        takeaway: "지방선거 경선은 단일화 그 자체보다 이후 결집력이 더 중요합니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989523",
+        note: "확인 방식: 네이버 뉴스 정치 섹션 헤드라인"
+      },
+      {
+        id: "pol-4",
+        group: "domestic",
+        publisher: "politics",
+        source: "연합뉴스",
+        section: "정치",
+        date: "2026-03-30",
+        title: "민형배·주철현·김영록, '신정훈 단일후보'에 미묘한 입장차",
+        summary: "신정훈 후보의 단일화 성사 이후에도 다른 후보들이 이를 해석하는 방식에는 미묘한 차이가 드러나고 있습니다. 같은 결과를 두고도 연대의 의미를 크게 보느냐, 독자 경쟁 구도를 유지하느냐에 따라 향후 선거 전략이 달라질 수 있기 때문입니다. 단일화 성공이 곧바로 정치적 통합으로 이어지는 것은 아니라는 점을 보여주는 사례입니다.",
+        takeaway: "단일화 성사 뒤에도 후보 간 해석 차이가 남으면 선거 연대는 불안정해질 수 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989516",
+        note: "확인 방식: 네이버 뉴스 정치 섹션 헤드라인"
+      },
+      {
+        id: "pol-5",
+        group: "domestic",
+        publisher: "politics",
+        source: "뉴시스",
+        section: "정치",
+        date: "2026-03-30",
+        title: "이준석 \"이미 다 보여줬다\"…전한길 \"졸업장에 전공 왜 없나\" 의혹 제기에 반박",
+        summary: "이준석 개혁신당 대표가 다시 제기된 학력 위조 의혹에 대해 강하게 반박하며 정치권 공방이 이어지고 있습니다. 선거 국면에서 정책 경쟁보다 개인 이력 검증 공방이 부각되면 의제 설정이 흐트러지고 지지층 결집용 소모전으로 번질 가능성이 큽니다. 유권자 입장에서는 사실관계 확인과 별개로 정치권의 논의 수준 자체를 평가하게 되는 장면입니다.",
+        takeaway: "선거가 인물 검증 공방으로 흐르면 정책 경쟁의 밀도는 약해질 수밖에 없습니다.",
+        link: "https://n.news.naver.com/mnews/article/003/0013853892",
+        note: "확인 방식: 네이버 뉴스 정치 섹션 헤드라인"
+      },
+      {
+        id: "eco-1",
+        group: "domestic",
+        publisher: "economy",
+        source: "연합뉴스",
+        section: "경제",
+        date: "2026-03-30",
+        title: "지상군 투입할까…장기전 우려에 공매도 잔고 처음 16조원 넘어",
+        summary: "미국의 이란 지상군 투입 가능성이 거론되며 장기전 우려가 커지자 유가증권시장의 공매도 순보유 잔고가 처음으로 16조원을 넘어섰습니다. 이는 시장이 단기 조정보다 장기 불확실성과 변동성 확대에 더 크게 베팅하고 있다는 뜻입니다. 실물 충격이 가시화되기 전부터 금융시장이 먼저 위험 프리미엄을 높이는 전형적인 방어 국면으로 볼 수 있습니다.",
+        takeaway: "시장 심리는 이미 단기 충격보다 장기전 리스크를 더 크게 반영하고 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989536",
+        note: "확인 방식: 네이버 뉴스 경제 섹션 헤드라인"
+      },
+      {
+        id: "eco-2",
+        group: "domestic",
+        publisher: "economy",
+        source: "연합뉴스",
+        section: "경제",
+        date: "2026-03-30",
+        title: "트럼프 \"이란 석유장악\" 언급에 코스피 한때 5%↓…증시 충격파",
+        summary: "트럼프 전 대통령의 이란 석유 장악 발언과 지상군 투입 가능성 언급이 겹치며 코스피가 장중 한때 5% 급락하는 등 충격파가 번졌습니다. 시장은 단순한 지정학 뉴스가 아니라 원유 공급망과 물가, 통화정책 경로까지 흔들 수 있는 사건으로 받아들이고 있습니다. 한국처럼 대외 변수에 민감한 증시는 해외 리스크가 곧바로 자산가격 조정으로 이어질 수 있음을 보여줍니다.",
+        takeaway: "지정학 충격은 한국 증시에서 즉시 위험회피와 가격 조정으로 번지고 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989477",
+        note: "확인 방식: 네이버 뉴스 경제 섹션 헤드라인"
+      },
+      {
+        id: "eco-3",
+        group: "domestic",
+        publisher: "economy",
+        source: "동아일보",
+        section: "경제",
+        date: "2026-03-30",
+        title: "OCI홀딩스, 세계은행 국제금융공사로부터 투자 유치… 반도체 폴리실리콘 사업 본격화",
+        summary: "OCI홀딩스가 세계은행그룹 산하 국제금융공사로부터 대규모 투자를 유치하며 반도체용 폴리실리콘 사업 확대에 나섰습니다. 단순 자금 조달을 넘어 전략 산업 공급망에서 한국 기업의 역할이 다시 강화되고 있다는 신호로 읽힙니다. 대외 불확실성이 큰 시기에도 첨단소재와 반도체 밸류체인 투자는 계속 이어지고 있다는 점이 중요합니다.",
+        takeaway: "불확실성 속에서도 전략 산업 투자는 공급망 경쟁력 강화의 핵심 축으로 남아 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/020/0003708060",
+        note: "확인 방식: 네이버 뉴스 경제 섹션 헤드라인"
+      },
+      {
+        id: "eco-4",
+        group: "domestic",
+        publisher: "economy",
+        source: "조선일보",
+        section: "경제",
+        date: "2026-03-30",
+        title: "다음달 유류할증료 최대 3배… “항공권, 3월 중 끊어야 싸다”",
+        summary: "이란 전쟁 여파로 다음 달부터 국내 항공사들의 유류할증료가 최대 3배 오를 수 있다는 전망이 나오고 있습니다. 국제 유가 상승이 곧바로 여행 비용과 소비자 체감 물가로 번지는 전형적인 사례입니다. 에너지 가격 충격이 실생활 지출 항목으로 빠르게 전이되면 내수 심리에도 부담이 커질 수 있습니다.",
+        takeaway: "에너지 가격 충격은 항공료처럼 체감 소비 항목에서 먼저 드러나고 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/023/0003967649",
+        note: "확인 방식: 네이버 뉴스 경제 섹션 헤드라인"
+      },
+      {
+        id: "eco-5",
+        group: "domestic",
+        publisher: "economy",
+        source: "연합뉴스",
+        section: "경제",
+        date: "2026-03-30",
+        title: "나랏돈 씀씀이 대수술…의무지출 10% 감축·재량은 15% 줄인다",
+        summary: "정부가 의무지출과 재량지출 모두에 감축 목표를 세우고 고강도 지출 구조조정에 나서기로 했습니다. 역대 최대 규모의 재정 조정이 예고되면서 재정 건전성과 경기 대응 사이의 균형이 핵심 쟁점으로 떠오르고 있습니다. 긴축 기조가 강해질수록 민생 지원과 성장 방어를 어떻게 병행할지가 정책 평가의 관건이 될 전망입니다.",
+        takeaway: "재정 구조조정은 건전성 강화와 경기 방어 사이의 균형이 핵심입니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989454",
+        note: "확인 방식: 네이버 뉴스 경제 섹션 헤드라인"
+      },
+      {
+        id: "soc-1",
+        group: "domestic",
+        publisher: "society",
+        source: "뉴시스",
+        section: "사회",
+        date: "2026-03-30",
+        title: "대구안실련 \"영덕 풍력사고는 인재…안전관리 개편\"",
+        summary: "경북 영덕 풍력발전단지 화재 사고와 관련해 시민단체가 정부의 풍력발전 안전관리 제도 전면 개편을 촉구했습니다. 재생에너지 확대가 빠르게 진행되는 가운데 설비 안전 기준과 사후 대응 체계가 그 속도를 따라가지 못하고 있다는 문제의식이 담겨 있습니다. 에너지 전환 정책도 안전 인프라와 규제 체계가 함께 보강되지 않으면 사회적 신뢰를 잃기 쉽습니다.",
+        takeaway: "에너지 전환도 안전관리 체계가 받쳐주지 않으면 정책 신뢰를 잃게 됩니다.",
+        link: "https://n.news.naver.com/mnews/article/003/0013853479",
+        note: "확인 방식: 네이버 뉴스 사회 섹션 헤드라인"
+      },
+      {
+        id: "soc-2",
+        group: "domestic",
+        publisher: "society",
+        source: "뉴시스",
+        section: "사회",
+        date: "2026-03-30",
+        title: "2년 전 유사 거래 근거로 아파트 증여세 추가 부과…法 \"적법\"",
+        summary: "아파트 증여세와 관련해 평가기준일 전 2년 사이 유사 거래 사례가 있으면 그 거래가격을 시가로 인정해 추가 세금을 부과할 수 있다는 법원 판단이 나왔습니다. 부동산 증여와 상속 과정에서 세무 리스크가 더 커질 수 있다는 점에서 시장의 주목을 받고 있습니다. 거래 관행보다 과세 기준의 정교함이 더 중요해지는 흐름으로 볼 수 있습니다.",
+        takeaway: "부동산 증여는 절세보다 시가 산정 기준을 더 엄격히 따져야 하는 국면입니다.",
+        link: "https://n.news.naver.com/mnews/article/003/0013853098",
+        note: "확인 방식: 네이버 뉴스 사회 섹션 헤드라인"
+      },
+      {
+        id: "soc-3",
+        group: "domestic",
+        publisher: "society",
+        source: "연합뉴스",
+        section: "사회",
+        date: "2026-03-30",
+        title: "\"칭얼대서\"…카페서 장난감으로 한살배기 때린 40대 입건",
+        summary: "다른 이들이 보는 앞에서 한 살배기 딸을 폭행한 40대 여성이 입건됐습니다. 양육과 훈육이라는 이름으로 학대가 정당화될 수 없다는 점을 다시 확인시켜 주는 사건입니다. 아동학대는 가정 내부 문제가 아니라 공공이 개입해야 할 사회적 범죄라는 인식이 더 중요해지고 있습니다.",
+        takeaway: "훈육을 이유로 한 폭력도 명백한 아동학대라는 기준이 더 분명해지고 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989365",
+        note: "확인 방식: 네이버 뉴스 사회 섹션 헤드라인"
+      },
+      {
+        id: "soc-4",
+        group: "domestic",
+        publisher: "society",
+        source: "한국일보",
+        section: "사회",
+        date: "2026-03-30",
+        title: "\"종량제 봉투 가격 인상 없어\" 포항시, 사재기 자제 당부",
+        summary: "중동 정세 불안에 따른 원료 수급 우려로 종량제 봉투 수요가 급증하자 포항시가 과도한 사재기 자제를 당부했습니다. 에너지와 원자재 불안이 생활 밀착형 소비재 수급 불안으로 번지는 양상이 나타나고 있습니다. 작은 품목이라도 공급 불안 심리가 붙으면 지역 사회 전체의 혼란으로 이어질 수 있다는 점을 보여줍니다.",
+        takeaway: "원자재 불안은 생활용품 사재기처럼 일상 소비 행동부터 바꾸기 시작합니다.",
+        link: "https://n.news.naver.com/mnews/article/469/0000922356",
+        note: "확인 방식: 네이버 뉴스 사회 섹션 헤드라인"
+      },
+      {
+        id: "soc-5",
+        group: "domestic",
+        publisher: "society",
+        source: "동아일보",
+        section: "사회",
+        date: "2026-03-30",
+        title: "논산딸기축제, 지역과 세계를 잇는 성공적 무대 마무리",
+        summary: "논산딸기축제가 대규모 방문객과 판매 실적을 기록하며 마무리됐습니다. 지역 축제가 단순 행사에 그치지 않고 지역 경제와 관광 소비를 견인하는 플랫폼으로 기능하고 있음을 보여줍니다. 지방 도시의 경쟁력도 제조업이나 산업단지뿐 아니라 체류형 소비와 지역 브랜드를 얼마나 키우느냐에 달려 있습니다.",
+        takeaway: "지역 축제는 소비와 관광을 묶는 지역경제 플랫폼으로 더 중요해지고 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/020/0003708065",
+        note: "확인 방식: 네이버 뉴스 사회 섹션 헤드라인"
+      },
+      {
+        id: "int-1",
+        group: "domestic",
+        publisher: "world",
+        source: "중앙일보",
+        section: "국제",
+        date: "2026-03-30",
+        title: "中, 홍콩 방문객 폰 비번 요구 법제화…반발한 美총영사 초치",
+        summary: "중국 당국이 홍콩에서 경찰의 스마트폰 비밀번호 요구를 제도화하고, 이에 우려를 표한 미국 총영사를 초치했습니다. 보안과 통제 강화가 외교 갈등으로 번지는 전형적인 장면으로, 홍콩의 개방성과 국제도시 이미지에도 부담을 줄 수 있습니다. 디지털 통제가 이제는 인권 이슈를 넘어 외교 관계와 투자 심리까지 건드리는 변수로 커지고 있습니다.",
+        takeaway: "디지털 통제 강화는 홍콩 내부 문제를 넘어 외교와 투자 환경까지 흔들 수 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/025/0003512368",
+        note: "확인 방식: 네이버 뉴스 국제 섹션 헤드라인"
+      },
+      {
+        id: "int-2",
+        group: "domestic",
+        publisher: "world",
+        source: "중앙일보",
+        section: "국제",
+        date: "2026-03-30",
+        title: "트럼프 \"이란과 협상 잘하고 있어…꽤 조기에 합의 이뤄질 것\"",
+        summary: "트럼프 전 대통령이 이란과의 직간접 협상이 잘 진행되고 있으며 비교적 이른 시점에 합의가 가능하다고 밝혔습니다. 강경 발언과 협상 메시지가 동시에 나오는 상황은 시장과 외교 당국 모두에게 혼선을 줄 수 있습니다. 실제 합의로 이어질지, 아니면 협상 카드로만 소비될지가 중동 리스크의 다음 방향을 가를 핵심 변수입니다.",
+        takeaway: "강경 메시지와 협상 신호가 교차할수록 시장은 더 큰 불확실성을 느끼게 됩니다.",
+        link: "https://n.news.naver.com/mnews/article/025/0003512557",
+        note: "확인 방식: 네이버 뉴스 국제 섹션 헤드라인"
+      },
+      {
+        id: "int-3",
+        group: "domestic",
+        publisher: "world",
+        source: "연합뉴스",
+        section: "국제",
+        date: "2026-03-30",
+        title: "\"사우디 원유, 호르무즈 통과 후 파키스탄으로\"",
+        summary: "사우디 원유를 실은 유조선이 호르무즈 해협을 통과한 뒤 파키스탄으로 향하고 있다는 보도가 나왔습니다. 드문 통과 사례라는 점에서 중동 에너지 수송 경로의 긴장도가 얼마나 높아졌는지 보여줍니다. 해협의 안전성과 항로 유지 여부는 국제유가뿐 아니라 아시아 에너지 수급 안정성에도 직접 영향을 줄 수 있습니다.",
+        takeaway: "호르무즈 해협의 실제 통과 사례는 에너지 시장의 긴장 수준을 그대로 보여줍니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989556",
+        note: "확인 방식: 네이버 뉴스 국제 섹션 헤드라인"
+      },
+      {
+        id: "int-4",
+        group: "domestic",
+        publisher: "world",
+        source: "연합뉴스",
+        section: "국제",
+        date: "2026-03-30",
+        title: "이스라엘, 예루살렘 미사 금지했다가 논란일자 급히 시정(종합)",
+        summary: "예루살렘 구시가지 성묘교회 미사가 당국 제지로 열리지 못했다가 논란이 커지자 이스라엘 정부가 급히 조치를 시정했습니다. 전쟁과 치안 논리가 종교 행위까지 제한하는 순간 국제적 비판과 외교 부담이 커질 수 있음을 보여줍니다. 안보 조치가 사회·종교 영역과 충돌할수록 분쟁은 더 넓은 차원의 갈등으로 번질 수 있습니다.",
+        takeaway: "안보 조치가 종교와 시민 일상까지 건드리면 분쟁의 정치적 비용은 더 커집니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989533",
+        note: "확인 방식: 네이버 뉴스 국제 섹션 헤드라인"
+      },
+      {
+        id: "int-5",
+        group: "domestic",
+        publisher: "world",
+        source: "연합뉴스",
+        section: "국제",
+        date: "2026-03-30",
+        title: "美, 러 유조선 쿠바행 용인…트럼프 \"생존해야 하니 상관없어\"(종합)",
+        summary: "러시아 유조선의 쿠바행을 미국이 사실상 용인하면서 대쿠바 제재 운용 방식에 변화 조짐이 나타났습니다. 인도적 위기와 외교 현실이 제재 원칙과 충돌할 때 미국의 대응이 얼마나 유연해질 수 있는지를 보여주는 사례입니다. 에너지와 지정학이 얽힌 제재 정책은 원칙보다 상황 대응이 더 크게 작동할 수 있음을 시사합니다.",
+        takeaway: "제재 정책도 에너지와 외교 현실 앞에서는 예외와 조정이 생길 수 있습니다.",
+        link: "https://n.news.naver.com/mnews/article/001/0015989517",
+        note: "확인 방식: 네이버 뉴스 국제 섹션 헤드라인"
+      }
+    ];
 
-    let currentGroup = 'global';
-    let currentPublisher = 'politics';
+    const groupTabs = [...document.querySelectorAll(".toggle")];
+    const publisherTabs = [...document.querySelectorAll(".publisher")];
+    const publisherRow = document.getElementById("publisherTabs");
+    const headlineList = document.getElementById("headlineList");
+    const detailContainer = document.getElementById("detailContainer");
+    const statusNote = document.getElementById("statusNote");
+    const headlineEmpty = document.getElementById("headlineEmpty");
+    const detailEmpty = document.getElementById("detailEmpty");
 
-    function injectGlobalScopeLabels() {
-      headlines.forEach((headline) => {
-        if (headline.dataset.group !== 'global') return;
-        if (headline.querySelector('.headline-scope')) return;
-        const titleRow = headline.querySelector('.headline-title-row');
-        if (!titleRow) return;
-        const scopeNode = document.createElement('p');
-        scopeNode.className = 'headline-scope';
-        scopeNode.textContent = GLOBAL_SCOPE_TEXT;
-        titleRow.parentNode.insertBefore(scopeNode, titleRow);
-      });
+    let currentGroup = "domestic";
+    let currentPublisher = "politics";
+    let currentArticleId = null;
+
+    function getVisibleArticles() {
+      if (currentGroup === "global") {
+        return articles.filter((article) => article.group === "global").slice(0, GLOBAL_TARGET_COUNT);
+      }
+      return articles.filter((article) =>
+        article.group === "domestic" &&
+        article.publisher === currentPublisher &&
+        DOMESTIC_ALLOWED_SOURCES.includes(article.source)
+      );
     }
 
-    function injectDates() {
-      headlines.forEach((headline) => {
-        const date = articleDates[headline.dataset.target];
-        if (!date) return;
-        const meta = headline.querySelector('.headline-meta');
-        if (!meta || meta.querySelector('.date-label')) return;
-        const dateNode = document.createElement('span');
-        dateNode.className = 'date-label';
-        dateNode.textContent = date;
-        meta.appendChild(dateNode);
-      });
+    function renderHeadlines() {
+      const visibleArticles = getVisibleArticles();
+      headlineList.innerHTML = "";
+      statusNote.classList.add("hidden");
+      statusNote.textContent = "";
 
-      detailCards.forEach((card) => {
-        const date = articleDates[card.id];
-        if (!date) return;
-        const source = card.querySelector('.detail-source');
-        if (!source || source.querySelector('.date-label')) return;
-        const dateNode = document.createElement('span');
-        dateNode.className = 'date-label';
-        dateNode.textContent = date;
-        source.appendChild(dateNode);
-      });
-    }
-
-    function filterToExecutionDate() {
-      headlines.forEach((headline) => {
-        const date = articleDates[headline.dataset.target];
-        const isCurrent = date === executionDate;
-        headline.dataset.current = isCurrent ? 'true' : 'false';
-      });
-
-      detailCards.forEach((card) => {
-        const date = articleDates[card.id];
-        const isCurrent = date === executionDate;
-        card.dataset.current = isCurrent ? 'true' : 'false';
-      });
-    }
-
-    function showDetail(targetId) {
-      headlines.forEach((headline) => {
-        headline.classList.toggle('active', headline.dataset.target === targetId && !headline.classList.contains('hidden'));
-      });
-
-      detailCards.forEach((card) => {
-        card.classList.toggle('active', card.id === targetId && card.dataset.current === 'true');
-      });
-
-      const activeCard = detailCards.find((card) => card.classList.contains('active'));
-      detailEmpty.classList.toggle('active', !activeCard);
-    }
-
-    function syncHeadlineVisibility() {
-      publisherRow.classList.toggle('hidden', currentGroup !== 'domestic');
-
-      publisherTabs.forEach((tab) => {
-        const shouldShow = currentGroup === 'domestic' && tab.dataset.group === currentGroup;
-        tab.classList.toggle('hidden', !shouldShow);
-      });
-
-      const visiblePublishers = publisherTabs.filter((tab) => !tab.classList.contains('hidden'));
-      if (currentGroup === 'domestic' && !visiblePublishers.some((tab) => tab.dataset.publisher === currentPublisher)) {
-        currentPublisher = visiblePublishers[0].dataset.publisher;
+      headlineEmpty.classList.add("hidden");
+      detailEmpty.classList.add("hidden");
+      if (!visibleArticles.length) {
+        headlineEmpty.textContent = currentGroup === "global"
+          ? "해당 세션 기준 확인 기사 부족 - 지정 섹션 기사 수를 충분히 채우지 못했습니다."
+          : "현재 선택한 범위에서 메이저 언론사 기준으로 표시할 헤드라인이 없습니다.";
+        headlineEmpty.classList.remove("hidden");
+        detailEmpty.textContent = headlineEmpty.textContent;
+        detailEmpty.classList.remove("hidden");
+        detailContainer.innerHTML = "";
+        return;
       }
 
-      publisherTabs.forEach((tab) => {
-        const isActive = currentGroup === 'domestic'
-          && tab.dataset.publisher === currentPublisher
-          && tab.dataset.group === currentGroup;
-        tab.classList.toggle('active', isActive);
-      });
-
-      headlines.forEach((headline) => {
-        const visible = currentGroup === 'global'
-          ? headline.dataset.group === 'global' && headline.dataset.current === 'true'
-          : headline.dataset.group === 'domestic' && headline.dataset.publisher === currentPublisher && headline.dataset.current === 'true';
-        headline.classList.toggle('hidden', !visible);
-      });
-
-      const firstVisibleHeadline = headlines.find((headline) => !headline.classList.contains('hidden'));
-      if (firstVisibleHeadline) {
-        showDetail(firstVisibleHeadline.dataset.target);
-      } else {
-        headlines.forEach((headline) => headline.classList.remove('active'));
-        detailCards.forEach((card) => card.classList.remove('active'));
+      if (currentGroup === "global" && visibleArticles.length < GLOBAL_TARGET_COUNT) {
+        statusNote.textContent = "해당 세션 기준 확인 기사 부족: 해외 기사 총 20건까지 확장 표시하며, 지정 섹션 기준일 부족 시 최신 기사까지 포함합니다.";
+        statusNote.classList.remove("hidden");
+      }
+      if (currentGroup === "domestic" && visibleArticles.length < 5) {
+        statusNote.textContent = "국내 언론은 네이버 뉴스 정치·경제·사회·국제 섹션을 기준으로 메이저 언론사만 탐색하도록 조정되어, 현재 섹션에 표시 가능한 기사 수가 줄어들었습니다.";
+        statusNote.classList.remove("hidden");
       }
 
-      headlineEmpty.classList.toggle('active', !firstVisibleHeadline);
-      detailEmpty.classList.toggle('active', !firstVisibleHeadline);
+      visibleArticles.forEach((article, index) => {
+        if (!currentArticleId && index === 0) {
+          currentArticleId = article.id;
+        }
+
+        const button = document.createElement("button");
+        button.className = "headline" + (article.id === currentArticleId ? " active" : "");
+        button.type = "button";
+        button.innerHTML = `
+          <div class="headline-meta">
+            <span class="badge">${article.source}</span>
+            <span>${article.date}</span>
+          </div>
+          ${article.group === "global" ? `<p class="headline-scope">${GLOBAL_SCOPE_TEXT}</p>` : ""}
+          <p class="headline-title">${article.title}</p>
+      ${article.subtitle ? `<p class="headline-subtitle">${article.subtitle}</p>` : ""}
+        `;
+        button.addEventListener("click", () => {
+          currentArticleId = article.id;
+          renderHeadlines();
+          renderDetail();
+        });
+        headlineList.appendChild(button);
+      });
+    }
+
+    function renderDetail() {
+      const article = getVisibleArticles().find((item) => item.id === currentArticleId) || getVisibleArticles()[0];
+      if (!article) {
+        detailContainer.innerHTML = "";
+        detailEmpty.textContent = "현재 선택한 항목에 표시할 요약이 없습니다.";
+        detailEmpty.classList.remove("hidden");
+        return;
+      }
+
+      currentArticleId = article.id;
+      detailEmpty.classList.add("hidden");
+      detailContainer.innerHTML = `
+        <article class="detail-card active">
+          <div class="detail-top">
+            <div class="detail-source">
+              <span class="source-pill">${article.source}</span>
+              <span class="section-label">${article.section}</span>
+              <span class="date-label">${article.date}</span>
+            </div>
+          </div>
+          ${article.group === "global" ? `<p class="headline-scope">${GLOBAL_SCOPE_TEXT}</p>` : ""}
+          <h3>${article.title}</h3>
+          ${article.subtitle ? `<p class="translated-title"><strong>${article.subtitle}</strong></p>` : ""}
+          <p class="summary">${article.summary}</p>
+          ${article.takeaway ? `<p class="takeaway"><strong>왜 중요한가:</strong> ${article.takeaway}</p>` : ""}
+          <p class="note"><strong>확인 메모:</strong> ${article.note}</p>
+          <div class="detail-links"><a href="${article.link}" target="_blank" rel="noreferrer">원문 링크</a></div>
+        </article>
+      `;
+    }
+
+    function syncTabs() {
+      publisherRow.classList.toggle("hidden", currentGroup !== "domestic");
+
+      groupTabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.group === currentGroup);
+      });
+
+      publisherTabs.forEach((tab) => {
+        tab.classList.toggle("active", currentGroup === "domestic" && tab.dataset.publisher === currentPublisher);
+      });
+    }
+
+    function render() {
+      syncTabs();
+      renderHeadlines();
+      renderDetail();
     }
 
     groupTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
+      tab.addEventListener("click", () => {
         currentGroup = tab.dataset.group;
-        groupTabs.forEach((item) => item.classList.toggle('active', item === tab));
-        syncHeadlineVisibility();
+        currentArticleId = null;
+        render();
       });
     });
 
     publisherTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        currentGroup = tab.dataset.group;
+      tab.addEventListener("click", () => {
+        currentGroup = "domestic";
         currentPublisher = tab.dataset.publisher;
-        groupTabs.forEach((item) => item.classList.toggle('active', item.dataset.group === currentGroup));
-        syncHeadlineVisibility();
+        currentArticleId = null;
+        render();
       });
     });
 
-    headlines.forEach((headline) => {
-      headline.addEventListener('click', () => {
-        if (!headline.classList.contains('hidden')) {
-          showDetail(headline.dataset.target);
-        }
-      });
-    });
-
-    injectDates();
-    injectGlobalScopeLabels();
-    filterToExecutionDate();
-    syncHeadlineVisibility();
+    render();
   </script>
 </body>
 </html>
