@@ -54,8 +54,9 @@
     .shell {
       position: relative;
       display: grid;
-      grid-template-rows: auto minmax(0, 1fr);
+      grid-template-rows: auto auto auto minmax(0, 1fr);
       gap: 16px;
+      align-content: start;
       padding: 12px;
       min-height: 100vh;
       width: min(1988px, calc(100vw - 8px));
@@ -76,10 +77,12 @@
       display: grid;
       gap: 10px;
       align-self: start;
+      align-content: start;
     }
 
     .titlebar {
       padding: 14px 16px;
+      align-self: start;
     }
 
     .dept-name {
@@ -113,6 +116,7 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
+      align-items: start;
     }
 
     .nav-link {
@@ -120,6 +124,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      align-self: start;
       min-height: 54px;
       padding: 0 10px;
       border-radius: 18px;
@@ -200,6 +205,7 @@
 
     .pickerbar {
       padding: 14px 16px;
+      align-self: start;
     }
 
     .picker-row {
@@ -290,7 +296,7 @@
     .viz-frame {
       --viz-scale: 1;
       --viz-base-height: 720px;
-      min-height: calc(var(--viz-base-height) * var(--viz-scale));
+      min-height: var(--viz-base-height);
       border-radius: 18px;
       border: 1px solid rgba(29, 78, 216, 0.14);
       background:
@@ -519,11 +525,11 @@
       if (!frame || !stage) return;
 
       const frameWidth = frame.clientWidth;
-      const shouldScale = window.innerWidth >= 1500 && frameWidth >= 1100;
-      const isLargeDesktop = window.innerWidth >= 1500 && window.innerHeight >= 900;
-      const scale = shouldScale
-        ? clamp(frameWidth / 1180, 1, 1.28)
-        : 1;
+      const desktopVizWidth = 1468;
+      const compactVizWidth = 1180;
+      const targetWidth = window.innerWidth <= 1120 ? compactVizWidth : desktopVizWidth;
+      const isLargeDesktop = window.innerWidth >= 1800 && window.innerHeight >= 900;
+      const scale = clamp(frameWidth / targetWidth, 0.76, 1);
       const baseHeight = window.innerWidth <= 720
         ? 620
         : isLargeDesktop
@@ -582,6 +588,8 @@
       `;
 
       requestAnimationFrame(updateVizScale);
+      setTimeout(updateVizScale, 600);
+      setTimeout(updateVizScale, 1400);
     }
 
     function render() {
