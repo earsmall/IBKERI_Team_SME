@@ -64,12 +64,29 @@
     .shell {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(360px, 1.08fr) minmax(0, 2fr);
-      gap: 24px;
-      padding: 24px;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 14px;
+      padding: 12px;
       min-height: 100vh;
       max-width: 2400px;
       margin: 0 auto;
+    }
+
+    .topbar {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .titlebar {
+      padding: 14px 18px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(360px, 1.08fr) minmax(0, 2fr);
+      gap: 24px;
+      min-height: 0;
     }
 
     .panel {
@@ -86,33 +103,45 @@
       flex-direction: column;
       gap: 18px;
       position: sticky;
-      top: 24px;
-      height: calc(100vh - 48px);
+      top: 12px;
+      height: fit-content;
+      max-height: calc(100vh - 24px);
       overflow: hidden;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
+    .sidebar-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
       color: var(--accent-strong);
-      background: var(--accent-soft);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      text-align: left;
     }
 
     .dept-name {
       display: block;
       margin-bottom: 8px;
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       letter-spacing: 0.03em;
       color: var(--accent-strong);
       line-height: 1.35;
       text-align: center;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--accent-strong);
+      text-align: center;
+    }
+
+    .page-title::before {
+      content: "< ";
+    }
+
+    .page-title::after {
+      content: " >";
     }
 
     .nav-switch {
@@ -126,12 +155,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 58px;
+      min-height: 54px;
       padding: 0 10px;
       border-radius: 18px;
       border: 1px solid transparent;
       text-decoration: none;
-      font-size: clamp(12px, 1.25vw, 15px);
+      font-size: 13px;
       font-weight: 800;
       text-align: center;
       line-height: 1.1;
@@ -154,27 +183,27 @@
     }
 
     .nav-link-read {
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6);
       color: #ffffff;
-      border-color: rgba(29, 78, 216, 0.28);
+      border-color: rgba(59, 130, 246, 0.32);
     }
 
     .nav-link-dashboard {
-      background: linear-gradient(135deg, #0f766e, #0ea5a5);
+      background: linear-gradient(135deg, #0f4c81, #1d70b8);
       color: #ffffff;
-      border-color: rgba(14, 165, 165, 0.28);
+      border-color: rgba(29, 112, 184, 0.32);
     }
 
     .nav-link-stats {
-      background: linear-gradient(135deg, #b45309, #d97706);
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
       color: #ffffff;
-      border-color: rgba(217, 119, 6, 0.28);
+      border-color: rgba(96, 165, 250, 0.32);
     }
 
-    .nav-link-news {
-      background: linear-gradient(135deg, #7c3aed, #9333ea);
+    .nav-link-sme {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
       color: #ffffff;
-      border-color: rgba(147, 51, 234, 0.28);
+      border-color: rgba(37, 99, 235, 0.32);
     }
 
     .nav-link.is-active {
@@ -425,7 +454,7 @@
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
       gap: 20px;
-      min-height: calc(100vh - 48px);
+      min-height: 0;
     }
 
     .hero {
@@ -467,7 +496,7 @@
     .hero h2 {
       margin: 6px 0 2px;
       font-family: var(--font-display);
-      font-size: 24px;
+      font-size: 18px;
       line-height: 1.15;
       white-space: nowrap;
       overflow: hidden;
@@ -479,33 +508,38 @@
       max-width: 720px;
       color: var(--muted);
       line-height: 1.4;
-      font-size: 13px;
+      font-size: 11px;
     }
 
     .stats {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 180px));
-      gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       margin-top: 0;
+      flex-wrap: nowrap;
     }
 
     .stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       background: rgba(255,255,255,0.72);
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
-      padding: 10px 12px;
+      padding: 5px 8px;
+      white-space: nowrap;
     }
 
     .stat label {
-      display: block;
-      font-size: 11px;
+      display: inline;
+      font-size: 10px;
       color: var(--muted);
-      margin-bottom: 4px;
+      margin-bottom: 0;
     }
 
     .stat strong {
-      display: block;
-      font-size: 22px;
+      display: inline;
+      font-size: 12px;
       font-weight: 800;
     }
 
@@ -535,7 +569,8 @@
     }
 
     #heroSubtitle:empty,
-    #listTitle:empty {
+    #listTitle:empty,
+    #listNote:empty {
       display: none;
     }
 
@@ -643,14 +678,14 @@
     }
 
     @media (max-width: 1120px) {
-      .shell {
+      .content-grid {
         grid-template-columns: 1fr;
-        max-width: none;
       }
 
       .sidebar {
         position: static;
         height: auto;
+        max-height: none;
       }
 
       .main {
@@ -665,6 +700,7 @@
         padding: 14px;
       }
 
+      .topbar,
       .hero,
       .section,
       .sidebar {
@@ -689,14 +725,17 @@
         width: min(1880px, calc(100vw - 48px));
         max-width: none;
         min-height: calc(100vh - 24px);
+        padding: 12px 18px;
+      }
+
+      .content-grid {
         grid-template-columns: minmax(610px, 1.1fr) minmax(0, 2.1fr);
         gap: 22px;
-        padding: 12px 18px;
       }
 
       .sidebar {
         top: 12px;
-        height: calc(100vh - 24px);
+        max-height: calc(100vh - 24px);
       }
 
       .main {
@@ -713,96 +752,101 @@
 </head>
 <body>
   <div class="shell">
-    <aside class="sidebar panel">
-      <div>
-        <div class="dept-name">IBK&#44221;&#51228;&#50672;&#44396;&#49548; &#51473;&#44592;&#49328;&#50629;&#50672;&#44396;&#49892; &#51473;&#49548;&#44592;&#50629;&#54016;</div>
-      </div>
-
+    <section class="topbar panel">
+      <div class="dept-name">IBK&#44221;&#51228;&#50672;&#44396;&#49548; &#51473;&#44592;&#49328;&#50629;&#50672;&#44396;&#49892; &#51473;&#49548;&#44592;&#50629;&#54016;</div>
       <div class="nav-switch">
         <a class="nav-link nav-link-read is-active" href="./index.html">
           <span>읽을거리</span>
         </a>
-        <a class="nav-link nav-link-news" href="./News.html">
-          <span>언론기사</span>
-        </a>
         <a class="nav-link nav-link-stats" href="./statistics_catalog.html">
-          <span>통계 등 검색</span>
+          <span>유용한 사이트</span>
+        </a>
+        <a class="nav-link nav-link-sme" href="./SME_data.html">
+          <span>중소기업 통계</span>
         </a>
         <a class="nav-link nav-link-dashboard" href="./tableau_dashboard.html">
           <span>시각화 대쉬보드</span>
         </a>
       </div>
+    </section>
 
-      <div class="search-wrap">
-        <div class="search-box">
-          <input id="searchInput" type="search" placeholder="Search keywords: KDI, exports, startup, finance">
-        </div>
-        <div class="filter-row">
-          <input id="startDateInput" type="date" aria-label="Start date">
-          <input id="endDateInput" type="date" aria-label="End date">
-          <button id="clearFiltersBtn" type="button">Clear</button>
-        </div>
-        <div id="searchMeta" class="search-meta"></div>
-      </div>
+    <section class="titlebar panel">
+      <h1 class="page-title">읽을거리</h1>
+    </section>
 
-      <div class="calendar">
-        <div class="calendar-head">
-          <button id="prevMonthBtn" class="calendar-nav" type="button" aria-label="Previous month">&lt;</button>
-          <div class="calendar-picker">
-            <button id="calendarLabelBtn" class="calendar-label-btn" type="button" aria-haspopup="true" aria-expanded="false">Month</button>
-            <div id="calendarPopover" class="calendar-popover" hidden>
-              <div class="calendar-selects">
-                <select id="yearSelect" aria-label="Year"></select>
-                <select id="monthSelect" aria-label="Month"></select>
+    <div class="content-grid">
+      <aside class="sidebar panel">
+        <h2 class="sidebar-title">검색 및 기간 설정</h2>
+        <div class="search-wrap">
+          <div class="search-box">
+            <input id="searchInput" type="search" placeholder="Search keywords: KDI, exports, startup, finance">
+          </div>
+          <div class="filter-row">
+            <input id="startDateInput" type="date" aria-label="Start date">
+            <input id="endDateInput" type="date" aria-label="End date">
+            <button id="clearFiltersBtn" type="button">Clear</button>
+          </div>
+          <div id="searchMeta" class="search-meta"></div>
+        </div>
+
+        <div class="calendar">
+          <div class="calendar-head">
+            <button id="prevMonthBtn" class="calendar-nav" type="button" aria-label="Previous month">&lt;</button>
+            <div class="calendar-picker">
+              <button id="calendarLabelBtn" class="calendar-label-btn" type="button" aria-haspopup="true" aria-expanded="false">Month</button>
+              <div id="calendarPopover" class="calendar-popover" hidden>
+                <div class="calendar-selects">
+                  <select id="yearSelect" aria-label="Year"></select>
+                  <select id="monthSelect" aria-label="Month"></select>
+                </div>
+                <button id="goMonthBtn" type="button">Move</button>
               </div>
-              <button id="goMonthBtn" type="button">Move</button>
             </div>
+            <button id="todayBtn" class="calendar-nav calendar-today" type="button">Today</button>
+            <button id="nextMonthBtn" class="calendar-nav" type="button" aria-label="Next month">&gt;</button>
           </div>
-          <button id="todayBtn" class="calendar-nav calendar-today" type="button">Today</button>
-          <button id="nextMonthBtn" class="calendar-nav" type="button" aria-label="Next month">&gt;</button>
+          <div class="weekdays">
+            <div class="weekday">SUN</div>
+            <div class="weekday">MON</div>
+            <div class="weekday">TUE</div>
+            <div class="weekday">WED</div>
+            <div class="weekday">THU</div>
+            <div class="weekday">FRI</div>
+            <div class="weekday">SAT</div>
+          </div>
+          <div id="dateList" class="calendar-grid"></div>
         </div>
-        <div class="weekdays">
-          <div class="weekday">SUN</div>
-          <div class="weekday">MON</div>
-          <div class="weekday">TUE</div>
-          <div class="weekday">WED</div>
-          <div class="weekday">THU</div>
-          <div class="weekday">FRI</div>
-          <div class="weekday">SAT</div>
-        </div>
-        <div id="dateList" class="calendar-grid"></div>
-      </div>
-    </aside>
+      </aside>
 
-    <main class="main">
-      <section class="hero panel">
-        <div class="hero-top">
-          <div>
-            <div class="eyebrow">Policy / Research / Reports</div>
-            <h2 id="heroTitle">Loading...</h2>
-            <p id="heroSubtitle">Building the date archive and search index from the message history.</p>
-          </div>
-          <div class="stats">
-            <div class="stat">
-              <label>Dates Archived</label>
-              <strong id="statDays">-</strong>
+      <main class="main">
+        <section class="hero panel">
+          <div class="hero-top">
+            <div>
+              <h2 id="heroTitle">Loading...</h2>
+              <p id="heroSubtitle">Building the date archive and search index from the message history.</p>
             </div>
-            <div class="stat">
-              <label>Items Extracted</label>
-              <strong id="statItems">-</strong>
+            <div class="stats">
+              <div class="stat">
+                <label>Dates Archived</label>
+                <strong id="statDays">-</strong>
+              </div>
+              <div class="stat">
+                <label>Items Extracted</label>
+                <strong id="statItems">-</strong>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="section panel">
-        <div class="section-head">
-          <h3 id="listTitle">Items</h3>
-          <div id="listNote" class="section-note"></div>
-        </div>
-        <div id="cards" class="cards"></div>
-      </section>
-    </main>
+        <section class="section panel">
+          <div class="section-head">
+            <h3 id="listTitle">Items</h3>
+            <div id="listNote" class="section-note"></div>
+          </div>
+          <div id="cards" class="cards"></div>
+        </section>
+      </main>
+    </div>
   </div>
 
   <script>
@@ -1223,7 +1267,7 @@
       els.heroTitle.textContent = section.label;
       els.heroSubtitle.textContent = '';
       els.listTitle.textContent = '';
-      els.listNote.textContent = `${section.entries.length} items`;
+      els.listNote.textContent = '';
 
       els.cards.innerHTML = '';
       if (!section.entries.length) {
@@ -1253,7 +1297,7 @@
       }
 
       els.listTitle.textContent = '';
-      els.listNote.textContent = `${results.length} items`;
+      els.listNote.textContent = '';
 
       els.cards.innerHTML = '';
       if (!results.length) {

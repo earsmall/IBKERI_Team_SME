@@ -78,30 +78,35 @@
       align-self: start;
     }
 
-    .topbar-row {
-      display: grid;
-      grid-template-columns: max-content minmax(320px, 560px);
-      gap: 12px;
-      align-items: center;
-      justify-content: start;
-    }
-
-    .topbar-row.controls {
-      grid-template-columns: auto minmax(280px, 560px);
-      gap: 14px;
-      align-items: center;
-      justify-content: start;
+    .titlebar {
+      padding: 14px 16px;
     }
 
     .dept-name {
       display: block;
       margin-bottom: 0;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       letter-spacing: 0.03em;
       color: var(--accent-strong);
       line-height: 1.35;
-      text-align: left;
+      text-align: center;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--accent-strong);
+      text-align: center;
+    }
+
+    .page-title::before {
+      content: "< ";
+    }
+
+    .page-title::after {
+      content: " >";
     }
 
     .nav-switch {
@@ -115,15 +120,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 60px;
-      padding: 0 11px;
+      min-height: 54px;
+      padding: 0 10px;
       border-radius: 18px;
       border: 1px solid transparent;
       text-decoration: none;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
       text-align: center;
-      line-height: 1.3;
+      line-height: 1.1;
       transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease, border-color 160ms ease;
       box-shadow: 0 12px 24px rgba(40, 72, 115, 0.12);
     }
@@ -134,30 +139,29 @@
     }
 
     .nav-link-read {
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6);
       color: #ffffff;
-      border-color: rgba(29, 78, 216, 0.28);
+      border-color: rgba(59, 130, 246, 0.32);
     }
 
     .nav-link-dashboard {
-      background: linear-gradient(135deg, #0f766e, #0ea5a5);
+      background: linear-gradient(135deg, #0f4c81, #1d70b8);
       color: #ffffff;
-      border-color: rgba(14, 165, 165, 0.28);
+      border-color: rgba(29, 112, 184, 0.32);
     }
 
     .nav-link-stats {
-      background: linear-gradient(135deg, #b45309, #d97706);
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
       color: #ffffff;
-      border-color: rgba(217, 119, 6, 0.28);
+      border-color: rgba(96, 165, 250, 0.32);
     }
 
-    .nav-link-news {
-      background: linear-gradient(135deg, #7c3aed, #9333ea);
+    .nav-link-sme {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
       color: #ffffff;
-      border-color: rgba(147, 51, 234, 0.28);
+      border-color: rgba(37, 99, 235, 0.32);
     }
-
-    .nav-link.is-active {
+.nav-link.is-active {
       box-shadow: 0 16px 30px rgba(40, 72, 115, 0.18);
     }
 
@@ -194,11 +198,25 @@
       display: none;
     }
 
+    .pickerbar {
+      padding: 14px 16px;
+    }
+
+    .picker-row {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: max-content minmax(320px, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
     .dashboard-picker {
       display: grid;
       gap: 0;
       min-width: 0;
-      max-width: 620px;
+      width: 100%;
+      max-width: 100%;
     }
 
     .dashboard-select {
@@ -238,9 +256,12 @@
 
     .main {
       min-height: 0;
+      display: flex;
+      justify-content: center;
     }
 
     .viewer {
+      width: min(1720px, 100%);
       padding: 14px 12px 12px;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
@@ -275,13 +296,17 @@
       background:
         linear-gradient(135deg, rgba(255,255,255,0.98), rgba(236, 244, 255, 0.96));
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
     }
 
     .viz-stage {
       width: calc(100% / var(--viz-scale));
       min-height: calc(var(--viz-base-height) / var(--viz-scale));
       transform: scale(var(--viz-scale));
-      transform-origin: top left;
+      transform-origin: top center;
+      margin: 0 auto;
     }
 
     tableau-viz {
@@ -308,10 +333,8 @@
         padding: 16px;
       }
 
-      .topbar-row,
-      .topbar-row.controls {
+      .picker-row {
         grid-template-columns: 1fr;
-        justify-content: stretch;
       }
 
       .main {
@@ -325,6 +348,7 @@
       }
 
       .topbar,
+      .pickerbar,
       .viewer {
         padding: 18px;
       }
@@ -379,27 +403,28 @@
 <body>
   <div class="shell">
     <section class="topbar panel">
-      <div class="topbar-row">
-        <div class="dept-name">IBK경제연구소 중기산업연구실 중소기업팀</div>
-        <div class="nav-switch">
-          <a class="nav-link nav-link-read" href="./index.html">
-            <span>읽을거리</span>
-          </a>
-          <a class="nav-link nav-link-news" href="./News.html">
-            <span>언론기사</span>
-          </a>
-          <a class="nav-link nav-link-stats" href="./statistics_catalog.html">
-            <span>통계 등 검색</span>
-          </a>
-          <a class="nav-link nav-link-dashboard is-active" href="./tableau_dashboard.html">
-            <span>시각화 대쉬보드</span>
-          </a>
-        </div>
+      <div class="dept-name">IBK경제연구소 중기산업연구실 중소기업팀</div>
+      <div class="nav-switch">
+        <a class="nav-link nav-link-read" href="./index.html">
+          <span>읽을거리</span>
+        </a>
+        <a class="nav-link nav-link-stats" href="./statistics_catalog.html">
+          <span>유용한 사이트</span>
+        </a>
+        <a class="nav-link nav-link-sme" href="./SME_data.html">
+          <span>중소기업 통계</span>
+        </a>
+        <a class="nav-link nav-link-dashboard is-active" href="./tableau_dashboard.html">
+          <span>시각화 대쉬보드</span>
+        </a>
       </div>
-
-      <div class="list-label">&lt; 대쉬보드 목록 &gt;</div>
-
-      <div class="topbar-row controls">
+    </section>
+    <section class="titlebar panel">
+      <h1 class="page-title">시각화 대쉬보드</h1>
+    </section>
+    <section class="pickerbar panel">
+      <div class="picker-row">
+        <div class="list-label">시각화 대쉬보드 선택하기 >>>>>></div>
         <div class="dashboard-picker">
           <select id="dashboardSelect" class="dashboard-select" aria-label="대시보드 목록"></select>
           <div id="dashboardHelper" class="dashboard-helper"></div>
@@ -483,24 +508,6 @@
       viewerTitle: document.getElementById("viewerTitle"),
       vizMount: document.getElementById("vizMount")
     };
-
-    const controlsRow = document.querySelector(".topbar-row.controls");
-    if (controlsRow && !controlsRow.querySelector(".list-label")) {
-      const label = document.createElement("div");
-      label.className = "list-label";
-      label.textContent = "< 대쉬보드 목록 >";
-      controlsRow.insertBefore(label, controlsRow.firstChild);
-    }
-
-    const controlsLabel = document.querySelector(".topbar-row.controls .list-label");
-    if (controlsLabel) {
-      controlsLabel.textContent = "대쉬보드 선택하기 ->>>";
-    }
-
-    const controlsLabelOverride = document.querySelector(".topbar-row.controls .list-label");
-    if (controlsLabelOverride) {
-      controlsLabelOverride.textContent = "시각화 대쉬보드 선택하기 >>>>>";
-    }
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
