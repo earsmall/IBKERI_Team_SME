@@ -314,6 +314,9 @@
       min-height: var(--viz-base-height);
       display: flex;
       justify-content: center;
+      flex: 0 0 auto;
+      margin: 0 auto;
+      max-width: 100%;
     }
 
     .viz-stage {
@@ -527,10 +530,40 @@
       return Math.min(Math.max(value, min), max);
     }
 
-    function getPreferredDevice() {
-      if (window.innerWidth <= 640) return "phone";
-      if (window.innerWidth <= 1120) return "tablet";
-      return "desktop";
+    function getViewportPreset() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isLargeDesktop = width >= 2200 && height >= 1200;
+
+      if (width <= 640) {
+        return {
+          device: "phone",
+          targetWidth: 390,
+          baseHeight: 760
+        };
+      }
+
+      if (width <= 1280) {
+        return {
+          device: "tablet",
+          targetWidth: 1100,
+          baseHeight: 700
+        };
+      }
+
+      if (isLargeDesktop) {
+        return {
+          device: "desktop",
+          targetWidth: 1600,
+          baseHeight: Math.max(940, height - 90)
+        };
+      }
+
+      return {
+        device: "desktop",
+        targetWidth: 1366,
+        baseHeight: 720
+      };
     }
 
     function updateVizScale() {
@@ -538,19 +571,11 @@
       const stage = document.querySelector(".viz-stage");
       if (!frame || !stage) return;
 
+      const preset = getViewportPreset();
       const frameWidth = frame.clientWidth;
-      const targetWidth = window.innerWidth <= 640
-        ? 960
-        : window.innerWidth <= 1120
-          ? 1280
-          : 1468;
-      const isLargeDesktop = window.innerWidth >= 1800 && window.innerHeight >= 900;
-      const scale = clamp(frameWidth / targetWidth, 0.2, 1);
-      const baseHeight = window.innerWidth <= 720
-        ? 620
-        : isLargeDesktop
-          ? Math.max(940, window.innerHeight - 90)
-          : 720;
+      const targetWidth = preset.targetWidth;
+      const scale = clamp(frameWidth / targetWidth, 0.24, 1);
+      const baseHeight = preset.baseHeight;
 
       frame.style.setProperty("--viz-scale", scale.toFixed(3));
       frame.style.setProperty("--viz-base-height", `${Math.round(baseHeight)}px`);
@@ -585,7 +610,7 @@
     }
 
     function renderViz(selectedDashboard) {
-      const preferredDevice = getPreferredDevice();
+      const preferredDevice = getViewportPreset().device;
       if (!selectedDashboard) {
         els.vizMount.className = "empty";
         delete els.vizMount.dataset.device;
@@ -633,7 +658,7 @@
     }
 
     function syncVizLayout() {
-      const preferredDevice = getPreferredDevice();
+      const preferredDevice = getViewportPreset().device;
       const filteredDashboards = getFilteredDashboards();
       const selectedDashboard = getSelectedDashboard(filteredDashboards);
 
