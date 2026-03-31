@@ -276,6 +276,53 @@
       padding: 10px 12px;
     }
 
+    .quick-link-list .link-chip.has-logo {
+      padding: 8px 12px;
+    }
+
+    .link-chip-content {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .link-chip-logo-frame {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--logo-width, 96px);
+      height: var(--logo-height, 24px);
+      overflow: hidden;
+    }
+
+    .link-chip-logo-frame.is-full {
+      width: var(--logo-full-width, 100%);
+    }
+
+    .link-chip-logo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      transform: scale(var(--logo-scale, 1));
+      transform-origin: center;
+    }
+
+    .link-chip-logo.is-cover {
+      object-fit: cover;
+    }
+
+    .link-chip-logo.is-fill {
+      object-fit: fill;
+    }
+
+    .link-chip-text {
+      white-space: nowrap;
+    }
+
     .link-chip:hover {
       border-color: rgba(29, 78, 216, 0.28);
       background: rgba(255, 255, 255, 0.96);
@@ -335,9 +382,9 @@
         tone: "tone-search",
         note: "클릭 시 새 창으로 이동합니다.",
         items: [
-          { title: "Google", url: "https://www.google.com/" },
-          { title: "Naver", url: "https://www.naver.com/" },
-          { title: "Youtube", url: "https://youtube.com/?themeRefresh=1" }
+          { title: "Google", url: "https://www.google.com/", image: "./img/Google.png" },
+          { title: "Naver", url: "https://www.naver.com/", image: "./img/Naver.png?v=20260331-133551" },
+          { title: "Youtube", url: "https://youtube.com/?themeRefresh=1", image: "./img/Youtube.png?v=20260331-133537" }
         ]
       },
       {
@@ -361,6 +408,61 @@
         ]
       }
     ];
+
+    const quickAccessLogoMap = {
+      "https://news.naver.com/": {
+        image: "./img/N_news.jpeg?v=20260331-133914",
+        logoWidth: "100%",
+        logoHeight: 38,
+        fullLogo: true,
+        imageFit: "cover",
+        chipPaddingX: 12
+      },
+      "https://news.google.com/home?hl=ko&gl=KR&ceid=KR:ko": {
+        image: "./img/Google%20news.png?v=20260331-133930",
+        logoHeight: 34,
+        imageFit: "cover",
+        fullLogo: true
+      },
+      "https://chatgpt.com/": {
+        image: "./img/ChatGPT.png?v=20260331-135430",
+        logoWidth: "100%",
+        logoHeight: 34,
+        fullLogo: true,
+        logoFullWidth: "100%",
+        imageFit: "fill"
+      },
+      "https://gemini.google.com/app?hl=ko": {
+        image: "./img/Gemini.jpeg?v=20260331-134215",
+        logoWidth: "100%",
+        logoHeight: 28
+      },
+      "https://claude.ai/new": {
+        image: "./img/Claude.png?v=20260331-134230",
+        logoWidth: "100%",
+        logoHeight: 28
+      },
+      "https://notebooklm.google.com/": {
+        image: "./img/NotebookLM.png?v=20260331-135455",
+        logoWidth: "100%",
+        logoHeight: 38,
+        fullLogo: true,
+        logoFullWidth: "100%",
+        imageFit: "contain"
+      }
+    };
+
+    function formatCssSize(value, fallback) {
+      if (value === undefined || value === null || value === "") return fallback;
+      return typeof value === "number" ? `${value}px` : value;
+    }
+
+    quickAccessSections.forEach((section) => {
+      section.items = section.items.map((item) => ({
+        ...item,
+        ...(quickAccessLogoMap[item.url] || {})
+      }));
+    });
 
     const usefulSiteSections = [
       {
@@ -426,7 +528,11 @@
           </div>
           <div class="${listClass}">
             ${section.items.map((item) => `
-              <a class="link-chip" href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+              <a class="link-chip${item.image ? " has-logo" : ""}" href="${item.url}" target="_blank" rel="noopener noreferrer" aria-label="${item.title}" style="${item.chipPaddingX ? `padding-left:${item.chipPaddingX}px;padding-right:${item.chipPaddingX}px;` : ""}">
+                <span class="link-chip-content">
+                  ${item.image ? `<span class="link-chip-logo-frame${item.fullLogo ? " is-full" : ""}" style="${item.logoWidth ? `--logo-width:${formatCssSize(item.logoWidth, "96px")};` : ""}${item.logoHeight ? `--logo-height:${formatCssSize(item.logoHeight, "24px")};` : ""}${item.logoFullWidth ? `--logo-full-width:${formatCssSize(item.logoFullWidth, "100%")};` : ""}${item.logoScale ? `--logo-scale:${item.logoScale};` : ""}"><img class="link-chip-logo${item.imageFit === "cover" ? " is-cover" : ""}${item.imageFit === "fill" ? " is-fill" : ""}" src="${item.image}" alt="${item.title}"></span>` : `<span class="link-chip-text">${item.title}</span>`}
+                </span>
+              </a>
             `).join("")}
           </div>
         </article>
