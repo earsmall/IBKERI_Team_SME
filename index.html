@@ -1075,20 +1075,71 @@
       let currentAgency = '';
       let buffer = [];
 
+      function normalizeMetadataLabel(rawLabel) {
+        const label = (rawLabel || '').replace(/[:：]\s*$/, '').trim();
+        if (!label) return '첨부';
+        if (/^(?:링크|link)$/i.test(label)) return '관련 링크';
+        if (/^(?:pdf|첨부|첨부파일)$/i.test(label)) return '첨부: PDF';
+        return label;
+      }
+
+      function parseMetadataLine(trimmed) {
+        let match = trimmed.match(/^\((https?:\/\/[^\s)]+)\)$/i);
+        if (match) return { type: 'link', href: match[1] };
+
+        match = trimmed.match(/^\(([^:()]+)\s*:\s*(https?:\/\/[^\s)]+)\)$/i);
+        if (match) {
+          const text = normalizeMetadataLabel(match[1]);
+          return text === '관련 링크'
+            ? { type: 'link', href: match[2] }
+            : { type: 'attachment', href: match[2], text };
+        }
+
+        match = trimmed.match(/^[-*]?\s*>?\s*(https?:\/\/\S+)$/i);
+        if (match) return { type: 'link', href: match[1] };
+
+        match = trimmed.match(/^[-*]?\s*>?\s*([^:>]+)\s*:\s*(https?:\/\/\S+)$/i);
+        if (match) {
+          const text = normalizeMetadataLabel(match[1]);
+          return text === '관련 링크'
+            ? { type: 'link', href: match[2] }
+            : { type: 'attachment', href: match[2], text };
+        }
+
+        return null;
+      }
+
       function pushBuffer() {
         if (!currentAgency || buffer.length === 0) return;
 
         let link = '';
         const contentLines = [];
+        const attachments = [];
         buffer.forEach(line => {
           const trimmed = line.trim();
           if (!trimmed) return;
-          const linkMatch = trimmed.match(/^\((https?:\/\/[^\s)]+)\)$/);
-          if (linkMatch) {
-            link = linkMatch[1];
-          } else {
-            contentLines.push(trimmed);
+
+          const metadata = parseMetadataLine(trimmed);
+          if (metadata) {
+            if (metadata.type === 'link') {
+              if (!link) link = metadata.href;
+            } else {
+              attachments.push(metadata);
+            }
+            return;
           }
+
+          const inlineTitleLink = !/^[-*]/.test(trimmed)
+            ? trimmed.match(/^(.+?)\((https?:\/\/[^\s)]+)\)$/i)
+            : null;
+
+          if (inlineTitleLink) {
+            if (!link) link = inlineTitleLink[2];
+            contentLines.push(inlineTitleLink[1].trim());
+            return;
+          }
+
+          contentLines.push(trimmed);
         });
 
         if (!contentLines.length) {
@@ -1101,11 +1152,20 @@
         });
 
         const title = cleaned.find(line => !/^[-*]/.test(line))?.replace(/^\d+\.\s+/, '').trim() ?? '';
-        const details = cleaned
+        const detailLines = cleaned
           .filter(line => /^[-*]/.test(line))
           .map(line => line.trim())
-          .filter(Boolean)
-          .join('\n');
+          .filter(Boolean);
+
+        attachments.forEach(item => {
+          detailLines.push(`- [${item.text}](${item.href})`);
+        });
+
+        if (!link && attachments.length) {
+          link = attachments[0].href;
+        }
+
+        const details = detailLines.join('\n');
 
         if (title) {
           results.push({
