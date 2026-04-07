@@ -75,13 +75,8 @@
       text-align: center;
     }
 
-    .page-title::before {
-      content: "< ";
-    }
-
-    .page-title::after {
-      content: " >";
-    }
+    .page-title::before { content: "< "; }
+    .page-title::after { content: " >"; }
 
     .nav-switch {
       display: grid;
@@ -120,6 +115,25 @@
       align-content: start;
     }
 
+    .intro {
+      display: grid;
+      gap: 6px;
+      padding: 2px 2px 4px;
+    }
+
+    .intro h2 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--accent-strong);
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     .major-list {
       display: grid;
       gap: 14px;
@@ -127,11 +141,21 @@
 
     .major-card {
       display: grid;
-      gap: 12px;
+      gap: 14px;
       padding: 16px;
       border: 1px solid rgba(29, 78, 216, 0.12);
       border-radius: 18px;
       background: var(--panel-strong);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .major-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      opacity: 0.95;
     }
 
     .major-card:nth-child(1) {
@@ -139,23 +163,32 @@
       border-color: rgba(59, 130, 246, 0.24);
     }
 
+    .major-card:nth-child(1)::before { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+
     .major-card:nth-child(2) {
       background: linear-gradient(180deg, rgba(234, 248, 245, 0.95), rgba(255, 255, 255, 0.92));
       border-color: rgba(20, 184, 166, 0.24);
     }
+
+    .major-card:nth-child(2)::before { background: linear-gradient(90deg, #0f766e, #2dd4bf); }
 
     .major-card:nth-child(3) {
       background: linear-gradient(180deg, rgba(255, 247, 234, 0.95), rgba(255, 255, 255, 0.92));
       border-color: rgba(245, 158, 11, 0.24);
     }
 
+    .major-card:nth-child(3)::before { background: linear-gradient(90deg, #d97706, #fbbf24); }
+
     .major-card:nth-child(4) {
       background: linear-gradient(180deg, rgba(243, 240, 255, 0.95), rgba(255, 255, 255, 0.92));
       border-color: rgba(124, 58, 237, 0.22);
     }
 
+    .major-card:nth-child(4)::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
     .major-head {
-      display: block;
+      display: grid;
+      gap: 4px;
     }
 
     .major-head h2 {
@@ -164,9 +197,14 @@
       color: var(--accent-strong);
     }
 
+    .major-meta {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
     .sub-grid {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 12px;
     }
 
@@ -185,6 +223,10 @@
       color: var(--accent-strong);
     }
 
+    .sub-card-title:empty {
+      display: none;
+    }
+
     .link-list {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -193,26 +235,16 @@
 
     .link-chip {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
-      padding: 8px 10px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: 48px;
+      padding: 10px 12px;
       border-radius: 12px;
       border: 1px solid rgba(29, 78, 216, 0.14);
       background: rgba(255,255,255,0.92);
       text-decoration: none;
       color: var(--ink);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.35;
-    }
-
-    .link-chip::before {
-      content: "•";
-      flex: 0 0 auto;
-      color: #2563eb;
-      font-size: 16px;
-      line-height: 1;
+      text-align: left;
     }
 
     .link-chip:hover {
@@ -220,22 +252,41 @@
       background: rgba(255,255,255,0.98);
     }
 
+    .stat-chip-content {
+      display: grid;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .stat-chip-title {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .stat-chip-meta {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: var(--muted);
+      word-break: keep-all;
+    }
+
+    @media (max-width: 1200px) {
+      .link-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
     @media (max-width: 1080px) {
-      .link-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .link-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 860px) {
-      .nav-switch {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .nav-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 640px) {
-      .link-list {
-        grid-template-columns: 1fr;
-      }
+      .link-list { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -256,6 +307,10 @@
     </section>
 
     <section class="main panel">
+      <div class="intro">
+        <h2>통계목록 기준 반영</h2>
+        <p><code>통계목록.md</code>의 최신 제목과 링크를 기준으로 대분류와 중분류를 정리했습니다. 괄호 안 설명은 다음 줄에 표시하고, 데스크톱에서는 한 줄에 4개씩 보이도록 구성했습니다.</p>
+      </div>
       <div id="majorList" class="major-list"></div>
     </section>
   </div>
@@ -264,129 +319,154 @@
     const statsGroups = [
       {
         title: "중소기업",
+        note: "기본통계, 실물경기, 체감경기로 구분했습니다.",
         subgroups: [
           {
             title: "1. 중소기업 기본통계",
             items: [
-              { title: "기업수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_A001&conn_path=I2" },
-              { title: "종사자수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_B001&conn_path=I2" },
-              { title: "매출액", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_C001&conn_path=I2" }
+              { title: "기업규모별 기업수(중소기업 기본통계, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_A001&conn_path=I2" },
+              { title: "기업규모별 종사자수(중소기업 기본통계, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_B001&conn_path=I2" },
+              { title: "매출액(중소기업 기본통계, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_BR_C001&conn_path=I2" }
             ]
           },
           {
             title: "2. 실물경기",
             items: [
-              { title: "중소기업 경기동행지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=303&tblId=DT_303005_CI001&conn_path=I2" },
-              { title: "기업규모별 제조업 생산지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1F02007&conn_path=I2" },
-              { title: "중소기업 평균가동률(15~22년)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_B10121&conn_path=I2" },
-              { title: "중소기업 평균가동률(23년 이후)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10125&conn_path=I2" },
-              { title: "시도/산업별 광공업 생산지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1F02001&conn_path=I2" },
-              { title: "기업규모별 서비스업 생산지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2022&conn_path=I2" },
-              { title: "음식점 포함 소매판매액지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41017&conn_path=I2" },
-              { title: "재별 상품군별 소매판매액지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41012&conn_path=I2" },
-              { title: "산업별 서비스업 생산지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2020&conn_path=I2" }
+              { title: "중소기업 경기동행지수(중소기업 경기동행지수, 중소기업은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=303&tblId=DT_303005_CI001&conn_path=I2" },
+              { title: "기업규모별 제조업 생산지수(광업제조업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1F02007&conn_path=I2" },
+              { title: "중소기업 평균가동률(중소기업경기전망조사, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10125&conn_path=I2" },
+              { title: "시도/산업별 광공업 생산지수(광업제조업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1F02001&conn_path=I2" },
+              { title: "기업규모별 서비스업 생산지수(서비스업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2022&conn_path=I2" },
+              { title: "음식점 포함 소매판매액지수(서비스업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41017&conn_path=I2" },
+              { title: "재별 상품군별 소매판매액지수(서비스업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41012&conn_path=I2" },
+              { title: "산업별 서비스업 생산지수(서비스업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1KC2020&conn_path=I2" }
             ]
           },
           {
             title: "3. 체감경기",
             items: [
-              { title: "한국은행 BSI(실적)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y013&conn_path=I2" },
-              { title: "한국은행 BSI(전망)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y014&conn_path=I2" },
-              { title: "SBHI(실적)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10100A&conn_path=I2" },
-              { title: "SBHI(전망)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10100B&conn_path=I2" },
-              { title: "기업경영상 애로요인", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10127&conn_path=I2" }
+              { title: "BSI실적(기업경기조사, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y013&conn_path=I2" },
+              { title: "BSI전망(기업경기조사, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y014&conn_path=I2" },
+              { title: "SBHI 실적(중소기업경기전망조사, 중소벤처기업부 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10100A&conn_path=I2" },
+              { title: "SBHI 전망(중소기업경기전망조사, 중소벤처기업부 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10100B&conn_path=I2" },
+              { title: "기업경영상 애로요인(중소기업경기전망조사, 중소벤처기업부 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=340&tblId=DT_D10127&conn_path=I2" }
             ]
           }
         ]
       },
       {
         title: "소상공인, 자영업자",
+        note: "자영업자 현황부터 체감경기, 창업·폐업까지 묶었습니다.",
         subgroups: [
           {
             title: "1. 자영업자 기본현황",
             items: [
-              { title: "성/종사상지위별 취업자", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1DA7028S&conn_path=I2" },
-              { title: "시도·산업·종사상지위별 종사자수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K52D04&conn_path=I2" },
-              { title: "소득5분위별 가구주 종사상지위별 자산, 부채, 소득 현황", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1HDAAA13&conn_path=I2" }
+              { title: "성/종사상지위별 취업자(경제활동인구조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1DA7028S&conn_path=I2" },
+              { title: "시도·산업·종사상지위별 종사자수(전국사업체조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K52F01&conn_path=I2" },
+              { title: "소득5분위별 가구주 종사상지위별 자산, 부채, 소득 현황(가계금융복지조사, 국가데이터처 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1HDAAA13&conn_path=I2" }
             ]
           },
           {
             title: "2. 실물경기",
             items: [
-              { title: "재별 상품군별 판매액", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41002&conn_path=I2" },
-              { title: "재별 및 상품군별 소매판매액지수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41012&conn_path=I2" }
+              { title: "재별 상품군별 판매액(서비스업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41002&conn_path=I2" },
+              { title: "재별 및 상품군별 소매판매액지수(서비스업동향조사, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1K41012&conn_path=I2" }
             ]
           },
           {
             title: "3. 체감경기",
             items: [
-              { title: "소상공인 부문별 실적 및 전망", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_001&conn_path=I2" },
-              { title: "소상공인 업종별 실적 및 전망", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_002&conn_path=I2" },
-              { title: "소상공인 지역별 실적 및 전망", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_005&conn_path=I2" }
+              { title: "소상공인 부문별 실적 및 전망(소상공인시장경기동향조사, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_001&conn_path=I2" },
+              { title: "소상공인 업종별 실적 및 전망(소상공인시장경기동향조사, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_002&conn_path=I2" },
+              { title: "소상공인 지역별 실적 및 전망(소상공인시장경기동향조사, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_005&conn_path=I2" }
             ]
           },
           {
             title: "4. 창업, 폐업",
             items: [
-              { title: "기업생멸행정통계 - 산업별 조직형태별 기업수", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1BD1006&conn_path=I2" },
-              { title: "폐업자 수 및 폐업률", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=DT_133N_981&conn_path=I2" },
-              { title: "폐업자 현황", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=TX_13301_A169&conn_path=I2" }
+              { title: "업종별 창업기업수(창업기업동향, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_142N_F201&conn_path=I2" },
+              { title: "산업별 조직형태별 기업수(기업생멸행정통계, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1BD1106&conn_path=I2" },
+              { title: "사업자 현황(국세통계, 국세청)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=DT_133N_981&conn_path=I2" },
+              { title: "폐업자 현황(국세통계, 국세청)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=TX_13301_A169&conn_path=I2" }
             ]
           }
         ]
       },
       {
         title: "중소기업 금융",
+        note: "대출금·금리와 대출행태 서베이를 나눠 정리했습니다.",
         subgroups: [
           {
             title: "1. 대출금, 금리",
             items: [
-              { title: "산업별대출금(예금은행, 기업규모별)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_131Y018&conn_path=I2" },
-              { title: "시설, 운전자금 대출", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_141Y004&conn_path=I2" },
-              { title: "대출금리(신규취급액 기준)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y006&conn_path=I2" },
-              { title: "대출금리(잔액 기준)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y015&conn_path=I2" }
+              { title: "예금은행 기업규모별 산업별대출금(통화금융통계, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_131Y018&conn_path=I2" },
+              { title: "예금은행 시설, 운전자금 대출(통화금융통계, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_141Y004&conn_path=I2" },
+              { title: "대출금리, 신규취급액 기준(통화금융통계, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y006&conn_path=I2" },
+              { title: "대출금리, 잔액 기준(통화금융통계, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y015&conn_path=I2" }
             ]
           },
           {
             title: "2. 대출행태 서베이",
             items: [
-              { title: "대출태도", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y001&conn_path=I2" },
-              { title: "신용위험", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y002&conn_path=I2" },
-              { title: "대출 수요", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y003&conn_path=I2" }
+              { title: "대출태도(금융기관대출행태조사, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y001&conn_path=I2" },
+              { title: "신용위험(금융기관대출행태조사, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y002&conn_path=I2" },
+              { title: "대출 수요(금융기관대출행태조사, 한국은행)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y003&conn_path=I2" }
             ]
           }
         ]
       },
       {
         title: "수출 중소기업",
+        note: "수출입과 국가별·산업별 수출 동향을 한 묶음으로 정리했습니다.",
         subgroups: [
           {
             title: "주요 수출 통계",
             items: [
-              { title: "기업규모별 수출입", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N116&conn_path=I2" },
-              { title: "기업규모별, 주요국가별 수출입", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N227&conn_path=I2" },
-              { title: "산업별, 기업규모별 수출입", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_N313&conn_path=I2" },
-              { title: "대륙별, 국가별 중소기업 수출", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2" }
+              { title: "기업규모별 수출입(기업특성별무역통계, 국가데이터처 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_P116&conn_path=I2" },
+              { title: "기업규모별, 주요국가별 수출입(기업특성별무역통계, 국가데이터처 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_P227&conn_path=I2" },
+              { title: "산업별, 기업규모별 수출입(기업특성별무역통계, 국가데이터처 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_P116&conn_path=I2" },
+              { title: "대륙별, 국가별 중소기업 수출(중소기업수출동향, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2" }
             ]
           }
         ]
       }
     ];
 
+    function splitStatText(text) {
+      const match = text.match(/^(.*?)(?:\(([^()]*)\))$/);
+      if (!match) {
+        return { title: text, meta: "" };
+      }
+
+      return {
+        title: match[1].trim(),
+        meta: match[2].trim()
+      };
+    }
+
     const majorListEl = document.getElementById("majorList");
     majorListEl.innerHTML = statsGroups.map((group) => `
       <article class="major-card">
         <div class="major-head">
           <h2>${group.title}</h2>
+          <div class="major-meta">${group.note}</div>
         </div>
         <div class="sub-grid">
           ${group.subgroups.map((subgroup) => `
             <section class="sub-card">
-              <h3>${subgroup.title}</h3>
+              <h3 class="sub-card-title">${subgroup.title}</h3>
               <div class="link-list">
-                ${subgroup.items.map((item) => `
-                  <a class="link-chip" href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title}</a>
-                `).join("")}
+                ${subgroup.items.map((item) => {
+                  const parts = splitStatText(item.title);
+                  return `
+                    <a class="link-chip" href="${item.url}" target="_blank" rel="noopener noreferrer">
+                      <span class="stat-chip-content">
+                        <span class="stat-chip-title">${parts.title}</span>
+                        ${parts.meta ? `<span class="stat-chip-meta">(${parts.meta})</span>` : ""}
+                      </span>
+                    </a>
+                  `;
+                }).join("")}
               </div>
             </section>
           `).join("")}
