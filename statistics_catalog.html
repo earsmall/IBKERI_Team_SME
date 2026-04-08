@@ -80,13 +80,8 @@
       text-align: center;
     }
 
-    .page-title::before {
-      content: "< ";
-    }
-
-    .page-title::after {
-      content: " >";
-    }
+    .page-title::before { content: "< "; }
+    .page-title::after { content: " >"; }
 
     .nav-switch {
       display: grid;
@@ -173,9 +168,7 @@
       border-color: rgba(37, 99, 235, 0.18);
     }
 
-    .tone-search::before {
-      background: linear-gradient(90deg, #2563eb, #60a5fa);
-    }
+    .tone-search::before { background: linear-gradient(90deg, #2563eb, #60a5fa); }
 
     .tone-news {
       background:
@@ -184,9 +177,7 @@
       border-color: rgba(234, 88, 12, 0.18);
     }
 
-    .tone-news::before {
-      background: linear-gradient(90deg, #ea580c, #fb923c);
-    }
+    .tone-news::before { background: linear-gradient(90deg, #ea580c, #fb923c); }
 
     .tone-ai {
       background:
@@ -195,9 +186,7 @@
       border-color: rgba(124, 58, 237, 0.18);
     }
 
-    .tone-ai::before {
-      background: linear-gradient(90deg, #7c3aed, #a78bfa);
-    }
+    .tone-ai::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
 
     .tone-stats {
       background:
@@ -206,9 +195,7 @@
       border-color: rgba(14, 116, 144, 0.18);
     }
 
-    .tone-stats::before {
-      background: linear-gradient(90deg, #0e7490, #67e8f9);
-    }
+    .tone-stats::before { background: linear-gradient(90deg, #0e7490, #67e8f9); }
 
     .tone-gov {
       background:
@@ -217,9 +204,7 @@
       border-color: rgba(22, 163, 74, 0.18);
     }
 
-    .tone-gov::before {
-      background: linear-gradient(90deg, #16a34a, #86efac);
-    }
+    .tone-gov::before { background: linear-gradient(90deg, #16a34a, #86efac); }
 
     .tone-research {
       background:
@@ -228,9 +213,7 @@
       border-color: rgba(217, 119, 6, 0.18);
     }
 
-    .tone-research::before {
-      background: linear-gradient(90deg, #d97706, #facc15);
-    }
+    .tone-research::before { background: linear-gradient(90deg, #d97706, #facc15); }
 
     .section-note {
       font-size: 12px;
@@ -311,16 +294,12 @@
       transform-origin: center;
     }
 
-    .link-chip-logo.is-cover {
-      object-fit: cover;
-    }
-
-    .link-chip-logo.is-fill {
-      object-fit: fill;
-    }
-
-    .link-chip-text {
-      white-space: nowrap;
+    .link-chip-logo.is-cover { object-fit: cover; }
+    .link-chip-logo.is-fill { object-fit: fill; }
+    .link-chip-text { white-space: nowrap; }
+    .link-chip-text.is-multiline {
+      white-space: normal;
+      line-height: 1.3;
     }
 
     .link-chip:hover {
@@ -329,19 +308,12 @@
     }
 
     @media (max-width: 1040px) {
-      .section-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .site-link-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .section-grid { grid-template-columns: 1fr; }
+      .site-link-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 860px) {
-      .nav-switch {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .nav-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 640px) {
@@ -410,59 +382,13 @@
     ];
 
     const quickAccessLogoMap = {
-      "https://news.naver.com/": {
-        image: "./img/N_news.jpeg?v=20260331-133914",
-        logoWidth: "100%",
-        logoHeight: 38,
-        fullLogo: true,
-        imageFit: "cover",
-        chipPaddingX: 12
-      },
-      "https://news.google.com/home?hl=ko&gl=KR&ceid=KR:ko": {
-        image: "./img/Google%20news.png?v=20260331-133930",
-        logoHeight: 34,
-        imageFit: "cover",
-        fullLogo: true
-      },
-      "https://chatgpt.com/": {
-        image: "./img/ChatGPT.png?v=20260331-135430",
-        logoWidth: "100%",
-        logoHeight: 34,
-        fullLogo: true,
-        logoFullWidth: "100%",
-        imageFit: "fill"
-      },
-      "https://gemini.google.com/app?hl=ko": {
-        image: "./img/Gemini.jpeg?v=20260331-134215",
-        logoWidth: "100%",
-        logoHeight: 28
-      },
-      "https://claude.ai/new": {
-        image: "./img/Claude.png?v=20260331-134230",
-        logoWidth: "100%",
-        logoHeight: 28
-      },
-      "https://notebooklm.google.com/": {
-        image: "./img/NotebookLM.png?v=20260331-135455",
-        logoWidth: "100%",
-        logoHeight: 38,
-        fullLogo: true,
-        logoFullWidth: "100%",
-        imageFit: "contain"
-      }
+      "https://news.naver.com/": { image: "./img/N_news.png?v=20260331-133914", logoWidth: "100%", logoHeight: 38, fullLogo: true, imageFit: "cover", chipPaddingX: 12 },
+      "https://news.google.com/home?hl=ko&gl=KR&ceid=KR:ko": { image: "./img/Google%20news.png?v=20260331-133930", logoHeight: 34, imageFit: "cover", fullLogo: true },
+      "https://chatgpt.com/": { image: "./img/ChatGPT.png?v=20260331-135430", logoWidth: "100%", logoHeight: 34, fullLogo: true, logoFullWidth: "100%", imageFit: "fill" },
+      "https://gemini.google.com/app?hl=ko": { image: "./img/Gemini.jpeg?v=20260331-134215", logoWidth: "100%", logoHeight: 28 },
+      "https://claude.ai/new": { image: "./img/Claude.png?v=20260331-134230", logoWidth: "100%", logoHeight: 28 },
+      "https://notebooklm.google.com/": { image: "./img/NotebookLM.png?v=20260331-135455", logoWidth: "100%", logoHeight: 38, fullLogo: true, logoFullWidth: "100%", imageFit: "contain" }
     };
-
-    function formatCssSize(value, fallback) {
-      if (value === undefined || value === null || value === "") return fallback;
-      return typeof value === "number" ? `${value}px` : value;
-    }
-
-    quickAccessSections.forEach((section) => {
-      section.items = section.items.map((item) => ({
-        ...item,
-        ...(quickAccessLogoMap[item.url] || {})
-      }));
-    });
 
     const usefulSiteSections = [
       {
@@ -498,6 +424,7 @@
           { title: "은행연합회", url: "https://www.kfb.or.kr/main/main.php" },
           { title: "중소기업중앙회", url: "https://www.kbiz.or.kr/ko/index/index.do" },
           { title: "KDI<br>정책시계열서비스", url: "https://epts.kdi.re.kr/polcTmsesSrvc/them" },
+          { title: "법제처<br>국민참여입법센터", url: "https://opinion.lawmaking.go.kr/", multiline: true },
           { title: "한국벤처캐피탈 협회", url: "https://www.kvca.or.kr/" },
           { title: "벤처투자종합포털", url: "https://www.vcs.go.kr/web/portal/main" },
           { title: "국제금융센터", url: "https://www.kcif.or.kr/" }
@@ -516,16 +443,25 @@
           { title: "중소벤처기업연구원", url: "https://www.kosi.re.kr/kosbiWar/main" },
           { title: "국회예산정책처", url: "https://www.nabo.go.kr/" },
           { title: "국회미래연구원", url: "https://www.nafi.re.kr/home/kor/main.do" },
+          { title: "현대경제연구원", url: "https://www.hri.co.kr/kor/main/main.html" },
           { title: "IBK경제연구소", url: "http://research.ibk.co.kr/research" },
           { title: "산업은행<br>미래전략연구소", url: "https://rd.kdb.co.kr/index.jsp" },
           { title: "수출입은행<br>해외경제연구소", url: "https://keri.koreaexim.go.kr/index" },
           { title: "우리금융경영연구소", url: "https://www.wfri.re.kr/ko/web/main.php" },
           { title: "하나금융연구소", url: "https://www.hanaif.re.kr/main.do" },
-          { title: "KB경영연구소", url: "https://www.kbfg.com/kbresearch/index.do" },
-          { title: "현대경제연구원", url: "https://www.hri.co.kr/kor/main/main.html" }
+          { title: "KB경영연구소", url: "https://www.kbfg.com/kbresearch/index.do" }
         ]
       }
     ];
+
+    function formatCssSize(value, fallback) {
+      if (value === undefined || value === null || value === "") return fallback;
+      return typeof value === "number" ? `${value}px` : value;
+    }
+
+    quickAccessSections.forEach((section) => {
+      section.items = section.items.map((item) => ({ ...item, ...(quickAccessLogoMap[item.url] || {}) }));
+    });
 
     function renderColumns(targetId, sections, headingTag, listClass) {
       const target = document.getElementById(targetId);
@@ -539,7 +475,7 @@
             ${section.items.map((item) => `
               <a class="link-chip${item.image ? " has-logo" : ""}" href="${item.url}" target="_blank" rel="noopener noreferrer" aria-label="${item.title}" style="${item.chipPaddingX ? `padding-left:${item.chipPaddingX}px;padding-right:${item.chipPaddingX}px;` : ""}">
                 <span class="link-chip-content">
-                  ${item.image ? `<span class="link-chip-logo-frame${item.fullLogo ? " is-full" : ""}" style="${item.logoWidth ? `--logo-width:${formatCssSize(item.logoWidth, "96px")};` : ""}${item.logoHeight ? `--logo-height:${formatCssSize(item.logoHeight, "24px")};` : ""}${item.logoFullWidth ? `--logo-full-width:${formatCssSize(item.logoFullWidth, "100%")};` : ""}${item.logoScale ? `--logo-scale:${item.logoScale};` : ""}"><img class="link-chip-logo${item.imageFit === "cover" ? " is-cover" : ""}${item.imageFit === "fill" ? " is-fill" : ""}" src="${item.image}" alt="${item.title}"></span>` : `<span class="link-chip-text">${item.title}</span>`}
+                  ${item.image ? `<span class="link-chip-logo-frame${item.fullLogo ? " is-full" : ""}" style="${item.logoWidth ? `--logo-width:${formatCssSize(item.logoWidth, "96px")};` : ""}${item.logoHeight ? `--logo-height:${formatCssSize(item.logoHeight, "24px")};` : ""}${item.logoFullWidth ? `--logo-full-width:${formatCssSize(item.logoFullWidth, "100%")};` : ""}${item.logoScale ? `--logo-scale:${item.logoScale};` : ""}"><img class="link-chip-logo${item.imageFit === "cover" ? " is-cover" : ""}${item.imageFit === "fill" ? " is-fill" : ""}" src="${item.image}" alt="${item.title}"></span>` : `<span class="link-chip-text${item.multiline ? " is-multiline" : ""}">${item.title}</span>`}
                 </span>
               </a>
             `).join("")}
