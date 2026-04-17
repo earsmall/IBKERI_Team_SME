@@ -284,6 +284,14 @@
       flex-wrap: wrap;
     }
 
+    .viewer-tools {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
     .viewer-head h3 {
       margin: 0;
       font-size: 18px;
@@ -294,8 +302,59 @@
       color: var(--muted);
     }
 
+    .zoom-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(29, 78, 216, 0.12);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 8px 18px rgba(40, 72, 115, 0.08);
+    }
+
+    .zoom-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-strong);
+      white-space: nowrap;
+    }
+
+    .zoom-slider {
+      width: min(220px, 36vw);
+      accent-color: var(--accent);
+    }
+
+    .zoom-value {
+      min-width: 48px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent-strong);
+      text-align: right;
+    }
+
+    .zoom-reset {
+      border: 0;
+      border-radius: 12px;
+      padding: 8px 10px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: filter 160ms ease, transform 160ms ease;
+    }
+
+    .zoom-reset:hover {
+      filter: brightness(0.98);
+      transform: translateY(-1px);
+    }
+
     .viz-frame {
-      --viz-scale: 1;
+      --viz-auto-scale: 1;
+      --viz-user-zoom: 1;
+      --viz-effective-scale: 1;
       --viz-base-height: 720px;
       --viz-target-width: 1468px;
       min-height: var(--viz-base-height);
@@ -303,26 +362,24 @@
       border: 1px solid rgba(29, 78, 216, 0.14);
       background:
         linear-gradient(135deg, rgba(255,255,255,0.98), rgba(236, 244, 255, 0.96));
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-gutter: stable both-edges;
     }
 
     .viz-stage-wrap {
-      width: calc(var(--viz-target-width) * var(--viz-scale));
+      width: max(100%, calc(var(--viz-target-width) * var(--viz-effective-scale)));
       min-height: var(--viz-base-height);
       display: flex;
       justify-content: center;
       flex: 0 0 auto;
       margin: 0 auto;
-      max-width: 100%;
     }
 
     .viz-stage {
       width: var(--viz-target-width);
-      min-height: calc(var(--viz-base-height) / var(--viz-scale));
-      transform: scale(var(--viz-scale));
+      min-height: calc(var(--viz-base-height) / var(--viz-effective-scale));
+      transform: scale(var(--viz-effective-scale));
       transform-origin: top left;
     }
 
@@ -368,6 +425,20 @@
       .pickerbar,
       .viewer {
         padding: 18px;
+      }
+
+      .viewer-tools {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .zoom-control {
+        width: 100%;
+      }
+
+      .zoom-slider {
+        width: 100%;
+        min-width: 0;
       }
 
       .topbar > .list-label {
@@ -452,7 +523,15 @@
       <section class="viewer panel">
         <div class="viewer-head">
           <h3 id="viewerTitle">대시보드 보기</h3>
-          <div class="viewer-note">브라우저 환경에 따라 로딩에 몇 초 정도 걸릴 수 있습니다.</div>
+          <div class="viewer-tools">
+            <label class="zoom-control" for="zoomRange">
+              <span class="zoom-label">가로 보기 조절</span>
+              <input id="zoomRange" class="zoom-slider" type="range" min="70" max="130" step="5" value="100" aria-label="대시보드 가로 보기 확대 비율">
+              <span id="zoomValue" class="zoom-value">100%</span>
+            </label>
+            <button id="zoomReset" class="zoom-reset" type="button">기본값</button>
+            <div class="viewer-note">브라우저 환경에 따라 로딩에 몇 초 정도 걸릴 수 있고, 확대 시에는 가로 스크롤로 좌우를 확인할 수 있습니다.</div>
+          </div>
         </div>
         <div class="viz-frame">
           <div id="vizMount" class="empty">대시보드를 불러오는 중입니다.</div>
@@ -516,15 +595,21 @@
     ];
 
     const state = {
-      selectedId: dashboards[0]?.id ?? null
+      selectedId: dashboards[0]?.id ?? null,
+      userZoom: 1
     };
 
     const els = {
       dashboardSelect: document.getElementById("dashboardSelect"),
       dashboardHelper: document.getElementById("dashboardHelper"),
       viewerTitle: document.getElementById("viewerTitle"),
-      vizMount: document.getElementById("vizMount")
+      vizMount: document.getElementById("vizMount"),
+      zoomRange: document.getElementById("zoomRange"),
+      zoomValue: document.getElementById("zoomValue"),
+      zoomReset: document.getElementById("zoomReset")
     };
+
+    const STORAGE_KEY = "tableau-dashboard-user-zoom";
 
     function clamp(value, min, max) {
       return Math.min(Math.max(value, min), max);
@@ -566,6 +651,18 @@
       };
     }
 
+    function loadUserZoom() {
+      const saved = Number(window.localStorage.getItem(STORAGE_KEY));
+      if (!Number.isFinite(saved)) return 1;
+      return clamp(saved, 0.7, 1.3);
+    }
+
+    function syncZoomControl() {
+      const percent = Math.round(state.userZoom * 100);
+      els.zoomRange.value = String(percent);
+      els.zoomValue.textContent = `${percent}%`;
+    }
+
     function updateVizScale() {
       const frame = document.querySelector(".viz-frame");
       const stage = document.querySelector(".viz-stage");
@@ -574,10 +671,13 @@
       const preset = getViewportPreset();
       const frameWidth = frame.clientWidth;
       const targetWidth = preset.targetWidth;
-      const scale = clamp(frameWidth / targetWidth, 0.24, 1);
+      const autoScale = clamp(frameWidth / targetWidth, 0.24, 1);
+      const effectiveScale = clamp(autoScale * state.userZoom, 0.24, 1.3);
       const baseHeight = preset.baseHeight;
 
-      frame.style.setProperty("--viz-scale", scale.toFixed(3));
+      frame.style.setProperty("--viz-auto-scale", autoScale.toFixed(3));
+      frame.style.setProperty("--viz-user-zoom", state.userZoom.toFixed(2));
+      frame.style.setProperty("--viz-effective-scale", effectiveScale.toFixed(3));
       frame.style.setProperty("--viz-base-height", `${Math.round(baseHeight)}px`);
       frame.style.setProperty("--viz-target-width", `${targetWidth}px`);
     }
@@ -675,6 +775,22 @@
       render();
     });
 
+    els.zoomRange.addEventListener("input", event => {
+      state.userZoom = clamp(Number(event.target.value) / 100, 0.7, 1.3);
+      window.localStorage.setItem(STORAGE_KEY, String(state.userZoom));
+      syncZoomControl();
+      updateVizScale();
+    });
+
+    els.zoomReset.addEventListener("click", () => {
+      state.userZoom = 1;
+      window.localStorage.setItem(STORAGE_KEY, String(state.userZoom));
+      syncZoomControl();
+      updateVizScale();
+    });
+
+    state.userZoom = loadUserZoom();
+    syncZoomControl();
     render();
     window.addEventListener("resize", syncVizLayout);
     window.addEventListener("orientationchange", syncVizLayout);
