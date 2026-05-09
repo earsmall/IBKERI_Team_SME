@@ -222,6 +222,13 @@
 
     .major-card:nth-child(4)::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
 
+    .major-card:nth-child(5) {
+      background: linear-gradient(180deg, rgba(240, 253, 244, 0.95), rgba(255, 255, 255, 0.92));
+      border-color: rgba(34, 197, 94, 0.22);
+    }
+
+    .major-card:nth-child(5)::before { background: linear-gradient(90deg, #16a34a, #86efac); }
+
     .major-head {
       display: grid;
       gap: 4px;
@@ -420,15 +427,6 @@
               { title: "소상공인 업종별 실적 및 전망(소상공인시장경기동향조사, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_002&conn_path=I2" },
               { title: "소상공인 지역별 실적 및 전망(소상공인시장경기동향조사, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_S0001N_005&conn_path=I2" }
             ]
-          },
-          {
-            title: "4. 창업, 폐업",
-            items: [
-              { title: "업종별 창업기업수(창업기업동향, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_142N_F201&conn_path=I2" },
-              { title: "산업별 조직형태별 기업수(기업생멸행정통계, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1BD1106&conn_path=I2" },
-              { title: "사업자 현황(국세통계, 국세청)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=DT_133N_981&conn_path=I2" },
-              { title: "폐업자 현황(국세통계, 국세청)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=TX_13301_A169&conn_path=I2" }
-            ]
           }
         ]
       },
@@ -464,6 +462,20 @@
               { title: "기업규모별, 주요국가별 수출입(기업특성별무역통계, 국가데이터처 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_P227&conn_path=I2" },
               { title: "산업별, 기업규모별 수출입(기업특성별무역통계, 국가데이터처 등)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1TEC_P116&conn_path=I2" },
               { title: "대륙별, 국가별 중소기업 수출(중소기업수출동향, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_B10066&conn_path=I2" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "창업, 폐업",
+        subgroups: [
+          {
+            title: "주요 창업, 폐업 통계",
+            items: [
+              { title: "업종별 창업기업수(창업기업동향, 중소벤처기업부)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=142&tblId=DT_142N_F201&conn_path=I2" },
+              { title: "산업별 조직형태별 기업수(기업생멸행정통계, 국가데이터처)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1BD1106&conn_path=I2" },
+              { title: "사업자 현황(국세통계, 국세청)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=DT_133N_981&conn_path=I2" },
+              { title: "폐업자 현황(국세통계, 국세청)", url: "https://kosis.kr/statHtml/statHtml.do?orgId=133&tblId=TX_13301_A169&conn_path=I2" }
             ]
           }
         ]
