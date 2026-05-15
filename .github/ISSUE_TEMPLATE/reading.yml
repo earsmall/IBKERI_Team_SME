@@ -1,0 +1,64 @@
+name: 읽을거리 등록하기
+description: 웹페이지에 새 읽을거리를 등록합니다.
+title: "[읽을거리] "
+labels: ["reading-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        제출하면 자동으로 웹페이지 반영 작업이 실행됩니다. 공개 저장소의 Issue로 등록되므로 민감한 내용은 입력하지 마세요.
+  - type: input
+    id: date
+    attributes:
+      label: 날짜
+      description: 웹페이지에 표시할 날짜입니다.
+      placeholder: "2026년 5월 15일"
+    validations:
+      required: true
+  - type: input
+    id: agency
+    attributes:
+      label: 기관
+      placeholder: "한국개발연구원"
+    validations:
+      required: true
+  - type: input
+    id: submitter
+    attributes:
+      label: 등록자
+      description: 웹페이지 카드에 표시될 이름입니다.
+      placeholder: "홍길동"
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: 제목
+      placeholder: "읽을거리 제목"
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: 주요 내용
+      description: 없으면 "없음"이라고 적어주세요. 여러 줄 입력이 가능합니다.
+      placeholder: |
+        없음
+    validations:
+      required: true
+  - type: textarea
+    id: attachments
+    attributes:
+      label: 첨부
+      description: 없으면 "없음"이라고 적어주세요. 첨부가 있으면 `첨부 제목 | https://...` 형식으로 적고, 여러 개는 줄을 나눠 입력해 주세요.
+      placeholder: |
+        없음
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: 링크
+      placeholder: "https://..."
+    validations:
+      required: true

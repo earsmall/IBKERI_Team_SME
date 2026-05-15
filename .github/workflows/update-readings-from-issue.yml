@@ -1,0 +1,64 @@
+name: Update readings from public submission
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  update-readings:
+    if: contains(github.event.issue.labels.*.name, 'reading-submission') || startsWith(github.event.issue.title, '[읽을거리]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Convert issue to readings markdown
+        run: python tools/issue_to_readings_update.py --event "$GITHUB_EVENT_PATH" --output ".github/generated/reading_submission.md" --archive "읽을거리 제출기록.md"
+
+      - name: Update index.html
+        run: python tools/update_readings_index.py --markdown ".github/generated/reading_submission.md" --html "index.html" --append-existing
+
+      - name: Commit updated page
+        id: commit
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html "읽을거리 제출기록.md"
+          git commit -m "Add reading submission #${{ github.event.issue.number }}"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const changed = '${{ steps.commit.outputs.changed }}';
+            const success = '${{ job.status }}' === 'success';
+            const body = success
+              ? (changed === 'true'
+                ? '등록 내용이 index.html에 반영되었습니다.'
+                : '등록 내용 처리 결과, 새로 반영할 변경사항이 없었습니다.')
+              : '등록 자동 반영 중 오류가 발생했습니다. Actions 로그를 확인해주세요.';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
+            if (success) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed'
+              });
+            }

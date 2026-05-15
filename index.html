@@ -517,9 +517,12 @@
       bottom: -58px;
       transform: rotate(18deg);
       background: rgba(255,255,255,0.32);
+      pointer-events: none;
     }
 
     .hero-top {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -580,6 +583,178 @@
       display: inline;
       font-size: 12px;
       font-weight: 800;
+    }
+
+    .submit-reading-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(220, 38, 38, 0.34);
+      background: linear-gradient(135deg, #b91c1c, #ef4444);
+      color: #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.1;
+      white-space: nowrap;
+      box-shadow: 0 10px 20px rgba(185, 28, 28, 0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+    }
+
+    .submit-reading-link:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+    }
+
+    .submission-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(24, 33, 43, 0.42);
+    }
+
+    .submission-backdrop[hidden] {
+      display: none;
+    }
+
+    .submission-dialog {
+      width: min(720px, 100%);
+      max-height: min(760px, calc(100vh - 36px));
+      overflow: auto;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 60px rgba(24, 33, 43, 0.24);
+      padding: 20px;
+    }
+
+    .submission-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .submission-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .submission-close {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      width: 34px;
+      height: 34px;
+      background: #ffffff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .submission-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .submission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .submission-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .submission-field label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-strong);
+    }
+
+    .submission-field input,
+    .submission-field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      background: rgba(249, 252, 255, 0.96);
+    }
+
+    .submission-field textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .attachment-builder {
+      display: grid;
+      gap: 8px;
+    }
+
+    .attachment-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .attachment-remove,
+    .attachment-add {
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--accent-strong);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      min-height: 36px;
+      padding: 8px 10px;
+      white-space: nowrap;
+    }
+
+    .attachment-remove {
+      color: #b42318;
+    }
+
+    .submission-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .submission-actions button {
+      min-height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .submission-cancel {
+      background: #ffffff;
+      color: var(--muted);
+    }
+
+    .submission-submit {
+      background: linear-gradient(135deg, #b91c1c, #ef4444);
+      color: #ffffff;
+      border-color: rgba(220, 38, 38, 0.34) !important;
     }
 
     .section {
@@ -657,6 +832,17 @@
     .date-chip {
       font-size: 11px;
       color: var(--muted);
+    }
+
+    .submitter-chip {
+      margin: -2px 0 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .submitter-chip strong {
+      color: var(--accent-strong);
+      font-weight: 800;
     }
 
     .card h4 {
@@ -755,6 +941,14 @@
       }
 
       .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .submission-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .attachment-row {
         grid-template-columns: 1fr;
       }
     }
@@ -876,6 +1070,7 @@
                 <label>Items Extracted</label>
                 <strong id="statItems">-</strong>
               </div>
+              <button id="openSubmissionBtn" class="submit-reading-link" type="button">읽을거리 등록하기</button>
             </div>
           </div>
         </section>
@@ -888,6 +1083,52 @@
           <div id="cards" class="cards"></div>
         </section>
       </main>
+    </div>
+  </div>
+
+  <div id="submissionModal" class="submission-backdrop" hidden>
+    <div class="submission-dialog" role="dialog" aria-modal="true" aria-labelledby="submissionTitle">
+      <div class="submission-head">
+        <h3 id="submissionTitle">읽을거리 등록하기</h3>
+        <button id="closeSubmissionBtn" class="submission-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <form id="submissionForm" class="submission-form">
+        <div class="submission-grid">
+          <div class="submission-field">
+            <label for="submissionDate">날짜</label>
+            <input id="submissionDate" name="date" type="text" placeholder="2026년 5월 15일" required>
+          </div>
+          <div class="submission-field">
+            <label for="submissionSubmitter">등록자</label>
+            <input id="submissionSubmitter" name="submitter" type="text" placeholder="홍길동" required>
+          </div>
+        </div>
+        <div class="submission-field">
+          <label for="submissionAgency">기관</label>
+          <input id="submissionAgency" name="agency" type="text" placeholder="한국개발연구원" required>
+        </div>
+        <div class="submission-field">
+          <label for="submissionReadingTitle">제목</label>
+          <input id="submissionReadingTitle" name="title" type="text" placeholder="읽을거리 제목" required>
+        </div>
+        <div class="submission-field">
+          <label for="submissionDetails">주요 내용</label>
+          <textarea id="submissionDetails" name="details" placeholder="없음"></textarea>
+        </div>
+        <div class="submission-field">
+          <label>첨부</label>
+          <div id="attachmentRows" class="attachment-builder"></div>
+          <button id="addAttachmentBtn" class="attachment-add" type="button">첨부 추가</button>
+        </div>
+        <div class="submission-field">
+          <label for="submissionLink">링크</label>
+          <input id="submissionLink" name="link" type="url" placeholder="https://..." required>
+        </div>
+        <div class="submission-actions">
+          <button class="submission-cancel" type="button" id="cancelSubmissionBtn">취소</button>
+          <button class="submission-submit" type="submit">등록 내용 보내기</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -927,7 +1168,16 @@
       clearFiltersBtn: document.getElementById('clearFiltersBtn'),
       searchMeta: document.getElementById('searchMeta'),
       statDays: document.getElementById('statDays'),
-      statItems: document.getElementById('statItems')
+      statItems: document.getElementById('statItems'),
+      openSubmissionBtn: document.getElementById('openSubmissionBtn'),
+      submissionModal: document.getElementById('submissionModal'),
+      closeSubmissionBtn: document.getElementById('closeSubmissionBtn'),
+      cancelSubmissionBtn: document.getElementById('cancelSubmissionBtn'),
+      submissionForm: document.getElementById('submissionForm'),
+      submissionDate: document.getElementById('submissionDate'),
+      submissionDetails: document.getElementById('submissionDetails'),
+      attachmentRows: document.getElementById('attachmentRows'),
+      addAttachmentBtn: document.getElementById('addAttachmentBtn')
     };
 
     function decodeBase64Utf8(value) {
@@ -1011,6 +1261,103 @@
     function formatMonthLabel(monthKey) {
       const [year, month] = monthKey.split('-');
       return `${year}.${month}`;
+    }
+
+    function formatKoreanDate(isoDate) {
+      const match = String(isoDate || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return '';
+      return `${match[1]}년 ${Number(match[2])}월 ${Number(match[3])}일`;
+    }
+
+    function setSubmissionOpen(isOpen) {
+      els.submissionModal.hidden = !isOpen;
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (isOpen) {
+        els.submissionDate.value = formatKoreanDate(state.selectedDate) || formatKoreanDate(new Date().toISOString().slice(0, 10));
+        if (!els.submissionDetails.value) els.submissionDetails.value = '없음';
+        if (!els.attachmentRows.children.length) {
+          addAttachmentRow();
+        }
+        setTimeout(() => els.submissionDate.focus(), 0);
+      }
+    }
+
+    function addAttachmentRow(label = '', href = '') {
+      const row = document.createElement('div');
+      row.className = 'attachment-row';
+      row.innerHTML = `
+        <input class="attachment-label-input" type="text" placeholder="첨부 제목" value="${escapeHtml(label)}">
+        <input class="attachment-url-input" type="url" placeholder="https://..." value="${escapeHtml(href)}">
+        <button class="attachment-remove" type="button">삭제</button>
+      `;
+      row.querySelector('.attachment-remove').addEventListener('click', () => {
+        row.remove();
+        if (!els.attachmentRows.children.length) {
+          addAttachmentRow();
+        }
+      });
+      els.attachmentRows.appendChild(row);
+    }
+
+    function collectAttachments() {
+      const attachments = [...els.attachmentRows.querySelectorAll('.attachment-row')]
+        .map(row => {
+          const label = row.querySelector('.attachment-label-input').value.trim();
+          const href = row.querySelector('.attachment-url-input').value.trim();
+          return { label, href };
+        })
+        .filter(item => item.label || item.href);
+
+      if (!attachments.length) return '없음';
+
+      const incomplete = attachments.find(item => !item.label || !item.href);
+      if (incomplete) {
+        throw new Error('첨부는 제목과 링크를 모두 입력해야 합니다.');
+      }
+
+      return attachments.map(item => `${item.label}(${item.href})`).join('\n');
+    }
+
+    function createIssueUrlFromSubmission(form) {
+      const formData = new FormData(form);
+      const value = name => String(formData.get(name) || '').trim();
+      const title = `[읽을거리] ${value('title')}`;
+      const body = [
+        '### 날짜',
+        '',
+        value('date'),
+        '',
+        '### 기관',
+        '',
+        value('agency'),
+        '',
+        '### 등록자',
+        '',
+        value('submitter'),
+        '',
+        '### 제목',
+        '',
+        value('title'),
+        '',
+        '### 주요 내용',
+        '',
+        value('details') || '없음',
+        '',
+        '### 첨부',
+        '',
+        collectAttachments(),
+        '',
+        '### 링크',
+        '',
+        value('link')
+      ].join('\n');
+
+      const params = new URLSearchParams({
+        title,
+        body,
+        labels: 'reading-submission'
+      });
+      return `https://github.com/earsmall/IBKERI_Team_SME/issues/new?${params.toString()}`;
     }
 
     function setMonthPickerOpen(isOpen) {
@@ -1149,11 +1496,18 @@
         if (!currentAgency || buffer.length === 0) return;
 
         let link = '';
+        let submitter = '';
         const contentLines = [];
         const attachments = [];
         buffer.forEach(line => {
           const trimmed = line.trim();
           if (!trimmed) return;
+
+          const submitterMatch = trimmed.match(/^등록자\s*[:：]\s*(.+)$/);
+          if (submitterMatch) {
+            submitter = submitterMatch[1].trim();
+            return;
+          }
 
           const metadata = parseMetadataLine(trimmed);
           if (metadata) {
@@ -1208,7 +1562,8 @@
             agency: currentAgency,
             title,
             details,
-            link
+            link,
+            submitter
           });
         }
 
@@ -1249,7 +1604,7 @@
           ...entry,
           dateLabel: label,
           isoDate: parseIso(label),
-          searchText: [label, entry.agency, entry.title, entry.details].filter(Boolean).join(' ')
+          searchText: [label, entry.agency, entry.title, entry.details, entry.submitter].filter(Boolean).join(' ')
         }));
 
         const isoDate = parseIso(label);
@@ -1360,6 +1715,7 @@
           <div class="date-chip">${escapeHtml(item.dateLabel)}</div>
         </div>
         <h4>${titleHtml}</h4>
+        ${item.submitter ? `<div class="submitter-chip">등록자 <strong>${escapeHtml(item.submitter)}</strong></div>` : ''}
         ${detailsHtml ? `<p class="details">${detailsHtml}</p>` : ''}
       `;
       return article;
@@ -1480,6 +1836,43 @@
       els.clearFiltersBtn.addEventListener('click', () => {
         clearSearchFilters();
         render();
+      });
+
+      els.openSubmissionBtn.addEventListener('click', () => {
+        setSubmissionOpen(true);
+      });
+
+      els.addAttachmentBtn.addEventListener('click', () => {
+        addAttachmentRow();
+      });
+
+      els.closeSubmissionBtn.addEventListener('click', () => {
+        setSubmissionOpen(false);
+      });
+
+      els.cancelSubmissionBtn.addEventListener('click', () => {
+        setSubmissionOpen(false);
+      });
+
+      els.submissionModal.addEventListener('click', event => {
+        if (event.target === els.submissionModal) {
+          setSubmissionOpen(false);
+        }
+      });
+
+      els.submissionForm.addEventListener('submit', event => {
+        event.preventDefault();
+        let issueUrl = '';
+        try {
+          issueUrl = createIssueUrlFromSubmission(els.submissionForm);
+        } catch (error) {
+          window.alert(error.message);
+          return;
+        }
+        const opened = window.open(issueUrl, '_blank', 'noopener,noreferrer');
+        if (!opened) {
+          window.location.href = issueUrl;
+        }
       });
 
       els.prevMonthBtn.addEventListener('click', () => {
