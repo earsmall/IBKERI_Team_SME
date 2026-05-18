@@ -1233,11 +1233,40 @@
       return safe.replace(pattern, '<mark>$1</mark>');
     }
 
+    function toIsoDate(year, month, day) {
+      const yearText = String(year);
+      const monthNumber = Number(month);
+      const dayNumber = Number(day);
+      if (!/^\d{4}$/.test(yearText) || monthNumber < 1 || monthNumber > 12 || dayNumber < 1 || dayNumber > 31) {
+        return '';
+      }
+      return `${yearText}-${String(monthNumber).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+    }
+
     function parseIso(label) {
-      const match = label.match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})\D*/);
-      if (!match) return label;
-      const [, year, month, day] = match;
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      const value = String(label || '').trim();
+      const exact = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (exact) return toIsoDate(exact[1], exact[2], exact[3]);
+
+      const englishMonth = value.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{1,2})\s+(\d{4})/i);
+      if (englishMonth) {
+        const monthMap = {
+          jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6,
+          jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12
+        };
+        return toIsoDate(englishMonth[3], monthMap[englishMonth[1].slice(0, 3).toLowerCase()], englishMonth[2]);
+      }
+
+      const parsedTime = Date.parse(value);
+      if (!Number.isNaN(parsedTime)) {
+        const parsedDate = new Date(parsedTime);
+        return toIsoDate(parsedDate.getFullYear(), parsedDate.getMonth() + 1, parsedDate.getDate());
+      }
+
+      const numeric = value.match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+      if (numeric) return toIsoDate(numeric[1], numeric[2], numeric[3]);
+
+      return '';
     }
 
     function normalizeAgencyName(value) {
@@ -1412,7 +1441,7 @@
 
     function normalizeSharedEntry(item) {
       const isoDate = parseIso(item.isoDate || item.dateLabel || item.date || '');
-      const dateLabel = item.dateLabel || formatKoreanDate(isoDate);
+      const dateLabel = formatKoreanDate(isoDate) || String(item.dateLabel || '');
       return {
         agency: normalizeAgencyName(String(item.agency || '')),
         title: String(item.title || ''),
