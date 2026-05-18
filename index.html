@@ -1297,12 +1297,23 @@
       return `${match[1]}년 ${Number(match[2])}월 ${Number(match[3])}일`;
     }
 
+    function getLocalTodayIso() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     function setSubmissionOpen(isOpen) {
       els.submissionModal.hidden = !isOpen;
       document.body.style.overflow = isOpen ? 'hidden' : '';
       if (isOpen) {
         renderSubmissionDateOptions();
-        els.submissionDate.value = state.selectedDate || els.submissionDate.value;
+        const todayIso = getLocalTodayIso();
+        els.submissionDate.value = els.submissionDate.querySelector(`option[value="${todayIso}"]`)
+          ? todayIso
+          : els.submissionDate.value;
         if (!els.submissionDetails.value) els.submissionDetails.value = '없음';
         if (!els.attachmentRows.children.length) {
           addAttachmentRow();
@@ -1312,7 +1323,7 @@
     }
 
     function renderSubmissionDateOptions() {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getLocalTodayIso();
       const dateOptions = [...state.sections];
       if (!dateOptions.some(section => section.isoDate === today)) {
         dateOptions.unshift({
@@ -1394,6 +1405,7 @@
         searchText: [dateLabel, value('agency'), value('title'), details, value('submitter')].filter(Boolean).join(' '),
         savedAt: new Date().toISOString(),
         pin: value('pin'),
+        hasPin: true,
         isShared: true
       };
     }
@@ -1411,6 +1423,7 @@
         isoDate,
         searchText: [dateLabel, item.agency, item.title, item.details, item.submitter].filter(Boolean).join(' '),
         savedAt: item.savedAt || '',
+        hasPin: item.hasPin === true || item.hasPin === 'true',
         isShared: true
       };
     }
@@ -1476,7 +1489,7 @@
       if (!entry.savedAt) {
         throw new Error('삭제할 항목의 저장 정보가 없습니다.');
       }
-      if (!pin) {
+      if (entry.hasPin && !pin) {
         throw new Error('삭제 PIN을 입력해 주세요.');
       }
 
@@ -1486,7 +1499,7 @@
         const url = new URL(SHARED_READINGS_ENDPOINT);
         url.searchParams.set('action', 'delete');
         url.searchParams.set('savedAt', entry.savedAt);
-        url.searchParams.set('pin', pin);
+        url.searchParams.set('pin', pin || '');
         url.searchParams.set('callback', callbackName);
         url.searchParams.set('_', Date.now());
 
@@ -1866,7 +1879,8 @@
       for (let day = 1; day <= lastDate; day += 1) {
         const section = daysMap.get(day);
         const cell = document.createElement(section ? 'button' : 'div');
-        cell.className = `day-cell${section ? ' has-entry' : ' muted'}${section && section.isoDate === state.selectedDate ? ' active' : ''}`;
+        const isoDate = `${yearText}-${monthText}-${String(day).padStart(2, '0')}`;
+        cell.className = `day-cell${section ? ' has-entry' : ' muted'}${isoDate === state.selectedDate ? ' active' : ''}`;
 
         if (section) {
           cell.type = 'button';
@@ -1927,11 +1941,15 @@
         deleteButton.addEventListener('click', async event => {
           event.stopPropagation();
           if (!window.confirm('이 읽을거리를 삭제할까요?')) return;
-          const pin = window.prompt('등록할 때 입력한 삭제 PIN을 입력해 주세요.');
-          if (pin === null) return;
+          let pin = '';
+          if (item.hasPin) {
+            const input = window.prompt('등록할 때 입력한 삭제 PIN을 입력해 주세요.');
+            if (input === null) return;
+            pin = input.trim();
+          }
 
           try {
-            await deleteSharedSubmission(item, pin.trim());
+            await deleteSharedSubmission(item, pin);
           } catch (error) {
             window.alert(error.message);
             return;
@@ -2020,17 +2038,32 @@
       }
 
       els.searchMeta.textContent = '';
-      const selected = state.sections.find(section => section.isoDate === state.selectedDate) || state.sections[0];
-      if (!selected) {
+      const selected = state.sections.find(section => section.isoDate === state.selectedDate);
+      if (!selected && state.selectedDate && /^\d{4}-\d{2}-\d{2}$/.test(state.selectedDate)) {
+        state.activeMonth = state.selectedDate.slice(0, 7);
+        renderEmptyDateView(state.selectedDate);
+        return;
+      }
+
+      const fallbackSelected = selected || state.sections[0];
+      if (!fallbackSelected) {
         els.heroTitle.textContent = 'No data available';
         els.heroSubtitle.textContent = 'No date-based messages could be parsed from the text file.';
         els.cards.innerHTML = '<div class="empty">Unable to load data.</div>';
         return;
       }
 
-      state.selectedDate = selected.isoDate;
-      state.activeMonth = selected.isoDate.slice(0, 7);
-      renderSelectedDateView(selected);
+      state.selectedDate = fallbackSelected.isoDate;
+      state.activeMonth = fallbackSelected.isoDate.slice(0, 7);
+      renderSelectedDateView(fallbackSelected);
+    }
+
+    function renderEmptyDateView(isoDate) {
+      els.heroTitle.textContent = formatKoreanDate(isoDate);
+      els.heroSubtitle.textContent = '';
+      els.listTitle.textContent = '';
+      els.listNote.textContent = '';
+      els.cards.innerHTML = '<div class="empty">이 날짜에 등록된 읽을거리가 없습니다.</div>';
     }
 
     function init() {
@@ -2140,7 +2173,7 @@
       });
 
       els.todayBtn.addEventListener('click', () => {
-        const todayIso = new Date().toISOString().slice(0, 10);
+        const todayIso = getLocalTodayIso();
         const todaySection = state.sections.find(section => section.isoDate === todayIso);
         if (todaySection) {
           state.selectedDate = todaySection.isoDate;
@@ -2148,11 +2181,10 @@
           return;
         }
 
-        const latestSection = state.sections[0];
-        if (latestSection) {
-          state.selectedDate = latestSection.isoDate;
-          moveToMonth(latestSection.isoDate.slice(0, 7));
-        }
+        state.selectedDate = todayIso;
+        state.activeMonth = todayIso.slice(0, 7);
+        clearSearchFilters();
+        render();
       });
 
       document.addEventListener('click', event => {
