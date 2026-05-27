@@ -890,9 +890,11 @@
     .card-actions {
       display: flex;
       justify-content: flex-end;
+      gap: 8px;
       margin-top: 12px;
     }
 
+    .edit-entry-btn,
     .delete-entry-btn {
       border: 1px solid rgba(180, 35, 24, 0.24);
       border-radius: var(--radius-sm);
@@ -902,6 +904,16 @@
       font-size: 12px;
       font-weight: 800;
       padding: 7px 10px;
+    }
+
+    .edit-entry-btn {
+      border-color: rgba(29, 78, 216, 0.24);
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .edit-entry-btn:hover {
+      background: #dbeafe;
     }
 
     .delete-entry-btn:hover {
@@ -1126,8 +1138,8 @@
           </div>
         </div>
         <div class="submission-field">
-          <label for="submissionPin">삭제 PIN</label>
-          <input id="submissionPin" name="pin" type="password" placeholder="삭제할 때 사용할 4자리 이상 PIN" minlength="4" autocomplete="off" required>
+          <label for="submissionPin">삭제/수정 PIN</label>
+          <input id="submissionPin" name="pin" type="password" placeholder="삭제하거나 수정할 때 사용할 4자리 이상 PIN" minlength="4" autocomplete="off" required>
         </div>
         <div class="submission-field">
           <label for="submissionAgency">기관</label>
@@ -1152,7 +1164,7 @@
         </div>
         <div class="submission-actions">
           <button class="submission-cancel" type="button" id="cancelSubmissionBtn">취소</button>
-          <button class="submission-submit" type="submit">등록 내용 보내기</button>
+          <button id="submissionSubmitBtn" class="submission-submit" type="submit">등록 내용 보내기</button>
         </div>
       </form>
     </div>
@@ -1172,6 +1184,7 @@
       activeMonth: null,
       startDate: '',
       endDate: '',
+      editingEntry: null,
       isMonthPickerOpen: false
     };
 
@@ -1199,9 +1212,11 @@
       statItems: document.getElementById('statItems'),
       openSubmissionBtn: document.getElementById('openSubmissionBtn'),
       submissionModal: document.getElementById('submissionModal'),
+      submissionTitle: document.getElementById('submissionTitle'),
       closeSubmissionBtn: document.getElementById('closeSubmissionBtn'),
       cancelSubmissionBtn: document.getElementById('cancelSubmissionBtn'),
       submissionForm: document.getElementById('submissionForm'),
+      submissionSubmitBtn: document.getElementById('submissionSubmitBtn'),
       submissionDate: document.getElementById('submissionDate'),
       submissionDetails: document.getElementById('submissionDetails'),
       attachmentRows: document.getElementById('attachmentRows'),
@@ -1341,10 +1356,12 @@
       document.body.style.overflow = isOpen ? 'hidden' : '';
       if (isOpen) {
         renderSubmissionDateOptions();
-        const todayIso = getLocalTodayIso();
-        els.submissionDate.value = els.submissionDate.querySelector(`option[value="${todayIso}"]`)
-          ? todayIso
-          : els.submissionDate.value;
+        if (!state.editingEntry) {
+          const todayIso = getLocalTodayIso();
+          els.submissionDate.value = els.submissionDate.querySelector(`option[value="${todayIso}"]`)
+            ? todayIso
+            : els.submissionDate.value;
+        }
         if (!els.submissionDetails.value) els.submissionDetails.value = '없음';
         if (!els.attachmentRows.children.length) {
           addAttachmentRow();
@@ -1356,6 +1373,12 @@
     function renderSubmissionDateOptions() {
       const today = getLocalTodayIso();
       const dateOptions = [...state.sections];
+      if (state.editingEntry && !dateOptions.some(section => section.isoDate === state.editingEntry.isoDate)) {
+        dateOptions.unshift({
+          isoDate: state.editingEntry.isoDate,
+          label: state.editingEntry.dateLabel || formatKoreanDate(state.editingEntry.isoDate)
+        });
+      }
       if (!dateOptions.some(section => section.isoDate === today)) {
         dateOptions.unshift({
           isoDate: today,
@@ -1402,7 +1425,49 @@
       return attachments;
     }
 
-    function createEntryFromSubmission(form) {
+    function splitDetailsAndAttachments(details = '') {
+      const attachments = [];
+      const detailLines = [];
+
+      String(details || '').split('\n').forEach(line => {
+        const attachmentMatch = line.match(/^[*-]\s*\[첨부:\s*(.+?)\]\((https?:\/\/[^\s)]+)\)$/);
+        if (attachmentMatch) {
+          attachments.push({ label: attachmentMatch[1].trim(), href: attachmentMatch[2].trim() });
+          return;
+        }
+        if (line.trim()) detailLines.push(line);
+      });
+
+      return {
+        details: detailLines.join('\n') || '없음',
+        attachments
+      };
+    }
+
+    function setSubmissionMode(entry = null) {
+      state.editingEntry = entry;
+      els.submissionTitle.textContent = entry ? '읽을거리 수정하기' : '읽을거리 등록하기';
+      els.submissionSubmitBtn.textContent = entry ? '수정 내용 저장하기' : '등록 내용 보내기';
+    }
+
+    function fillSubmissionForm(entry) {
+      const split = splitDetailsAndAttachments(entry.details);
+      els.submissionForm.elements.date.value = entry.isoDate;
+      els.submissionForm.elements.submitter.value = entry.submitter || '';
+      els.submissionForm.elements.pin.value = '';
+      els.submissionForm.elements.agency.value = entry.agency || '';
+      els.submissionForm.elements.title.value = entry.title || '';
+      els.submissionForm.elements.details.value = split.details;
+      els.submissionForm.elements.link.value = entry.link || '';
+      els.attachmentRows.innerHTML = '';
+      if (split.attachments.length) {
+        split.attachments.forEach(item => addAttachmentRow(item.label, item.href));
+      } else {
+        addAttachmentRow();
+      }
+    }
+
+    function createEntryFromSubmission(form, originalEntry = null) {
       const formData = new FormData(form);
       const value = name => String(formData.get(name) || '').trim();
       const isoDate = value('date');
@@ -1411,7 +1476,7 @@
         throw new Error('날짜를 선택해 주세요.');
       }
       if (value('pin').length < 4) {
-        throw new Error('삭제 PIN은 4자리 이상으로 입력해 주세요.');
+        throw new Error('삭제/수정 PIN은 4자리 이상으로 입력해 주세요.');
       }
 
       const detailLines = [];
@@ -1434,7 +1499,7 @@
         dateLabel,
         isoDate,
         searchText: [dateLabel, value('agency'), value('title'), details, value('submitter')].filter(Boolean).join(' '),
-        savedAt: new Date().toISOString(),
+        savedAt: originalEntry?.savedAt || new Date().toISOString(),
         pin: value('pin'),
         hasPin: true,
         isShared: true
@@ -1510,6 +1575,58 @@
         method: 'POST',
         mode: 'no-cors',
         body
+      });
+    }
+
+    function updateSharedSubmission(entry) {
+      if (!SHARED_READINGS_ENDPOINT) {
+        throw new Error('공유 저장소 URL이 아직 설정되지 않았습니다.');
+      }
+      if (!entry.savedAt) {
+        throw new Error('수정할 항목의 저장 정보가 없습니다.');
+      }
+      if (entry.hasPin && !entry.pin) {
+        throw new Error('수정 PIN을 입력해 주세요.');
+      }
+
+      return new Promise((resolve, reject) => {
+        const callbackName = `updateReading_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        const script = document.createElement('script');
+        const url = new URL(SHARED_READINGS_ENDPOINT);
+        url.searchParams.set('action', 'update');
+        url.searchParams.set('savedAt', entry.savedAt);
+        url.searchParams.set('pin', entry.pin || '');
+        url.searchParams.set('dateLabel', entry.dateLabel);
+        url.searchParams.set('isoDate', entry.isoDate);
+        url.searchParams.set('agency', entry.agency);
+        url.searchParams.set('title', entry.title);
+        url.searchParams.set('details', entry.details);
+        url.searchParams.set('link', entry.link);
+        url.searchParams.set('submitter', entry.submitter);
+        url.searchParams.set('callback', callbackName);
+        url.searchParams.set('_', Date.now());
+
+        const cleanup = () => {
+          delete window[callbackName];
+          script.remove();
+        };
+
+        window[callbackName] = payload => {
+          cleanup();
+          if (payload?.ok) {
+            resolve();
+          } else {
+            reject(new Error(payload?.error || '수정하지 못했습니다.'));
+          }
+        };
+
+        script.onerror = () => {
+          cleanup();
+          reject(new Error('수정 요청을 보내지 못했습니다.'));
+        };
+
+        script.src = url.toString();
+        document.head.appendChild(script);
       });
     }
 
@@ -1600,7 +1717,13 @@
       }
     }
 
+    function replaceEntryInState(originalEntry, updatedEntry) {
+      removeEntryFromState(originalEntry);
+      addEntryToState(updatedEntry);
+    }
+
     function resetSubmissionForm() {
+      setSubmissionMode(null);
       els.submissionForm.reset();
       els.submissionDetails.value = '없음';
       els.attachmentRows.innerHTML = '';
@@ -1965,8 +2088,17 @@
         <h4>${titleHtml}</h4>
         ${item.submitter ? `<div class="submitter-chip">등록자 <strong>${escapeHtml(item.submitter)}</strong></div>` : ''}
         ${detailsHtml ? `<p class="details">${detailsHtml}</p>` : ''}
-        ${item.isShared ? '<div class="card-actions"><button class="delete-entry-btn" type="button">삭제</button></div>' : ''}
+        ${item.isShared ? '<div class="card-actions"><button class="edit-entry-btn" type="button">수정</button><button class="delete-entry-btn" type="button">삭제</button></div>' : ''}
       `;
+      const editButton = article.querySelector('.edit-entry-btn');
+      if (editButton) {
+        editButton.addEventListener('click', event => {
+          event.stopPropagation();
+          setSubmissionMode(item);
+          setSubmissionOpen(true);
+          fillSubmissionForm(item);
+        });
+      }
       const deleteButton = article.querySelector('.delete-entry-btn');
       if (deleteButton) {
         deleteButton.addEventListener('click', async event => {
@@ -2126,6 +2258,7 @@
       });
 
       els.openSubmissionBtn.addEventListener('click', () => {
+        resetSubmissionForm();
         setSubmissionOpen(true);
       });
 
@@ -2150,15 +2283,24 @@
       els.submissionForm.addEventListener('submit', async event => {
         event.preventDefault();
         let entry = null;
+        const originalEntry = state.editingEntry;
         try {
-          entry = createEntryFromSubmission(els.submissionForm);
-          await saveSharedSubmission(entry);
+          entry = createEntryFromSubmission(els.submissionForm, originalEntry);
+          if (originalEntry) {
+            await updateSharedSubmission(entry);
+          } else {
+            await saveSharedSubmission(entry);
+          }
           delete entry.pin;
         } catch (error) {
           window.alert(error.message);
           return;
         }
-        addEntryToState(entry);
+        if (originalEntry) {
+          replaceEntryInState(originalEntry, entry);
+        } else {
+          addEntryToState(entry);
+        }
         clearSearchFilters();
         setSubmissionOpen(false);
         resetSubmissionForm();
