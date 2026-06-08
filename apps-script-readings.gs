@@ -10,6 +10,11 @@ const HEADERS = [
   'submitter',
   'pinHash'
 ];
+const GITHUB_API_VERSION = '2022-11-28';
+const DEFAULT_GITHUB_OWNER = 'earsmall';
+const DEFAULT_GITHUB_REPO = 'IBKERI_Team_SME';
+const DEFAULT_GITHUB_BRANCH = 'main';
+const DEFAULT_GITHUB_PATH = 'readings.json';
 
 function doGet(e) {
   const params = e.parameter || {};
@@ -22,6 +27,20 @@ function doGet(e) {
 
   if (params.action === 'update') {
     const result = withLock_(() => updateItem_(params));
+    return createResponse_(result, callback);
+  }
+
+  if (params.action === 'mirror') {
+    const result = withLock_(() => {
+      try {
+        return mirrorReadingsToGitHub_();
+      } catch (error) {
+        return {
+          ok: false,
+          error: String(error && error.message ? error.message : error)
+        };
+      }
+    });
     return createResponse_(result, callback);
   }
 
@@ -54,6 +73,7 @@ function doPost(e) {
 
     params.pinHash = hashPin_(params.pin);
     appendItem_(sheet, params);
+    mirrorReadingsBestEffort_();
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
@@ -87,6 +107,7 @@ function deleteItem_(savedAt, pin) {
       }
 
       sheet.deleteRow(rowIndex + 1);
+      mirrorReadingsBestEffort_();
       return { ok: true };
     }
   }
@@ -121,6 +142,7 @@ function updateItem_(params) {
           sheet.getRange(rowIndex + 1, columnIndex + 1).setValue(String(params[key] || ''));
         }
       });
+      mirrorReadingsBestEffort_();
       return { ok: true };
     }
   }
@@ -181,6 +203,104 @@ function hashPin_(pin) {
 
 function isPinHash_(value) {
   return /^[a-f0-9]{64}$/i.test(String(value || ''));
+}
+
+function mirrorReadingsToGitHub_() {
+  const token = getRequiredScriptProperty_('GITHUB_TOKEN');
+  const owner = getScriptProperty_('GITHUB_OWNER', DEFAULT_GITHUB_OWNER);
+  const repo = getScriptProperty_('GITHUB_REPO', DEFAULT_GITHUB_REPO);
+  const branch = getScriptProperty_('GITHUB_BRANCH', DEFAULT_GITHUB_BRANCH);
+  const path = getScriptProperty_('GITHUB_PATH', DEFAULT_GITHUB_PATH);
+  const items = readItems_();
+  const payload = {
+    updatedAt: new Date().toISOString(),
+    items
+  };
+  const content = JSON.stringify(payload, null, 2);
+  const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;
+  const existing = fetchGitHubJson_(`${apiUrl}?ref=${encodeURIComponent(branch)}`, token, {
+    method: 'get',
+    muteHttpExceptions: true
+  });
+  const body = {
+    message: `Update shared readings mirror (${payload.updatedAt})`,
+    content: Utilities.base64Encode(content, Utilities.Charset.UTF_8),
+    branch
+  };
+
+  if (existing.ok && existing.json && existing.json.sha) {
+    body.sha = existing.json.sha;
+  } else if (existing.status !== 404) {
+    throw new Error(`Could not read GitHub mirror file. HTTP ${existing.status}: ${existing.text}`);
+  }
+
+  const updated = fetchGitHubJson_(apiUrl, token, {
+    method: 'put',
+    contentType: 'application/json',
+    payload: JSON.stringify(body),
+    muteHttpExceptions: true
+  });
+
+  if (!updated.ok) {
+    throw new Error(`Could not update GitHub mirror file. HTTP ${updated.status}: ${updated.text}`);
+  }
+
+  return {
+    ok: true,
+    count: items.length,
+    path,
+    commit: updated.json && updated.json.commit ? updated.json.commit.sha : ''
+  };
+}
+
+function mirrorReadingsBestEffort_() {
+  try {
+    return mirrorReadingsToGitHub_();
+  } catch (error) {
+    console.error(error);
+    return {
+      ok: false,
+      error: String(error && error.message ? error.message : error)
+    };
+  }
+}
+
+function fetchGitHubJson_(url, token, options) {
+  const requestOptions = Object.assign({}, options, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': GITHUB_API_VERSION
+    }
+  });
+  const response = UrlFetchApp.fetch(url, requestOptions);
+  const status = response.getResponseCode();
+  const text = response.getContentText();
+  let json = null;
+  try {
+    json = text ? JSON.parse(text) : null;
+  } catch (error) {
+    json = null;
+  }
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    text,
+    json
+  };
+}
+
+function getScriptProperty_(key, fallback) {
+  const value = PropertiesService.getScriptProperties().getProperty(key);
+  return value == null || value === '' ? fallback : value;
+}
+
+function getRequiredScriptProperty_(key) {
+  const value = getScriptProperty_(key, '');
+  if (!value) {
+    throw new Error(`${key} script property is required.`);
+  }
+  return value;
 }
 
 function withLock_(callback) {
