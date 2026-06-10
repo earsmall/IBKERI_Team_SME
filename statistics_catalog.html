@@ -183,6 +183,10 @@
       opacity: 0.95;
     }
 
+    .column-card.is-wide {
+      grid-column: 1 / -1;
+    }
+
     .column-head {
       display: grid;
       gap: 4px;
@@ -251,6 +255,15 @@
 
     .tone-research::before { background: linear-gradient(90deg, #d97706, #facc15); }
 
+    .tone-ibk {
+      background:
+        radial-gradient(circle at top right, rgba(30, 64, 175, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(239, 246, 255, 0.96), rgba(255, 255, 255, 0.92));
+      border-color: rgba(30, 64, 175, 0.18);
+    }
+
+    .tone-ibk::before { background: linear-gradient(90deg, #1e40af, #38bdf8); }
+
     .section-note {
       font-size: 12px;
       color: var(--muted);
@@ -270,6 +283,10 @@
 
     .site-link-list {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .column-card.is-wide .site-link-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     .link-chip {
@@ -492,6 +509,18 @@
           { title: "하나금융연구소", url: "https://www.hanaif.re.kr/main.do" },
           { title: "KB경영연구소", url: "https://www.kbfg.com/kbresearch/index.do" }
         ]
+      },
+      {
+        title: "IBK",
+        tone: "tone-ibk",
+        wide: true,
+        note: "IBK 업무와 교육 관련 바로가기입니다.",
+        items: [
+          { title: "웹메일", url: "https://mail.ibk.co.kr/mail/login" },
+          { title: "EDGE 연수", url: "https://ibkedge.kbitube.or.kr/platformTubeWeb/CareLogin.do?cmd=moveLogin" },
+          { title: "IBK에듀", url: "https://edu.ibk.co.kr/login" },
+          { title: "법정의무교육", url: "https://ibk.getsmart.co.kr/members/login?returnUrl=http%3A%2F%2Fibk.getsmart.co.kr%2F" }
+        ]
       }
     ];
 
@@ -507,7 +536,7 @@
     function renderColumns(targetId, sections, headingTag, listClass) {
       const target = document.getElementById(targetId);
       target.innerHTML = sections.map((section) => `
-        <article class="column-card ${section.tone || ""}">
+        <article class="column-card ${section.tone || ""}${section.wide ? " is-wide" : ""}">
           <div class="column-head">
             <${headingTag}>${section.title}</${headingTag}>
             <div class="section-note">${section.note}</div>
